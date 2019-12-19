@@ -59,13 +59,14 @@ void Vector2D::normalize()
 Vector2D Vector2D::operator-(const Vector2D &op2) const
 {
 
-        return {Vector2D::x_ - op2.x_, Vector2D::y_ - op2.y_};
-
+      //  return {Vector2D::x_ - op2.x_, Vector2D::y_ - op2.y_};
+    return Vector2D(x_ - op2.x_,y_ - op2.y_);
 }
 
-Vector2D::Vector2D(const Vector2D &)
+Vector2D::Vector2D(const Vector2D &test)
 {
-
+            Vector2D::x_=test.x_;
+            Vector2D::y_=test.y_;
 }
 
 Vector2D::~Vector2D()
@@ -88,5 +89,11 @@ Vector2D::Vector2D(Vector2D *copy)
             Vector2D::x_=copy->x_;
             Vector2D::y_=copy->y_;
 }
+
+bool Vector2D::operator == (const Vector2D &item)
+{
+    return this->y_ == item.y_ && this->x_ == item.x_;
+}
+
 
 #pragma clang diagnostic pop
