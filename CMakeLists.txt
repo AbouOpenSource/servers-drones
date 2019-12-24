@@ -5,4 +5,4 @@ project(${PROJECT_NAME})
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(Test main.cpp)
+add_executable(Test main.cpp src/core/io/command/CommandParser.cpp src/core/io/command/CommandParser.hpp src/core/io/command/Command.cpp src/core/io/command/Command.hpp src/core/io/command/internal/ConfigCommand.cpp src/core/io/command/internal/ConfigCommand.hpp src/core/io/command/internal/HelpCommand.cpp src/core/io/command/internal/HelpCommand.hpp src/core/io/command/CommandWrapper.cpp src/core/io/command/CommandWrapper.hpp)
