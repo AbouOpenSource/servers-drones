@@ -39,6 +39,9 @@ public:
 
     Vector2D const operator/(int divisor) const;
 
+    Vector2D operator *(int divisor) const;
+
+
     Vector2D operator=(const Vector2D&);
 
     Vector2D(Vector2D *p_d);

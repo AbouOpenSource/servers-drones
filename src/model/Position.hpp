@@ -6,6 +6,8 @@
 #define DRONEPROJECT_POSITION_HPP
 
 
+#include "Vector2D.hpp"
+
 class Position {
 private :
     int x_;
@@ -22,6 +24,8 @@ public:
     void setY(int y);
 
     Position(int x, int y);
+
+    Position operator=(const Vector2D& item);
 };
 
 

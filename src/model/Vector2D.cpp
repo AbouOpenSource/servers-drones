@@ -95,5 +95,10 @@ bool Vector2D::operator == (const Vector2D &item)
     return this->y_ == item.y_ && this->x_ == item.x_;
 }
 
+Vector2D Vector2D::operator*(int mul) const
+{
+    return Vector2D(Vector2D::getAxisX()*mul, Vector2D::getAxisY()*mul);
+}
+
 
 #pragma clang diagnostic pop

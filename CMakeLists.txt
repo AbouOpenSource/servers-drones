@@ -5,4 +5,4 @@ project(${PROJECT_NAME})
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(Test main.cpp src/model/Drone.cpp src/model/Drone.hpp src/model/Server.cpp src/model/Server.hpp src/model/Position.cpp src/model/Position.hpp src/model/Vector2D.cpp src/model/Vector2D.hpp test/Vector2DTest.cpp test/DroneTest.cpp)
+add_executable(Test main.cpp src/model/Drone.cpp src/model/Drone.hpp src/model/Server.cpp src/model/Server.hpp src/model/Position.cpp src/model/Position.hpp src/model/Vector2D.cpp src/model/Vector2D.hpp test/Vector2DTest.cpp test/DroneTest.cpp src/model/Circle.cpp src/model/Circle.hpp)

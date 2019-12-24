@@ -28,3 +28,8 @@ Position::Position(int x, int y) : x_(x), y_(y)
 {
     //initialise another things
 }
+
+Position Position::operator=(const Vector2D &item)
+{
+    return Position(item.getAxisX(), item.getAxisY());
+}

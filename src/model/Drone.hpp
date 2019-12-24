@@ -8,6 +8,10 @@
 
 #include "Position.hpp"
 #include "Vector2D.hpp"
+#include <math.h>
+
+//why
+//#include "Server.hpp"
 
 class Drone {
 
@@ -21,6 +25,7 @@ private:
     Vector2D forces_;
     float weight_;
     int delta_time = int(3);
+    //Server my_server_;
 
 public:
 
@@ -47,8 +52,9 @@ public:
 
     void updatePosition();
 
+    void avoidCollisionWith(Drone *ptrDrone);
 
-
+    float distanceWithOtherDrone(Drone item);
 };
 
 
