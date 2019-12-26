@@ -20,7 +20,7 @@ public:
 
     HelpCommand();
 
-    char* validate(char *value, std::vector<Command *> &options, std::function<void(const std::string &)> &on_error) override;
+    char* validate(char *value, std::vector<Command *> &options, TypeUtil::ErrorCallback& on_error) override;
 
     void printOption(Command* option) const ;
 

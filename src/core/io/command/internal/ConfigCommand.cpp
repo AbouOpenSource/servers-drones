@@ -9,8 +9,7 @@ ConfigCommand::ConfigCommand()
         : Command("config", "c", "Set the config file absolute path.", "-c \"/home/foo/bar.txt\"", true)
 {}
 
-char *ConfigCommand::validate(char* value, std::vector<Command *> &options,
-                              std::function<void(const std::string &)> &on_error)
+char *ConfigCommand::validate(char *value, std::vector<Command *> &options, TypeUtil::ErrorCallback& on_error)
 {
     if (!std::experimental::filesystem::is_regular_file(value)) {
         on_error("The file \"" + std::string(value) + "\" is not a valid file.\nPlease give a valid file full path.");
@@ -20,5 +19,8 @@ char *ConfigCommand::validate(char* value, std::vector<Command *> &options,
 
 const char* ConfigCommand::get_value() const
 {
-    return value_ ? value_ : DEFAULT_FILE;
+    if (value_) {
+        return value_;
+    }
+    return std::experimental::filesystem::is_regular_file(DEFAULT_FILE_1) ? DEFAULT_FILE_1 : DEFAULT_FILE_2;
 }

@@ -21,7 +21,7 @@ CommandWrapper CommandParser::parse(int argc, char **args)
     Command* option(nullptr);
     char* arg;
 
-    std::function<void(const std::string&)> on_error = [] (const std::string& error) {
+    TypeUtil::ErrorCallback on_error = [] (const std::string& error) {
         std::cout << error;
         exit(1);
     };
@@ -59,5 +59,5 @@ CommandWrapper CommandParser::parse(int argc, char **args)
         i++;
     }
 
-    return {options_};
+    return CommandWrapper(options_);
 }
