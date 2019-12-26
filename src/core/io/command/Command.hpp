@@ -5,6 +5,8 @@
 #ifndef DRONEPROJECT_COMMAND_HPP
 #define DRONEPROJECT_COMMAND_HPP
 
+#include "../../../util/TypeUtil.hpp"
+
 /**
  * This objects is the representation of an option and contain all its informations such as name, description, usage etc.
  *
@@ -13,6 +15,8 @@
 class Command {
 
 public:
+
+    typedef std::function<char*(Command*, const char*, std::vector<Command*>&, TypeUtil::ErrorCallback& error)> ValidateCallback;
 
     /**
      * Main constructor
@@ -31,7 +35,7 @@ public:
             const char* description,
             const char* usage,
             bool value_required,
-            const std::function<char*(Command*, const char*, std::vector<Command*>&, std::function<void(const std::string&)>& error)>&  validate_function = nullptr
+            ValidateCallback  validate_function = nullptr
     );
 
     const char* get_shortcut() const;
@@ -60,7 +64,7 @@ public:
      * @param on_error A callable that can be called if something wrong and that will finish the program.
      * @return A valid argument of a default one
      */
-    virtual char* validate(char* value, std::vector<Command*>& options, std::function<void(const std::string&)>& on_error);
+    virtual char* validate(char* value, std::vector<Command*>& options, TypeUtil::ErrorCallback& on_error);
 
     static std::vector<Command*> all_internals();
 
@@ -78,7 +82,7 @@ private:
     bool value_required_;
     bool given_;
 
-    const std::function<char*(Command*, char*, std::vector<Command*>&, std::function<void(const std::string&)>& on_error)> validate_function_;
+    const ValidateCallback validate_function_;
 
 };
 

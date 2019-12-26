@@ -3,6 +3,7 @@
 //
 
 
+#include <utility>
 #include <vector>
 #include "Command.hpp"
 #include "internal/ConfigCommand.hpp"
@@ -13,7 +14,7 @@ Command::Command(
         const char* description,
         const char* usage,
         bool value_required,
-        const std::function<char*(Command*, const char*, std::vector<Command*>&, std::function<void(const std::string&)>& error)>& validate_function
+        ValidateCallback validate_function
     ) :
         name_(name),
         shortcut_(shortcut),
@@ -22,7 +23,7 @@ Command::Command(
         given_(false),
         value_required_(value_required),
         value_(nullptr),
-        validate_function_(validate_function)
+        validate_function_(std::move(validate_function))
 {}
 
 const char* Command::get_shortcut() const
@@ -60,7 +61,7 @@ bool Command::is_value_required() const
     return value_required_;
 }
 
-char* Command::validate(char* value, std::vector<Command*> &options, std::function<void(const std::string&)>& on_error)
+char* Command::validate(char* value, std::vector<Command*> &options, TypeUtil::ErrorCallback& on_error)
 {
     return validate_function_ != nullptr ? validate_function_(this, value, options, on_error) : value;
 }

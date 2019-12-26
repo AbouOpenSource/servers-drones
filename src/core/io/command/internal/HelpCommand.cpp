@@ -11,7 +11,7 @@ HelpCommand::HelpCommand()
         : Command("help", "h", "Display this help text.", "-h", false)
 {}
 
-char* HelpCommand::validate(char *value, std::vector<Command *> &options, std::function<void(const std::string &)> &on_error)
+char* HelpCommand::validate(char *value, std::vector<Command *> &options, TypeUtil::ErrorCallback& on_error)
 {
     std::cout << "Drone project command table:\n\n" << std::left
               << std::setw(COLUMN_WIDTH_NAME) << "Command"
