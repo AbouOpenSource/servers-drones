@@ -17,19 +17,19 @@ public:
 
     Circle(const Position &center, float raduis) ;
 
-    const Position &getCenter() const;
+    const Position &get_center() const;
 
-    float getRaduis() const;
+    float get_raduis() const;
 
-    void setCenter(const Position &center);
+    void set_center(const Position &center);
 
-    void setRaduis(float raduis);
+    void set_raduis(float raduis);
 
     float area();
 
-    float distanceWithOther(Circle item);
+    float distance_with_other(Circle item);
 
-    bool touchWithOther(Circle item);
+    bool touch_with_other(Circle item);
 };
 
 

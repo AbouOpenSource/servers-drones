@@ -9,43 +9,43 @@ Circle::Circle(const Position &center, float raduis) : center_(center), raduis_(
 
 }
 
-const Position &Circle::getCenter() const
+const Position &Circle::get_center() const
 {
     return center_;
 }
 
-float Circle::getRaduis() const
+float Circle::get_raduis() const
 {
     return raduis_;
 }
 
-void Circle::setCenter(const Position &center)
+void Circle::set_center(const Position &center)
 {
     center_ = center;
 }
 
-void Circle::setRaduis(float raduis)
+void Circle::set_raduis(float raduis)
 {
     raduis_ = raduis;
 }
 
 float Circle::area()
 {
-    return Circle::getRaduis()*Circle::getRaduis()*M_1_PI;
+    return Circle::get_raduis()*Circle::get_raduis()*M_PI;
 }
 
-float Circle::distanceWithOther(Circle item)
+float Circle::distance_with_other(Circle item)
 {
 
    return sqrt(
-            center_.getX()-item.center_.getX()*center_.getX()-item.center_.getX()   +
-               center_.getY()-item.center_.getY() *center_.getY()- item.center_.getY()
+            center_.getX() - item.center_.getX()*center_.getX() - item.center_.getX()   +
+               center_.getY() - item.center_.getY() *center_.getY() - item.center_.getY()
             );
 }
 
-bool Circle::touchWithOther(Circle item)
+bool Circle::touch_with_other(Circle item)
 {
-    return Circle::distanceWithOther(item) < item.getRaduis() + Circle::getRaduis();
+    return Circle::distance_with_other(item) < item.get_raduis() + Circle::get_raduis();
 }
 
 

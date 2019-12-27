@@ -20,6 +20,13 @@ private:
     int desiredNumberOfDrones;
     float dMax;
 public:
+    /**
+     *
+     * @param speed
+     * @param current_position it's a current position of the drone
+     * @param the_drone
+     */
+
     Server(const Vector2D &speed, const Vector2D &current_position, const std::vector<Drone*> &the_drone);
 
     const Vector2D &getSpeed() const;

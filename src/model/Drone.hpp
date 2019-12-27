@@ -12,19 +12,25 @@
 
 //why
 //#include "Server.hpp"
-
+#include <string>
+enum Color { red, green, blue };
 class Drone {
+
+    Drone(const Vector2D &current_position, const Vector2D &speed, const Vector2D &acceleration, Vector2D forces,
+          float weight, Color color,std::string name);
 
 
 private:
     Drone(const Vector2D &current_position, const Vector2D &forces, float weight);
 
+    std::string name_;
     Vector2D current_position_;
     Vector2D speed_;
     Vector2D acceleration_;
     Vector2D forces_;
     float weight_;
     int delta_time = int(3);
+    Color color_;
     //Server my_server_;
 
 public:
@@ -32,29 +38,29 @@ public:
     Drone(const Vector2D &current_position, const Vector2D &speed, const Vector2D &acceleration,
           Vector2D forces, float weight);
 
-    const Vector2D &getCurrentPosition() const;
+    const Vector2D &get_current_position() const;
 
-    const Vector2D &getSpeed() const;
+    const Vector2D &get_speed() const;
 
-    const Vector2D &getAcceleration() const;
+    const Vector2D &get_acceleration() const;
 
-    const Vector2D &getForces() const;
+    const Vector2D &get_forces() const;
 
-    void setCurrentPosition(const Vector2D &current_position);
+    void set_current_position(const Vector2D &current_position);
 
-    void setSpeed(const Vector2D &speed);
+    void set_speed(const Vector2D &speed);
 
-    void setAcceleration(const Vector2D &acceleration);
+    void set_acceleration(const Vector2D &acceleration);
 
-    void setForces(const Vector2D &forces);
+    void set_forces(const Vector2D &forces);
 
-    void setWeight(float weight);
+    void set_weight(float weight);
 
-    void updatePosition();
+    void update_position();
 
-    void avoidCollisionWith(Drone *ptrDrone);
+    void avoid_collision_with(Drone *ptrDrone);
 
-    float distanceWithOtherDrone(Drone item);
+    float distance_with_other_drone(Drone item);
 };
 
 

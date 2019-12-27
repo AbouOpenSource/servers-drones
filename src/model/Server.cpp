@@ -7,7 +7,11 @@
 #include "Circle.hpp"
 
 
-Server::Server(const Vector2D &speed, const Vector2D &current_position, const std::vector<Drone*> &the_drone) : speed_(
+Server::Server(
+        const Vector2D &speed,
+        const Vector2D &current_position,
+        const std::vector<Drone*> &the_drone
+        ) : speed_(
         speed), current_position_(current_position), the_drone_(the_drone), raduisDeCollision(15)
 {}
 
@@ -50,16 +54,16 @@ void Server::detectCollision()
             for(int i = 0; the_drone_.size() > i; i++){
                 //TODO make more test to check if i get the right values
                //I create here the circle circoncrit of my drone for test if the collision event can occurs
-                Position center = Position(the_drone_.at(i)->getCurrentPosition().getAxisX(),the_drone_.at(i)->getCurrentPosition().getAxisY());
+                Position center = Position(the_drone_.at(i)->get_current_position().getAxisX(),the_drone_.at(i)->get_current_position().getAxisY());
                 Circle zone =Circle(center,Server::getRaduisDeCollision());
 
                 for (int j = 0; j < the_drone_.size(); ++j) {
                         if(i!=j){
-                            Position otherCenter =Position(the_drone_.at(j)->getCurrentPosition().getAxisX(),the_drone_.at(j)->getCurrentPosition().getAxisY());
+                            Position otherCenter =Position(the_drone_.at(j)->get_current_position().getAxisX(),the_drone_.at(j)->get_current_position().getAxisY());
                             Circle otherZone =Circle(otherCenter,Server::getRaduisDeCollision());
 
-                            if(zone.touchWithOther(otherZone)){
-                                the_drone_.at(i)->avoidCollisionWith(the_drone_.at(j));
+                            if(zone.touch_with_other(otherZone)){
+                                the_drone_.at(i)->avoid_collision_with(the_drone_.at(j));
                             }
                         }
                 }
