@@ -1,4 +1,4 @@
-#include "../../util/vector_util/VectorUtil.hpp"
+#include "../util/VectorUtil.hpp"
 
 /********** Constructor & Destructor **********/
 
@@ -290,12 +290,48 @@ void Matrix<T>::foreach(std::function<void(uint row_index, uint col_index, T ele
     }
 }
 
-// Function to get cofactor of mat[p][q] in temp[][]. n is current
-// dimension of mat[][]
 template <typename T>
-void Matrix<T>::getCofactor(Matrix<T>& mat, Matrix<T>& temp, int p, int q, int n)
+int Matrix<T>::determinant()
+{
+    return determinant(vector_, number_of_rows_);
+}
+
+// DETERMINANT: MATRIX SOLUTION
+template <typename T>
+int Matrix<T>::determinant(Matrix<T> mat, size_t n)
+{
+    int D = 0; // Initialize result.
+
+//    std::cout << "size: " << n << std::endl;
+
+    // Base case : if matrix contains single element.
+    if (n == 1)
+        return mat[0][0];
+
+    Matrix<T> temp(mat.number_of_rows_, mat.number_of_cols_); // To store cofactors
+
+    int sign = 1;  // To store sign multiplier.
+
+
+    // Iterate for each element of first row.
+    for (int f = 0; f < n; f++)
+    {
+        // Getting Cofactor of mat[0][f].
+        getCofactor(mat, temp, 0, f, n);
+        D += sign * mat[0][f] * determinant(temp, n - 1);
+
+        // terms are to be added with alternate sign
+        sign = -sign;
+    }
+
+    return D;
+}
+
+template <typename T>
+void Matrix<T>::getCofactor(Matrix<T> mat, Matrix<T> temp, int p, int q, int n)
 {
     int i = 0, j = 0;
+//    std::cout << "address 2: " << &temp << std::endl;
 
     // Looping for each element of the matrix
     for (int row = 0; row < n; row++)
@@ -320,28 +356,25 @@ void Matrix<T>::getCofactor(Matrix<T>& mat, Matrix<T>& temp, int p, int q, int n
     }
 }
 
-/* Recursive function for finding determinant of matrix.
-   n is current dimension of mat[][]. */
+/* DETERMINANT: VECTOR SOLUTION
 template <typename T>
-int Matrix<T>::determinant()
-{
-    return determinant(*this, size());
-}
-
-template <typename T>
-int Matrix<T>::determinant(Matrix<T>& mat, size_t n)
+int Matrix<T>::determinant(std::vector<std::vector<T>>& mat, size_t n)
 {
     int D = 0; // Initialize result.
 
-    std::cout << "size: " << n << std::endl;
+//    std::cout << "size: " << n << std::endl;
 
-    //  Base case : if matrix contains single element.
+    // Base case : if matrix contains single element.
     if (n == 1)
-    {
         return mat[0][0];
-    }
 
-    Matrix<T> temp(mat.number_of_rows_, mat.number_of_rows_); // To store cofactors
+    std::vector<std::vector<T>> temp; // To store cofactors
+
+    temp.resize(mat.size());
+    for (size_t i = 0; i < mat.size(); i++)
+    {
+        temp[i].resize(mat.size());
+    }
 
     int sign = 1;  // To store sign multiplier.
 
@@ -349,8 +382,8 @@ int Matrix<T>::determinant(Matrix<T>& mat, size_t n)
     for (int f = 0; f < n; f++)
     {
         // Getting Cofactor of mat[0][f].
-        getCofactor(mat, temp, 0, f, n);
-        D += sign * mat[0][f] * determinant(temp, n - 1);
+        this->getCofactor(mat, temp, 0, f, n);
+        D += sign * mat[0][f] * this->determinant(temp, n - 1);
 
         // terms are to be added with alternate sign
         sign = -sign;
@@ -359,8 +392,78 @@ int Matrix<T>::determinant(Matrix<T>& mat, size_t n)
     return D;
 }
 
-//template <typename T>
-//Matrix<T> Matrix<T>::address()
-//{
-//    return *this;
-//}
+// Function to get cofactor of mat[p][q] in temp[][]. n is current
+// dimension of mat[][]
+template <typename T>
+void Matrix<T>::getCofactor(std::vector<std::vector<T>>& mat, std::vector<std::vector<T>>& temp, int p, int q, int n)
+{
+    int i = 0, j = 0;
+
+    // Looping for each element of the matrix
+    for (int row = 0; row < n; row++)
+    {
+        for (int col = 0; col < n; col++)
+        {
+            //  Copying into temporary matrix only those element
+            //  which are not in given row and column
+            if (row != p && col != q)
+            {
+//                std::cout << "temp[" << i << "][" << j << "]" << std::endl;
+//                std::cout << "row: " << row << ", col: " << col << std::endl;
+                temp[i][j++] = mat[row][col];
+
+                // Row is filled, so increase row index and
+                // reset col index
+                if (j == n - 1)
+                {
+                    j = 0;
+                    i++;
+                }
+            }
+        }
+    }
+}
+ */
+
+/* DETERMINANT: TEACHER SOLUTION
+template <typename T>
+void Matrix<T>::getMinus1Matrix(const Matrix<T> &mat44, int shadowLin, int shadowCol) {
+    int l = 0;
+
+    for (int lig = 0; lig < mat44.number_of_rows_; lig++) {
+        if (lig != shadowLin) {
+            int c = 0;
+            for (int col = 0; col < mat44.number_of_cols_; col++) {
+                if (col!=shadowCol) {
+                    (*this)[l][c] = mat44[lig][col];
+                    c++;
+                }
+            }
+            l++;
+        }
+    }
+}
+
+template <typename T>
+float Matrix<T>::determinant() {
+    Matrix<T> mat{size() - 1};
+
+    float det = 0;
+//    std::cout << mat.size() << std::endl;
+
+    float sign = 1;
+
+    if (size() == 2) {
+        return vector_[0][0] * vector_[1][1] - vector_[0][1] * vector_[1][0];
+    }
+
+    for (int i = 0; i < size(); i++)
+    {
+        mat.getMinus1Matrix(*this, i ,0);
+        det += sign * (*this)[i][0] * mat.determinant();
+        sign = -sign;
+    }
+
+    return det;
+}
+*/

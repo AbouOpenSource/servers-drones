@@ -11,6 +11,7 @@
 template <typename T>
 class Matrix
 {
+
     // Prevent the use of no numeric types.
     static_assert(std::is_arithmetic<T>::value, "Type must be numeric.");
 
@@ -180,12 +181,29 @@ public:
     const std::vector<std::vector<T>>& vector() const noexcept;
 
     int determinant();
-    int determinant(Matrix<T>& mat, size_t n);
 
-    void getCofactor(Matrix<T>& mat, Matrix<T>& temp, int p, int q, int n);
+    // DETERMINANT: MATRIX SOLUTION
+    /**
+     * @brief Recursive function for finding determinant of matrix.
+     * n is current dimension of mat[][].
+     * @param mat
+     * @param n
+     * @return
+     */
+    int determinant(Matrix<T> mat, size_t n);
 
-//    Matrix address();
+    /**
+     * @brief Function to get cofactor of mat[p][q] in temp[][]. n is current dimension of mat[][]
+     */
+    void getCofactor(Matrix<T> mat, Matrix<T> temp, int p, int q, int n);
 
+//    DETERMINANT: VECTOR SOLUTION
+//    int determinant(std::vector<std::vector<T>>& mat, size_t n);
+//    void getCofactor(std::vector<std::vector<T>>& mat, std::vector<std::vector<T>>& temp, int p, int q, int n);
+
+//    DETERMINANT: TEACHER SOLUTION
+//    float determinant();
+//    void getMinus1Matrix(const Matrix<T> &mat44,int shadowLin, int shadowCol);
 private:
     /**
      * @brief the number of rows of the matrix.
@@ -204,6 +222,5 @@ private:
 };
 
 #include "Matrix.tcc"
-
 
 #endif //DRONEPROJECT_MATRIX_HPP

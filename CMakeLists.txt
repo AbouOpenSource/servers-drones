@@ -1,10 +1,8 @@
-############################ AFTER ############################
-
 cmake_minimum_required(VERSION 3.14)
 set(CMAKE_CXX_STANDARD 14)
 
 set(PROJECT_NAME DroneProject)
-set(PROJECT_FILES Test main.cpp src/model/triangle/Triangle.h src/model/mesh/Mesh.hpp src/model/matrix/Matrix.tcc src/model/matrix/Matrix.hpp src/util/vector_util/VectorUtil.tcc src/util/vector_util/VectorUtil.hpp src/model/vector2D/Vector2D.hpp src/model/matrix/determinant.h src/model/matrix/determinant.cpp)
+set(PROJECT_FILES Test main.cpp src/util/VectorUtil.hpp src/model/determinant.hpp src/model/determinant.cpp src/model/Triangle.hpp src/model/Triangle.cpp src/model/Mesh.hpp src/model/Mesh.cpp src/model/Matrix.hpp src/model/Window.hpp src/model/Window.cpp)
 
 project(${PROJECT_NAME})
 

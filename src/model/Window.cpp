@@ -1,28 +1,12 @@
-#include <array>
-#include <glutWindow.h>
-#include "../mesh/Mesh.hpp"
+#include "Window.hpp"
 
-class Window: public GlutWindow {
-private:
-    std::array<Vector2D, 5> vertices;
-    std::array<Triangle*, 3> tris;
-    Mesh* mesh;
+Window::Window(const string &title, int argc, char **argv)
+    : GlutWindow(argc, argv, title, 1000, 800, FIXED)
+{
+}
 
-public:
-
-    Window(const string &title, int argc, char **argv): GlutWindow(argc, argv, title, 1000, 800, FIXED)
-    {
-    }
-
-    void onStart() override;
-    void onDraw() override;
-    void onQuit() override;
-    void onMouseMove(double cx,double cy) override;
-    void onMouseDown(int button,double cx,double cy) override;
-    void onKeyPressed(unsigned char c,double x,double y) override;
-};
-
-void Window::onStart() {
+void Window::onStart()
+{
     vertices[0].set(40,80);
     vertices[1].set(460,80);
     vertices[2].set(240,360);
@@ -35,14 +19,15 @@ void Window::onStart() {
 
     float tabVect[][2] = {{280,740},{700,750},{500,700},{900,720},{50,410}, {340 ,400} ,{650 ,390} ,{950 ,300} ,{400 ,200} ,{550 ,190} ,{200 ,50} ,{800 ,100}};
     int tabTri[][3] = {{0,2,1},{0,4,2},{1,6,3},{2,5,8},{2,6,1},{2,8,6},{3,6,11},
-           {3 ,11 ,7} ,{4 ,5 ,2} ,{4 ,8 ,5} ,{4 ,10 ,8} ,{6 ,8 ,9} ,{6 ,9 ,11} ,{8 ,10 ,9} ,{9 ,10 ,11}};
+                       {3 ,11 ,7} ,{4 ,5 ,2} ,{4 ,8 ,5} ,{4 ,10 ,8} ,{6 ,8 ,9} ,{6 ,9 ,11} ,{8 ,10 ,9} ,{9 ,10 ,11}};
 
     mesh = new Mesh(tabVect,12,tabTri,15);
 
     glClearColor(1.0,1.0,1.0,1.0); // background color
 }
 
-void Window::onDraw() {
+void Window::onDraw()
+{
     // draw the referential
     glPushMatrix();
     glTranslatef(10,10,0);
@@ -82,26 +67,26 @@ void Window::onDraw() {
     mesh->draw();
 }
 
-void Window::onQuit() {
-
-}
-
-void Window::onMouseMove(double cx, double cy) {
+void Window::onMouseMove(double cx, double cy)
+{
     Vector2D vertex((float) cx,(float) cy);
-//    for (auto t:tris) {
+//    for (auto t:tris)
 //        t->onMouseMove(v);
-//    }
 
     mesh->onMouseMove(vertex);
 }
 
 void Window::onMouseDown(int button, double cx, double cy)
 {
-    Vector2D vertex((float) cx,(float) cy);
+    Vector2D vertex((float) cx, (float) cy);
 
     mesh->onMouseDown(vertex);
 }
 
 void Window::onKeyPressed(unsigned char c, double x, double y)
+{
+}
+
+void Window::onQuit()
 {
 }
