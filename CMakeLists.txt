@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.14)
 set(CMAKE_CXX_STANDARD 14)
 
 set(PROJECT_NAME DroneProject)
-set(PROJECT_FILES Test main.cpp src/util/VectorUtil.hpp src/model/determinant.hpp src/model/determinant.cpp src/model/Triangle.hpp src/model/Triangle.cpp src/model/Mesh.hpp src/model/Mesh.cpp src/model/Matrix.hpp src/model/Window.hpp src/model/Window.cpp)
+set(PROJECT_FILES Test main.cpp src/util/VectorUtil.hpp src/model/determinant.hpp src/model/determinant.cpp src/model/Triangle.hpp src/model/Triangle.cpp src/model/Mesh.hpp src/model/Mesh.cpp src/model/Matrix.hpp src/model/Window.hpp src/model/Window.cppsrc/core/io/command/CommandParser.cpp src/core/io/command/CommandParser.hpp src/core/io/command/Command.cpp src/core/io/command/Command.hpp src/core/io/command/internal/ConfigCommand.cpp src/core/io/command/internal/ConfigCommand.hpp src/core/io/command/internal/HelpCommand.cpp src/core/io/command/internal/HelpCommand.hpp src/core/io/command/CommandWrapper.cpp src/core/io/command/CommandWrapper.hpp src/core/io/reader/FileStream.cpp src/core/io/reader/FileStream.hpp src/util/TypeUtil.hpp src/util/StringUtil.cpp src/util/StringUtil.hpp src/util/ArrayUtil.cpp src/util/ArrayUtil.hpp)
 
 project(${PROJECT_NAME})
 
