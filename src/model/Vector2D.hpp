@@ -7,29 +7,25 @@
 
 
 class Vector2D {
-private:
+
+public:
+
     int x_;
     int y_;
-public:
+
+    Vector2D();
+
     Vector2D(int x, int y);
 
     Vector2D (const Vector2D& test);
 
-    ~Vector2D();
+    void set(float p_x,float p_y);
 
+    void normalize();
 
+    double norm();
 
-    int getAxisX() const;
-
-    int getAxisY() const;
-
-    void setAxisX(int x);
-
-    void setAxisY(int y);
-
-    void set(float p_x,float p_y) ;
-
-    void normalize() ;
+    Vector2D ortho();
 
     Vector2D operator-(const Vector2D &op2) const;
 
@@ -41,12 +37,13 @@ public:
 
     Vector2D operator *(int divisor) const;
 
-
     Vector2D operator=(const Vector2D&);
 
     Vector2D(Vector2D *p_d);
 
-    bool operator ==  (const Vector2D& item);
+    bool operator == (const Vector2D& item);
+
+    friend Vector2D operator*(float a,const Vector2D &v);
 };
 
 #endif //DRONEPROJECT_VECTOR2D_HPP

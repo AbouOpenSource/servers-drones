@@ -4,22 +4,22 @@
 
 #include "Position.hpp"
 
-int Position::getX() const
+int Position::get_x() const
 {
     return x_;
 }
 
-int Position::getY() const
+int Position::get_y() const
 {
     return y_;
 }
 
-void Position::setX(int x)
+void Position::set_x(int x)
 {
     x_ = x;
 }
 
-void Position::setY(int y)
+void Position::set_y(int y)
 {
     Position::y_ = y;
 }
@@ -31,5 +31,5 @@ Position::Position(int x, int y) : x_(x), y_(y)
 
 Position Position::operator=(const Vector2D &item)
 {
-    return Position(item.getAxisX(), item.getAxisY());
+    return Position(item.x_, item.y_);
 }

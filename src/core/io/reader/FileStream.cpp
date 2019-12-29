@@ -7,7 +7,7 @@
 #include <vector>
 #include "FileStream.hpp"
 #include "../../../util/StringUtil.hpp"
-#include "../../../util/ArrayUtil.hpp"
+#include "../../../util/VectorUtil.tcc"
 
 FileStream::FileStream(std::string file_path, const FileStream::ReadOption options)
         : file_path_(std::move(file_path)), options_(options)
@@ -83,8 +83,8 @@ FileStream::WriterInterface::WriterInterface(const FileStream *file_stream)
 
 void FileStream::WriterInterface::write(unsigned int row, unsigned int col, const std::string& value)
 {
-    ArrayUtil::ensure_size(data_, row, [this] () {data_.emplace_back();});
-    ArrayUtil::ensure_size(data_[row], col, [this, &row] () {data_[row].emplace_back();});
+    VectorUtil::ensure_size(data_, row, [this] () {data_.emplace_back();});
+    VectorUtil::ensure_size(data_[row], col, [this, &row] () {data_[row].emplace_back();});
     data_[row][col] = value;
 }
 

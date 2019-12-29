@@ -4,7 +4,7 @@ Mesh::Mesh(const float tab_vect[][2], int size_tab_vect, const int tab_tri[][3],
 {
     for (int i = 0; i < size_tab_vect; i++)
     {
-        Vector2D vertex = Vector2D{tab_vect[i][0], tab_vect[i][1]};
+        Vector2D vertex = Vector2D{static_cast<int>(tab_vect[i][0]), static_cast<int>(tab_vect[i][1])};
         vertices.push_back(vertex);
     }
 
@@ -25,7 +25,7 @@ void Mesh::onMouseMove(const Vector2D& pos)
 {
     for (auto& triangle: triangles_)
     {
-        triangle.onMouseMove(pos);
+        triangle.on_mouse_move(pos);
     }
 }
 
@@ -38,7 +38,7 @@ void Mesh::draw()
 
     for (auto& triangle: triangles_)
     {
-        triangle.drawCircle();
+        triangle.draw_circle();
     }
 }
 
@@ -48,14 +48,14 @@ void Mesh::onMouseDown(const Vector2D& pos)
 
 //        if (triangle)
 //        {
-//            cout << "clicked" << triangle->whoami(vertices) << endl;
+//            cout << "clicked" << triangle->whoami(vertices_) << endl;
 //            if (!triangle->is_delaunay_)
 //            {
 //                triangle* triangle_neighbor = neighbor_inside(triangle);
 //
 //                if (triangle_neighbor)
 //                {
-//                    cout << "Neighbor:" << triangle_neighbor->whoami(vertices) << endl;
+//                    cout << "Neighbor:" << triangle_neighbor->whoami(vertices_) << endl;
 //
 //                    flip(triangle, triangle_neighbor);
 //                    check_delaunay();

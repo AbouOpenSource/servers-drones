@@ -124,7 +124,7 @@ Matrix<T>::Matrix(std::vector<std::vector<std::string>>& vector)
 
         number_of_rows_ = vector.size();
         number_of_cols_ = row_size;
-        vector_ =  Utils::cast_2d_string_vector_to_vector_of<T>(vector);
+        vector_ =  VectorUtil::cast_2d_string_vector_to_vector_of<T>(vector);
     }
 }
 

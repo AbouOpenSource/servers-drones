@@ -38,8 +38,8 @@ float Circle::distance_with_other(Circle item)
 {
 
    return sqrt(
-            center_.getX() - item.center_.getX()*center_.getX() - item.center_.getX()   +
-               center_.getY() - item.center_.getY() *center_.getY() - item.center_.getY()
+           center_.get_x() - item.center_.get_x() * center_.get_x() - item.center_.get_x() +
+                   center_.get_y() - item.center_.get_y() * center_.get_y() - item.center_.get_y()
             );
 }
 

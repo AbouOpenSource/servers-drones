@@ -5,14 +5,14 @@
 
 #include <glutWindow.h>
 
-#include "Mesh.hpp"
+#include "../model/Mesh.hpp"
 
 class Window: public GlutWindow
 {
 private:
-    std::array<Vector2D, 5> vertices;
-    std::array<Triangle*, 3> tris;
-    Mesh* mesh;
+    std::array<Vector2D, 5> vertices_;
+    std::array<Triangle*, 3> tris_;
+    Mesh* mesh_;
 
 public:
 

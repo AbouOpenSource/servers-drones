@@ -17,8 +17,10 @@ const float GREEN[4] = {0.0, 1.0f, 0.0, 1.0f};
 const float BLUE[4] = {0.0, 0.0, 1.0f, 1.0f};
 
 class Triangle {
+
 public:
-    Vector2D *ptr[3];
+
+    Vector2D *ptr_[3];
     bool is_highlighted_;
     Vector2D circum_center_;
     float circum_radius_;
@@ -26,29 +28,29 @@ public:
 
     Triangle(Vector2D *ptr1,Vector2D *ptr2,Vector2D *ptr3);
 
-//    bool is_equilateral() {
-//        return true;
-//    }
+    //bool is_equilateral() {
+    //  return true;
+    //}
 
-    void updateVertices(Vector2D *ptr1,Vector2D *ptr2,Vector2D *ptr3);
+    void update_vertices(Vector2D *ptr1, Vector2D *ptr2, Vector2D *ptr3);
 
-    void calculateCircle();
+    void calculate_circle();
 
-    void onMouseMove(const Vector2D& pos);
+    void on_mouse_move(const Vector2D& pos);
 
     bool is_on_the_left(const Vector2D *P, const Vector2D *P1, const Vector2D *P2);
 
-    bool isEmpty(const std::vector<Vector2D*> &tmp,int n);
+    bool is_empty(const std::vector<Vector2D*> &tmp, int n);
 
-    bool is_inside(const Vector2D &P);
+    bool is_inside(const Vector2D &p);
 
-    bool is_inside_circle(const Vector2D &P);
+    bool is_inside_circle(const Vector2D &p);
 
     bool check_delaunay(const std::vector<Vector2D> &points);
 
     void draw();
 
-    void drawCircle();
+    void draw_circle();
 };
 
 #endif //DRONEPROJECT_TRIANGLE_HPP

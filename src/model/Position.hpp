@@ -15,13 +15,13 @@ private :
 
 
 public:
-    int getX() const;
+    int get_x() const;
 
-    int getY() const;
+    int get_y() const;
 
-    void setX(int x);
+    void set_x(int x);
 
-    void setY(int y);
+    void set_y(int y);
 
     Position(int x, int y);
 

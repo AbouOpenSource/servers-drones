@@ -2,9 +2,8 @@
 #include "src/core/io/command/internal/ConfigCommand.hpp"
 #include "src/core/io/command/CommandParser.hpp"
 #include "src/core/io/reader/FileStream.hpp"
-#include <iostream>
 #include "src/model/Matrix.hpp"
-#include "src/model/Window.hpp"
+#include "src/gui/Window.hpp"
 
 using namespace std;
 

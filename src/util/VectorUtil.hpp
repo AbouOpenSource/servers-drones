@@ -3,7 +3,7 @@
 
 #include <vector>
 
-namespace Utils
+namespace VectorUtil
 {
     /**
     *  @brief: Print a one dimensional vector.

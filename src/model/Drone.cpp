@@ -80,8 +80,8 @@ void Drone::avoid_collision_with(Drone *ptrDrone)
     //float dAB = this->distanceWithOtherDrone(*ptrDrone);
     //Computing of the
     Vector2D BA = new Vector2D(
-            Drone::current_position_.getAxisX() - ptrDrone->current_position_.getAxisX(),
-            Drone::current_position_.getAxisY() - ptrDrone->current_position_.getAxisY()
+            Drone::current_position_.x_ - ptrDrone->current_position_.x_,
+            Drone::current_position_.y_ - ptrDrone->current_position_.y_
     );
 
 
@@ -103,13 +103,13 @@ void Drone::avoid_collision_with(Drone *ptrDrone)
 float Drone::distance_with_other_drone(Drone item)
 {
     return
-            sqrt(item.current_position_.getAxisX() - Drone::current_position_.getAxisX() *
-                                                     item.current_position_.getAxisX() -
-                 Drone::current_position_.getAxisX()
+            sqrt(item.current_position_.x_ - Drone::current_position_.x_ *
+                                                  item.current_position_.x_ -
+                 Drone::current_position_.x_
                  +
-                 item.current_position_.getAxisY() - Drone::current_position_.getAxisY() *
-                                                     item.current_position_.getAxisY() -
-                 Drone::current_position_.getAxisY()
+                         item.current_position_.y_ - Drone::current_position_.y_ *
+                                                  item.current_position_.y_ -
+                 Drone::current_position_.y_
             );
 }
 

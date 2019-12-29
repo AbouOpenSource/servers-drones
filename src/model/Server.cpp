@@ -54,12 +54,14 @@ void Server::detectCollision()
             for(int i = 0; the_drone_.size() > i; i++){
                 //TODO make more test to check if i get the right values
                //I create here the circle circoncrit of my drone for test if the collision event can occurs
-                Position center = Position(the_drone_.at(i)->get_current_position().getAxisX(),the_drone_.at(i)->get_current_position().getAxisY());
+                Position center = Position(the_drone_.at(i)->get_current_position().x_,
+                                           the_drone_.at(i)->get_current_position().y_);
                 Circle zone =Circle(center,Server::getRaduisDeCollision());
 
                 for (int j = 0; j < the_drone_.size(); ++j) {
                         if(i!=j){
-                            Position otherCenter =Position(the_drone_.at(j)->get_current_position().getAxisX(),the_drone_.at(j)->get_current_position().getAxisY());
+                            Position otherCenter =Position(the_drone_.at(j)->get_current_position().x_,
+                                                           the_drone_.at(j)->get_current_position().y_);
                             Circle otherZone =Circle(otherCenter,Server::getRaduisDeCollision());
 
                             if(zone.touch_with_other(otherZone)){

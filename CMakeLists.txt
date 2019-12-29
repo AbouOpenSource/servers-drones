@@ -2,7 +2,9 @@ cmake_minimum_required(VERSION 3.14)
 set(CMAKE_CXX_STANDARD 14)
 
 set(PROJECT_NAME DroneProject)
-set(PROJECT_FILES Test main.cpp src/util/VectorUtil.hpp src/model/determinant.hpp src/model/determinant.cpp src/model/Triangle.hpp src/model/Triangle.cpp src/model/Mesh.hpp src/model/Mesh.cpp src/model/Matrix.hpp src/model/Window.hpp src/model/Window.cppsrc/core/io/command/CommandParser.cpp src/core/io/command/CommandParser.hpp src/core/io/command/Command.cpp src/core/io/command/Command.hpp src/core/io/command/internal/ConfigCommand.cpp src/core/io/command/internal/ConfigCommand.hpp src/core/io/command/internal/HelpCommand.cpp src/core/io/command/internal/HelpCommand.hpp src/core/io/command/CommandWrapper.cpp src/core/io/command/CommandWrapper.hpp src/core/io/reader/FileStream.cpp src/core/io/reader/FileStream.hpp src/util/TypeUtil.hpp src/util/StringUtil.cpp src/util/StringUtil.hpp src/util/ArrayUtil.cpp src/util/ArrayUtil.hpp src/model/Drone.cpp src/model/Drone.hpp src/model/Server.cpp src/model/Server.hpp src/model/Position.cpp src/model/Position.hpp src/model/Vector2D.cpp src/model/Vector2D.hpp test/Vector2DTest.cpp test/DroneTest.cpp src/model/Circle.cpp src/model/Circle.hpp)
+
+file(GLOB_RECURSE PROJECT_FILES "*.cpp" "*.hpp" "*.tcc")
+list(FILTER PROJECT_FILES EXCLUDE REGEX "(.CompilerId.cpp$|glut)")
 
 project(${PROJECT_NAME})
 
@@ -14,8 +16,8 @@ IF (WIN32)
     message(STATUS ">>> Win32")
     add_compile_definitions(USE_FREEGLUT)
     set(GLUT_DIR F:/freeglut-3.0.0)
-    set(GLUT_INTERFACE_DIRS  ../glutInterface)
-    set(GLUT_INTERFACE_LIB_DIRS  ../glutInterface/cmake-build-debug)
+    set(GLUT_INTERFACE_DIRS lib/glutInterface)
+    set(GLUT_INTERFACE_LIB_DIRS  lib/glutInterface/cmake-build-debug)
     set(CMAKE_PREFIX_PATH FREEGLUT)
 
     set(FREEGLUT_INCLUDE_DIRS F:/freeglut-3.0.0/include)
@@ -37,8 +39,8 @@ IF(LINUX)
 
     SET(GLUT_INCLUDE_DIR /usr/include)
     SET(GLUT_glut_LIBRARY /usr/lib/x86_64-linux-gnu/libglut.so)
-    set(GLUT_INTERFACE_DIRS  ../glutInterface)
-    set(GLUT_INTERFACE_LIB_DIRS  ../glutInterface/cmake-build-debug)
+    set(GLUT_INTERFACE_DIRS  lib/glutInterface)
+    set(GLUT_INTERFACE_LIB_DIRS  lib/glutInterface/cmake-build-debug)
 
     find_package(GLUT REQUIRED)
     link_directories(${GLUT_LIBRARY_DIRS})
@@ -58,8 +60,8 @@ ENDIF(LINUX)
 
 IF (APPLE)
     message(STATUS ">>> APPLE")
-    set(GLUT_INTERFACE_DIRS  ../glutInterface)
-    set(GLUT_INTERFACE_LIB_DIRS  ../glutInterface/cmake-build-debug)
+    set(GLUT_INTERFACE_DIRS  lib/glutInterface)
+    set(GLUT_INTERFACE_LIB_DIRS  lib/glutInterface/cmake-build-debug)
 
     find_package(OpenGL REQUIRED)
     find_package(GLUT REQUIRED)

@@ -1,6 +1,0 @@
-Adding by SANOU ABOU
--   Create Server Class
-    *hpp
-    *cpp
--   Create Drone Class
--   Create Vector2 Class

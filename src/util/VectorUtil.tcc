@@ -1,7 +1,7 @@
 #include "iostream"
 #include <sstream>
 
-namespace Utils {
+namespace VectorUtil {
     template <typename T>
     void print_1D_vector(std::vector<T> &vector)
     {
@@ -102,5 +102,17 @@ namespace Utils {
         }
 
         return vector_of_cast_type;
+    }
+
+    template <typename T>
+    void ensure_size(const std::vector<T>& vector, unsigned long expected_size, const std::function<void()>& init_function) {
+        if (vector.size() > expected_size) {
+            return;
+        }
+        int i(vector.size());
+        while (i <= expected_size) {
+            init_function();
+            i++;
+        }
     }
 }
