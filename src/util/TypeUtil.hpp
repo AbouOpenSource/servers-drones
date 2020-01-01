@@ -6,6 +6,7 @@
 #define DRONEPROJECT_TYPEUTIL_HPP
 
 #include <string>
+#include <functional>
 
 namespace TypeUtil
 {
