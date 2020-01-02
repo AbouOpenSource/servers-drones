@@ -6,6 +6,7 @@
 #define DRONEPROJECT_COMMAND_HPP
 
 #include "../../../util/TypeUtil.hpp"
+#include <functional>
 
 /**
  * This objects is the representation of an option and contain all its informations such as name, description, usage etc.
