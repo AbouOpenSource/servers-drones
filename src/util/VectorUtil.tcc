@@ -41,7 +41,7 @@ namespace VectorUtil {
 
         // If the vector isn't empty, print it.
         std::cout << "[\n";
-        uint cell_count{0};
+        unsigned int cell_count{0};
 
         for (const auto &vector_row: vector)
         {
@@ -83,10 +83,10 @@ namespace VectorUtil {
 
         else
         {
-            for (uint i = 0; i < vector.size(); i++)
+            for (unsigned int i = 0; i < vector.size(); i++)
             {
                 vector_of_cast_type.push_back({});
-                for (uint j = 0; j < vector.size(); j++)
+                for (unsigned int j = 0; j < vector.size(); j++)
                 {
                     try
                     {
