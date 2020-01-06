@@ -5,6 +5,7 @@
 #include "CommandWrapper.hpp"
 #include <vector>
 #include <string>
+#include <cstring>
 
 CommandWrapper::CommandWrapper(std::vector<Command *>& options) : options_(options)
 {}
@@ -29,13 +30,13 @@ Command* CommandWrapper::get_command(const char* option, bool strict) const
     Command* command = nullptr;
     int i(0), max(options_.size());
     while (!command && i < max) {
-        if ((options_[i]->get_name()) == option || (options_[i]->get_shortcut()) == option) {
+        if (strcmp(options_[i]->get_name(), option) == 0 || strcmp(options_[i]->get_shortcut(), option) == 0) {
             command = options_[i];
         }
         i++;
     }
 
-    if (strict && !command) {
+    if (strict && command == nullptr) {
         throw std::logic_error(std::string("Command ").append(option).append(" not found."));
     }
 

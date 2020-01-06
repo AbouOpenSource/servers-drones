@@ -1,3 +1,4 @@
+#include <limits>
 #include "../util/VectorUtil.hpp"
 
 /********** Constructor & Destructor **********/
