@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.14)
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 
 set(PROJECT_NAME DroneProject)
 
@@ -30,7 +30,7 @@ IF (WIN32)
     link_directories(${FREEGLUT_LIBRARY_DIRS} ${OPENGL_LIBRARY_DIRS} ${GLUT_INTERFACE_LIB_DIRS})
     add_definitions(${FREEGLUT_DEFINITIONS} ${OPENGL_DEFINITIONS})
     add_executable(${PROJECT_NAME} ${PROJECT_FILES})
-    target_link_libraries(${PROJECT_NAME} ${FREEGLUT_LIBRARIES} ${GLUT_LIBRARIES} ${OPENGL_LIBRARIES} glutInterface.lib)
+    target_link_libraries(${PROJECT_NAME} ${FREEGLUT_LIBRARIES} ${GLUT_LIBRARIES} ${OPENGL_LIBRARIES} glutInterface.lib stdc++fs)
 ENDIF (WIN32)
 
 IF(LINUX)
@@ -67,6 +67,6 @@ IF (APPLE)
     find_package(GLUT REQUIRED)
     include_directories(${OPENGL_INCLUDE_DIRS}  ${GLUT_INCLUDE_DIRS} ${GLUT_INTERFACE_DIRS})
     link_directories(${OPENGL_LIBRARY_DIRS} ${GLUT_INTERFACE_LIB_DIRS})
-    add_executable(${PROJECT_NAME} ${PROJECT_FILES})
+    add_executable(${PROJECT_NAME} ${PROJECT_FILES} src/core/ServiceContainer.cpp src/core/ServiceContainer.hpp)
     target_link_libraries(${PROJECT_NAME} ${FREEGLUT_LIBRARIES} ${GLUT_LIBRARIES} ${OPENGL_LIBRARIES} libglutInterface.dylib)
 ENDIF(APPLE)
