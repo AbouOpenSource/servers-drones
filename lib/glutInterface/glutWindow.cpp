@@ -1,6 +1,8 @@
 //
 // Created by bpiranda on 18/06/2019.
 //
+#include <fstream>
+#include <cstring>
 #include "glutWindow.h"
 
 static void drawFunc();
@@ -45,6 +47,14 @@ GlutWindow::GlutWindow(int argc,char **argv,const string &title,unsigned int w,u
 void GlutWindow::start() {
     singlePtr->onStart();
     glutMainLoop();
+}
+
+unsigned int GlutWindow::getWindowWidth() {
+    return singlePtr->width;
+}
+
+unsigned int GlutWindow::getWindowHeight() {
+    return singlePtr->height;
 }
 
 void GlutWindow::mouseToScreenCoordinates(int mx, int my, double &sx, double &sy) {
@@ -272,5 +282,113 @@ static void passiveMotionFunc(int x,int y) {
 
 static void quitFunc() {
     singlePtr->onQuit();
+}
+
+GLuint GlutWindow::loadTGATexture(const string &title,int &tw,int &th) {
+    unsigned char *image;
+    GLuint id=0;
+
+    if (!(image=lectureTGA(title,tw,th))) {
+        cerr << "Error : can't open " << title << endl;
+    } else {
+        glGenTextures(1,&id);
+        glBindTexture(GL_TEXTURE_2D,id);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+        gluBuild2DMipmaps(GL_TEXTURE_2D,GL_RGBA,tw,th,GL_RGBA,GL_UNSIGNED_BYTE,image);
+        glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+        delete [] image;
+    }
+    return id;
+}
+
+unsigned char *GlutWindow::lectureTGA(const string &title, int&tw, int&th ,bool flip) {
+    const int DEF_targaHeaderLength=12;
+    const char DEF_targaHeaderContent[]="\x00\x02\x00\x00\x00\x00\x00\x00\x00\x00\x00";
+
+    ifstream fin;
+    char *pData;
+    streampos maxLen=0;
+
+    fin.open(title,ios::binary);
+    if (!fin.is_open()) return nullptr;
+
+    // calc the length of the file.
+    fin.seekg (0, ios::end);
+    maxLen = fin.tellg();
+    fin.seekg (0, ios::beg);
+
+    // allocate enough memory for the file image
+    pData = new char [int(maxLen)];
+
+    // read data
+    fin.read(pData,maxLen);
+
+    fin.close();
+
+    int commentOffset = int( (unsigned char)*pData );
+    if( memcmp( pData + 1, DEF_targaHeaderContent, DEF_targaHeaderLength - 1 ) != 0 ) {
+        cerr << "Not TGA image file format: " << title << endl;
+        return nullptr;
+    }
+    unsigned char smallArray[ 2 ];
+
+    memcpy( smallArray, pData + DEF_targaHeaderLength + 0, 2 );
+    tw = smallArray[ 0 ] + smallArray[ 1 ] * 0x0100;
+
+    memcpy( smallArray, pData + DEF_targaHeaderLength + 2, 2 );
+    th = smallArray[ 0 ] + smallArray[ 1 ] * 0x0100;
+
+    memcpy( smallArray, pData + DEF_targaHeaderLength + 4, 2 );
+    int depth = smallArray[ 0 ];
+//	int pixelBitFlags = smallArray[ 1 ];
+
+    if( ( tw <= 0 ) || ( th <= 0 ) )
+        return nullptr;
+
+    // Only allow 24-bit and 32-bit!
+    bool is24Bit( depth == 24 );
+    bool is32Bit( depth == 32 );
+    if( !( is24Bit || is32Bit ) )
+        return nullptr;
+
+    // Make it a BGRA array for now.
+    int bodySize(tw*th*4);
+    unsigned char * pBuffer = new unsigned char[ bodySize ];
+    if( is32Bit ) {
+        // Easy, just copy it.
+        memcpy( pBuffer, pData + DEF_targaHeaderLength + 6 + commentOffset, bodySize );
+    } else if( is24Bit ) {
+        int bytesRead = DEF_targaHeaderLength + 6 + commentOffset;
+        for( int loop = 0; loop < bodySize; loop += 4, bytesRead += 3 ) {
+            memcpy( pBuffer + loop, pData + bytesRead, 3 );
+            pBuffer[ loop + 3 ] = 255;			// Force alpha to max.
+        }
+    }
+    else return nullptr;
+
+    // Swap R & B (convert to RGBA).
+    for( int loop = 0; loop < bodySize; loop += 4 ) {
+        unsigned char tempC = pBuffer[ loop + 0 ];
+        pBuffer[ loop + 0 ] = pBuffer[ loop + 2 ];
+        pBuffer[ loop + 2 ] = tempC;
+    }
+
+    delete [] pData;
+
+    if (flip) {
+        unsigned char * pBufferRet = new unsigned char[ bodySize ], *ptr1=pBuffer+tw*(th-1)*4,*ptr2=pBufferRet;
+        for (int loop=0; loop<th; loop++) {
+            memcpy(ptr2,ptr1,tw*4);
+            ptr2+=tw*4;
+            ptr1-=tw*4;
+        }
+        delete [] pBuffer;
+        return pBufferRet;
+    }
+    // Ownership moves out.
+    return pBuffer;
 }
 

@@ -280,11 +280,11 @@ void Matrix<T>::add_row(const std::vector<T>& val)
 /********** Miscellaneous **********/
 
 template <typename T>
-void Matrix<T>::foreach(std::function<void(uint row_index, uint col_index, T element)> func_for_each_element)
+void Matrix<T>::foreach(std::function<void(unsigned int row_index, unsigned int col_index, T element)> func_for_each_element)
 {
-    for (uint i = 0; i < vector_.size(); i++)
+    for (unsigned int i = 0; i < vector_.size(); i++)
     {
-        for (uint j = 0; j < vector_[i].size(); j++)
+        for (unsigned int j = 0; j < vector_[i].size(); j++)
         {
             func_for_each_element(i, j, vector_[i][j]);
         }

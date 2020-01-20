@@ -12,14 +12,17 @@ int main(int argc, char** argv)
 
     // Init arguments
     std::vector<Command*> commands(Command::all_internals());
+    Command mickael("mickael","m","will print mickael","-m", true);
+    commands.push_back(&mickael);
     CommandParser command_parser(commands, true);
     CommandWrapper command_wrapper = command_parser.parse(argc, argv);
 
     // Read servers data
     FileStream in_stream(command_wrapper.get_value("c"), {";", true});
+    FileStream out_stream("../data/out.txt", {"///", true});
 
     auto reader_interface = in_stream.reader();
-    auto write_interface = in_stream.writer();
+    auto write_interface = out_stream.writer();
 
     // Usage example
     reader_interface.read([&write_interface] (const unsigned int row, const unsigned int col, const std::string& value) {
@@ -29,7 +32,7 @@ int main(int argc, char** argv)
         // Store on disk
         write_interface.persist();
     });
-  
+
     Matrix<int> matrix(10);
     //std::cout << matrix.determinant();
 

@@ -26,9 +26,9 @@ class GlutWindow {
     public:
         enum textAlign {ALIGN_LEFT,ALIGN_CENTER,ALIGN_RIGHT};
         enum coordinateMode {X_FIRST,Y_FIRST,PROPORTIONAL,LONGEST_FIRST,FIXED};
-        unsigned int width;
-        unsigned int height;
-        coordinateMode currentCM=PROPORTIONAL;
+        unsigned int width; //!< width of the client area
+        unsigned int height; //!< height of the client area
+        coordinateMode currentCM=PROPORTIONAL; //!< default coordinateMode is PROPORTIONAL
         /**
          * @brief Constuctor of GlutWindow object
          * @param argc: main function parameter (number of parameters)
@@ -48,6 +48,16 @@ class GlutWindow {
      * @brief Start function that open the window and run the event manager, must be run by the user
      */
     void start();
+    /**
+     * A static function that gives the width of the window
+     * @return the client area width
+     */
+    static unsigned int getWindowWidth();
+    /**
+     * A static function that gives the height of the window
+     * @return the client area height
+     */
+    static unsigned int getWindowHeight();
     /**
      * @brief Draw a line from (x0,y0) to (x1,y1)
      * @param x0: x position first point
@@ -184,7 +194,23 @@ class GlutWindow {
     static bool isInRect(double px,double py,double x0,double y0,double lx,double ly) {
         return px>=x0 && py>=y0 && px<=x0+lx && py<=y0+ly;
     }
-
+/**
+* @brief static function that returns an OpenGL texture id for the new texture
+* @param title: TGA image file name
+* @param tw: width of the texture in file
+* @param th: height of the texture in file
+* @return OpenGL texture id
+*/
+    static GLuint loadTGATexture(const string &title,int &tw,int &th);
+/**
+ * @brief static function that returns TGA image data
+ * @param title: TGA image file name
+ * @param tw: width of the texture in file
+ * @param th: height of the texture in file
+ * @param flip: vertical flip of the image
+ * @return image data
+ */
+    static unsigned char *lectureTGA(const string &title, int&tw, int&th ,bool flip=false);
 };
 
 #endif //GLUTINTERFACE_GLUTWINDOW_H

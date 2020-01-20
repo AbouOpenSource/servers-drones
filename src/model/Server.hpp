@@ -19,7 +19,7 @@ private:
     float raduisDeCollision;
     int desiredNumberOfDrones;
     float dMax;
-public:
+//public:
     /**
      *
      * @param speed
