@@ -14,11 +14,11 @@
 //why
 //#include "Server.hpp"
 #include <string>
-#include <GL/gl.h>
+#include <OpenGL/OpenGL.h>
 
 //enum Color { RED, GREEN, BLUE, PINK, YELLOW, CYAN };
 
-class Drone :public Drawable{
+class Drone : public Drawable {
 
     Drone(const Vector2D &current_position, const Vector2D &speed, const Vector2D &acceleration, Vector2D forces,
           float weight ,std::string name);

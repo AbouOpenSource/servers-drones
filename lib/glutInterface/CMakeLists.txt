@@ -63,7 +63,21 @@ IF (APPLE)
     add_library(glutInterface SHARED glutWindow.cpp glutWindow.h)
 ENDIF(APPLE)
 
+#IF (APPLE)
+#    message(STATUS ">>> APPLE")
+#    set(GLUT_INTERFACE_DIRS  ../glutInterface)
+#    set(GLUT_INTERFACE_LIB_DIRS  ../glutInterface/cmake-build-debug)
+#
+#    find_package(OpenGL REQUIRED)
+#    find_package(GLUT REQUIRED)
+#    include_directories(${OPENGL_INCLUDE_DIRS}  ${GLUT_INCLUDE_DIRS} ${GLUT_INTERFACE_DIRS})
+#    link_directories(${OPENGL_LIBRARY_DIRS} ${GLUT_INTERFACE_LIB_DIRS})
+#    add_executable(${PROJECT_NAME} ${PROJECT_FILES})
+#    target_link_libraries(${PROJECT_NAME} ${FREEGLUT_LIBRARIES} ${GLUT_LIBRARIES} ${OPENGL_LIBRARIES} libglutInterface.dylib)
+#ENDIF(APPLE)
+
+
 add_definitions(${FREEGLUT_DEFINITIONS} ${OPENGL_DEFINITIONS})
 
-add_executable(Test main.cpp glutWindow.cpp glutWindow.h)
+add_executable(Test main.cpp)
 target_link_libraries(glutInterface ${FREEGLUT_LIBRARIES} ${GLUT_LIBRARIES} ${OPENGL_LIBRARIES})

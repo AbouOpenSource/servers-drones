@@ -5,8 +5,6 @@
 #ifndef DRONEPROJECT_DRAWABLE_HPP
 #define DRONEPROJECT_DRAWABLE_HPP
 
-
-#include <GL/gl.h>
 #include "../../core/event/input/InputManager.hpp"
 
 class Drawable

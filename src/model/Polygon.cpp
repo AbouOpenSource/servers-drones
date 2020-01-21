@@ -364,9 +364,9 @@ void Polygon::triangulation()
                 Triangle triangle2 = Triangle(&p2_triangle, &p3_triangle, &interior_point);
                 Triangle triangle3 = Triangle(&p3_triangle, &p1_triangle, &interior_point);
 
-                triangles_.push_back(triangle1);
-                triangles_.push_back(triangle2);
-                triangles_.push_back(triangle3);
+//                triangles_.push_back(triangle1);
+//                triangles_.push_back(triangle2);
+//                triangles_.push_back(triangle3);
             }
 //            else
 //            {
