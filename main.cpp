@@ -4,7 +4,10 @@
 #include "src/core/io/reader/FileStream.hpp"
 #include "src/util/StringUtil.hpp"
 #include "src/util/VectorUtil.hpp"
+
 #include "src/model/Server.hpp"
+#include "src/model/Polygon.hpp"
+
 #include "src/gui/Window.hpp"
 #include "src/core/ServiceContainer.hpp"
 #include "src/gui/drawable/Circumscribe.hpp"
@@ -69,13 +72,21 @@ int main(int argc, char** argv)
 
                 Server server(name, server_pos, area_color);
 
+//                std::cout << "name: " << server.get_name()
+//                          << " position: x: " << server.getCurrentPosition().x_ << ", y: " << server.getCurrentPosition().y_
+//                          << " color: " << server.get_color()
+//                          << std::endl;
+
                 servers.push_back(server);
             }
         }
     });
 
+    Polygon convex_polygon = Polygon(servers);
     Circumscribe circumscribe(servers);
+
     window.addDrawable(&circumscribe);
+    window.addDrawable(&convex_polygon);
     window.start();
 
     return 0;

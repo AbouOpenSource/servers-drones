@@ -17,7 +17,7 @@ public:
 
     virtual void start(InputManager* input_manager);
 
-    virtual void draw() const;
+    virtual void draw();
 
     virtual void quit();
 };

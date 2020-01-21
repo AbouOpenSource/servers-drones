@@ -20,7 +20,7 @@ public:
 
     void start(InputManager* input_manager) override;
 
-    void draw() const override;
+    void draw() override;
 
 private:
 

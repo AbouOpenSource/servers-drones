@@ -10,7 +10,7 @@ Drawable::Drawable()
 void Drawable::start(InputManager* input_manager)
 {}
 
-void Drawable::draw() const
+void Drawable::draw()
 {}
 
 void Drawable::quit()

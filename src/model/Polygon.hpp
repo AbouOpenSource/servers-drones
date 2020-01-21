@@ -6,6 +6,7 @@
 #include "Vector2D.hpp"
 #include "Triangle.hpp"
 #include "Server.hpp"
+#include "../gui/drawable/Drawable.hpp"
 
 //const float BLACK[4] = { 0.0, 0.0, 0.0, 1.0};
 //const float RED[4] = { 1.0, 0.0, 0.0, 1.0};
@@ -13,7 +14,7 @@
 //const float GREEN[4] = { 0.0, 1.0, 0.0, 1.0};
 //const float BLUE[4] = { 0.0, 0.0, 1.0, 1.0};
 
-class Polygon
+class Polygon: public Drawable
 {
     Vector2D* tab_pts_;
     int n_max_;
@@ -35,7 +36,8 @@ public:
 
     /********** Modifier **********/
     bool add_vertex(const Vector2D &p);
-    void draw();
+
+    void draw() override;
 
     /**
      * @brief Check if the vertex p is inside the polygon.

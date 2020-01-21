@@ -20,12 +20,13 @@ void Circumscribe::start(InputManager* input_manager)
 //    tris_[1] = new triangle(&vertices_[1],&vertices_[3],&vertices_[2]);
 //    tris_[2] = new triangle(&vertices_[2],&vertices_[3],&vertices_[4]);
 
-    float tab_vect[][2] = {{280, 740}, {700, 750}, {500, 700}, {900, 720}, {50, 410}, {340 , 400} , {650 , 390} ,
-                           {950 , 300} , {400 , 200} , {550 , 190} , {200 , 50} , {800 , 100}};
-    int tab_tri[][3] = {{0,  2,   1}, {0, 4, 2}, {1, 6, 3}, {2, 5, 8}, {2, 6, 1}, {2, 8, 6}, {3, 6, 11},
-                        {3 , 11 , 7} , {4 , 5 , 2} , {4 , 8 , 5} , {4 , 10 , 8} , {6 , 8 , 9} , {6 , 9 , 11} , {8 , 10 , 9} , {9 , 10 , 11}};
+//    float tab_vect[][2] = {{280, 740}, {700, 750}, {500, 700}, {900, 720}, {50, 410}, {340 , 400} , {650 , 390},
+//                           {950 , 300} , {400 , 200} , {550 , 190} , {200 , 50} , {800 , 100}};
 
-    mesh_ = new Mesh(tab_vect, 12, tab_tri, 15);
+//    int tab_tri[][3] = {{0,  2,   1}, {0, 4, 2}, {1, 6, 3}, {2, 5, 8}, {2, 6, 1}, {2, 8, 6}, {3, 6, 11},
+//                        {3 , 11 , 7} , {4 , 5 , 2} , {4 , 8 , 5} , {4 , 10 , 8} , {6 , 8 , 9} , {6 , 9 , 11} , {8 , 10 , 9} , {9 , 10 , 11}};
+
+//    mesh_ = new Mesh(tab_vect, 12, tab_tri, 15);
     //mesh_ = new Mesh(servers_);
 
     glClearColor(1.0,1.0,1.0,1.0); // background color
@@ -34,48 +35,48 @@ void Circumscribe::start(InputManager* input_manager)
         Vector2D vertex((int)position.X, (int)position.Y);
         //for (auto t:tris_)
         //  t->onMouseMove(v);
-        mesh_->onMouseMove(vertex);
+//        mesh_->onMouseMove(vertex);
     });
 
     input_manager->register_mouse_click_listener([this] (InputManager::MouseClick click,
                                                          InputManager::MousePosition position,
                                                          bool is_inside) {
         Vector2D vertex((int)position.X, (int)position.Y);
-        mesh_->onMouseDown(vertex);
+//        mesh_->onMouseDown(vertex);
     });
 
 }
 
-void Circumscribe::draw() const
+void Circumscribe::draw()
 {
     // draw the referential
-    glPushMatrix();
-    glTranslatef(10,10,0);
-    glColor3fv(RED);
-    glBegin(GL_QUADS);
-    glVertex2f(0.0,-2.0);
-    glVertex2f(100.0,-2.0);
-    glVertex2f(100.0,2.0);
-    glVertex2f(0.0,2.0);
-    glEnd();
-    glBegin(GL_TRIANGLES);
-    glVertex2f(110.0,0.0);
-    glVertex2f(90.0,-10.0);
-    glVertex2f(90.0,10.0);
-    glEnd();
-    glColor3fv(GREEN);
-    glBegin(GL_QUADS);
-    glVertex2f(-2.0,0.0);
-    glVertex2f(2.0,0.0);
-    glVertex2f(2.0,100.0);
-    glVertex2f(-2.0,100.0);
-    glEnd();
-    glBegin(GL_TRIANGLES);
-    glVertex2f(0.0,110.0);
-    glVertex2f(-10.0,90.0);
-    glVertex2f(10.0,90.0);
-    glEnd();
-    glPopMatrix();
+//    glPushMatrix();
+//    glTranslatef(10,10,0);
+//    glColor3fv(RED);
+//    glBegin(GL_QUADS);
+//    glVertex2f(0.0,-2.0);
+//    glVertex2f(100.0,-2.0);
+//    glVertex2f(100.0,2.0);
+//    glVertex2f(0.0,2.0);
+//    glEnd();
+//    glBegin(GL_TRIANGLES);
+//    glVertex2f(110.0,0.0);
+//    glVertex2f(90.0,-10.0);
+//    glVertex2f(90.0,10.0);
+//    glEnd();
+//    glColor3fv(GREEN);
+//    glBegin(GL_QUADS);
+//    glVertex2f(-2.0,0.0);
+//    glVertex2f(2.0,0.0);
+//    glVertex2f(2.0,100.0);
+//    glVertex2f(-2.0,100.0);
+//    glEnd();
+//    glBegin(GL_TRIANGLES);
+//    glVertex2f(0.0,110.0);
+//    glVertex2f(-10.0,90.0);
+//    glVertex2f(10.0,90.0);
+//    glEnd();
+//    glPopMatrix();
 
 //    for (auto t:tris_) {
 //        t->draw();
@@ -84,6 +85,6 @@ void Circumscribe::draw() const
 //        t->drawCircle();
 //    }
 
-    mesh_->draw();
+//    mesh_->draw();
 }
 
