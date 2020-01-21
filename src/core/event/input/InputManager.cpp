@@ -2,6 +2,7 @@
 // Created by Maanrifa Bacar Ali on 21/01/2020.
 //
 
+#include <iostream>
 #include "InputManager.hpp"
 
 std::string InputManager::SERVICE = "InputService";
@@ -50,19 +51,20 @@ void InputManager::on_mouse_down(int button, double cx, double cy) const
 {
     MousePosition mouse_position = {cx, cy};
     MouseClick mouse_click = button == 0 ? LEFT : RIGHT;
-    bool is_inside = true; // TODO: Check if is inside
 
     for (auto & mouse_click_listener : mouse_click_listeners_) {
-        mouse_click_listener(mouse_click, mouse_position, is_inside);
+        mouse_click_listener(mouse_click, mouse_position);
     }
 }
 
 void InputManager::on_key_pressed(unsigned char c, double cx, double cy) const
 {
+
+    std::cout << "Key pressed: " << c << ',' << cx << ',' << cy << std::endl;
     MousePosition mouse_position = {cx, cy};
 
     for (auto & key_press_listener : key_press_listeners_) {
-        key_press_listener(c, mouse_position);
+        key_press_listener(static_cast<Key>(c), mouse_position);
     }
 }
 

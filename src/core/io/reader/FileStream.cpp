@@ -7,7 +7,7 @@
 #include <vector>
 #include "FileStream.hpp"
 #include "../../../util/StringUtil.hpp"
-#include "../../../util/VectorUtil.tcc"
+#include "../../../util/VectorUtil.hpp"
 
 FileStream::FileStream(std::string file_path, const FileStream::ReadOption options)
         : file_path_(std::move(file_path)), options_(options)

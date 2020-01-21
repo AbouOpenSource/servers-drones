@@ -8,15 +8,17 @@
 
 #include "Position.hpp"
 #include "Vector2D.hpp"
+#include "../gui/drawable/Drawable.hpp"
 #include <math.h>
 
 //why
 //#include "Server.hpp"
 #include <string>
+#include <GL/gl.h>
 
 //enum Color { RED, GREEN, BLUE, PINK, YELLOW, CYAN };
 
-class Drone {
+class Drone :public Drawable{
 
     Drone(const Vector2D &current_position, const Vector2D &speed, const Vector2D &acceleration, Vector2D forces,
           float weight ,std::string name);
@@ -24,14 +26,16 @@ class Drone {
 
 private:
     Drone(const Vector2D &current_position, const Vector2D &forces, float weight);
-
-    std::string name_;
+    const std::string filemane="../../data/";
+    std::string id_;
     Vector2D current_position_;
     Vector2D speed_;
     Vector2D acceleration_;
     Vector2D forces_;
     float weight_;
     int delta_time = int(3);
+    GLuint droneId=0;
+
     //Server my_server_;
 
 public:
@@ -63,7 +67,11 @@ public:
 
     float distance_with_other_drone(Drone item);
 
-    void draw();
+    void draw() const override;
+
+    void quit() override ;
+
+    void start(InputManager* input_manager,TextureLoader texture_loader) override ;
 };
 
 

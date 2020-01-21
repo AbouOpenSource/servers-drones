@@ -18,7 +18,20 @@ public:
 
     static std::string SERVICE;
 
-    enum Key {F1, F2, F3, F4, F5, F6, F7, F8, F9, F10, F11, S, D, DEL};
+    enum Key {
+        F1 = 49,
+        F2 = 50,
+        F3 = 51,
+        F4 = 52,
+        F5 = 53,
+        F6 = 54,
+        F7 = 55,
+        F8 = 56,
+        F9 = 57,
+        S = 115,
+        D = 100,
+        DEL = 127
+    };
 
     enum MouseClick {
         LEFT,
@@ -30,9 +43,9 @@ public:
         double Y;
     };
 
-    typedef std::function<void(const unsigned char& key, const MousePosition& mouse_position)> KeyPressListener;
+    typedef std::function<void(const Key key, const MousePosition& mouse_position)> KeyPressListener;
     typedef std::function<void(const MousePosition& position)> MouseMoveListener;
-    typedef std::function<void(const MouseClick& click, const MousePosition& position, bool is_inside)> MouseClickListener;
+    typedef std::function<void(const MouseClick& click, const MousePosition& position)> MouseClickListener;
 
     InputManager();
 

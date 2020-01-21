@@ -7,7 +7,7 @@
 Drawable::Drawable()
 {}
 
-void Drawable::start(InputManager* input_manager)
+void Drawable::start(InputManager* input_manager, TextureLoader texture_loader)
 {}
 
 void Drawable::draw()
