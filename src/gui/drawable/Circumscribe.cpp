@@ -43,13 +43,9 @@ void Circumscribe::start(InputManager* input_manager, TextureLoader texture_load
     });
 
     input_manager->register_mouse_click_listener([this] (InputManager::MouseClick click,
-                                                         InputManager::MousePosition position,
-                                                         bool is_inside) {
-        Vector2D vertex((int)position.X, (int)position.Y);
-//        mesh_->onMouseDown(vertex);
                                                          InputManager::MousePosition position) {
-        Vector2D vertex((float)position.X, (float)position.Y);
-    //    mesh_->onMouseDown(vertex);
+        Vector2D vertex((int)position.X, (int)position.Y);
+
     });
 
 }

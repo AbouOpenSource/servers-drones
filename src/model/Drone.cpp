@@ -114,7 +114,7 @@ float Drone::distance_with_other_drone(Drone item)
             );
 }
 
-void Drone::draw() const
+void Drone::draw()
 {
     glEnable(GL_TEXTURE_2D);
     glColor3f(1.0f,1.0f,1.0f);
