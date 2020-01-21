@@ -10,6 +10,8 @@
 #include "Vector2D.hpp"
 #include "Drone.hpp"
 
+enum Color { red, green, blue, pink, yellow, cyan };
+
 class Server {
 
 private:
@@ -19,7 +21,12 @@ private:
     float raduisDeCollision;
     int desiredNumberOfDrones;
     float dMax;
-//public:
+
+    const std::string name_;
+    std::string color_;
+//    Color color_;
+
+public:
     /**
      *
      * @param speed
@@ -27,7 +34,12 @@ private:
      * @param the_drone
      */
 
+    Server(std::string& name, Vector2D &current_position, std::string color);
+//    Server(std::string& name, Vector2D &current_position, Color color);
+
     Server(const Vector2D &speed, const Vector2D &current_position, const std::vector<Drone*> &the_drone);
+
+    const std::string &get_name() const;
 
     const Vector2D &getSpeed() const;
 
@@ -55,12 +67,17 @@ private:
 
     int getDesiredNumberOfDrones();
 
-  void connectDrone(Drone* ptrDrone);
+    void connectDrone(Drone* ptrDrone);
 
-   void disconnectDrone(Drone* ptrDrone);
+    void disconnectDrone(Drone* ptrDrone);
 
     float getDMax() const;
 
+    const std::string &get_color() const;
+
+    void set_color(const std::string &color);
+
+//    Color color_value_of(std::string color);
 };
 
 

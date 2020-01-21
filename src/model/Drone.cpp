@@ -7,8 +7,8 @@
 
 
 Drone::Drone(const Vector2D &current_position, const Vector2D &speed, const Vector2D &acceleration,
-             Vector2D forces, float weight,Color color,std::string name) : current_position_(
-        current_position), speed_(speed), acceleration_(acceleration), forces_(forces), weight_(weight),color_(color),name_(name)
+             Vector2D forces, float weight, std::string name) : current_position_(
+        current_position), speed_(speed), acceleration_(acceleration), forces_(forces), weight_(weight), name_(name)
 {
 
 }

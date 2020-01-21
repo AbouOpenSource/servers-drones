@@ -1,10 +1,22 @@
 #include "Mesh.hpp"
+#include "Polygon.hpp"
+
+Mesh::Mesh(std::vector<Server> servers)
+{
+    // TODO Convex hull
+//    Polygon convex_polygon = Polygon(servers);
+
+    // TODO Triangulation
+
+    // TODO Delaunay
+}
 
 Mesh::Mesh(const float tab_vect[][2], int size_tab_vect, const int tab_tri[][3], int size_tab_tri)
 {
+
     for (int i = 0; i < size_tab_vect; i++)
     {
-        Vector2D vertex = Vector2D{static_cast<int>(tab_vect[i][0]), static_cast<int>(tab_vect[i][1])};
+        Vector2D vertex = Vector2D{tab_vect[i][0], tab_vect[i][1]};
         vertices.push_back(vertex);
     }
 

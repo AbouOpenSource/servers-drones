@@ -14,7 +14,7 @@ public :
 
     Vector2D(const Vector2D &v);
 
-    Vector2D(float p_x,float p_y);
+    Vector2D(float p_x, float p_y);
 
     Vector2D operator-(const Vector2D &op2) const;
 

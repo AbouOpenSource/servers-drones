@@ -20,7 +20,7 @@ Vector2D::Vector2D(const Vector2D &v)
     y_ = v.y_;
 }
 
-Vector2D::Vector2D(float p_x,float p_y)
+Vector2D::Vector2D(float p_x, float p_y)
         : x_(p_x),
           y_(p_y)
 {

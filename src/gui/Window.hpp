@@ -12,12 +12,13 @@ class Window: public GlutWindow
 private:
     std::array<Vector2D, 5> vertices_;
     std::array<Triangle*, 3> tris_;
+    std::vector<Server> servers_;
     Mesh* mesh_;
 
 public:
 
     /********** Constructor **********/
-    Window(const string &title, int argc, char **argv);
+    Window(const string &title, int argc, char **argv, std::vector<Server>& servers);
 
     /********** Event **********/
     void onStart() override;
