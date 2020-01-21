@@ -62,6 +62,8 @@ public:
     void avoid_collision_with(Drone *ptrDrone);
 
     float distance_with_other_drone(Drone item);
+
+    void draw();
 };
 
 

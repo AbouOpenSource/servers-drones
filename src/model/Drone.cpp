@@ -113,4 +113,9 @@ float Drone::distance_with_other_drone(Drone item)
             );
 }
 
+void Drone::draw()
+{
+
+}
+
 

@@ -1,4 +1,6 @@
 #include <stack>
+#include <algorithm>
+#include <cstring>
 #include "Polygon.hpp"
 
 Polygon::Polygon(int p_max)
