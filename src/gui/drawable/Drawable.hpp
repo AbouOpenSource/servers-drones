@@ -6,7 +6,7 @@
 #define DRONEPROJECT_DRAWABLE_HPP
 
 
-#include <OpenGL/OpenGL.h>
+#include <GL/gl.h>
 #include "../../core/event/input/InputManager.hpp"
 
 class Drawable

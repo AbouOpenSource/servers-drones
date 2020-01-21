@@ -59,6 +59,8 @@ void InputManager::on_mouse_down(int button, double cx, double cy) const
 
 void InputManager::on_key_pressed(unsigned char c, double cx, double cy) const
 {
+
+    std::cout << "Key pressed: " << c << ',' << cx << ',' << cy << std::endl;
     MousePosition mouse_position = {cx, cy};
 
     for (auto & key_press_listener : key_press_listeners_) {

@@ -3,6 +3,7 @@
 //
 
 #include "Window.hpp"
+#include <glutWindow.h>
 
 std::string Window::SERVICE = "WindowService";
 
@@ -15,10 +16,14 @@ Window::Window(int argc, char **argv, InputManager* input_manager)
 
 void Window::onStart()
 {
-    for (auto & drawable : drawables_) {
-        drawable->start(input_manager_, [] (const std::string& path, int& x, int& y) {
-             return loadTGATexture(path, x, y);
-        });
+
+
+   for (auto & drawable : drawables_) {
+        drawable->start(input_manager_, [this] (const std::string &path, int &x, int &y)->int {
+
+                return this->loadTGATexture(path, x, y);
+                           // return 0;
+                        });
     }
 }
 
