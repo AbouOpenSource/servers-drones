@@ -13,6 +13,8 @@ class Drawable
 
 public:
 
+    Drawable();
+
     virtual void start(InputManager* input_manager);
 
     virtual void draw() const;

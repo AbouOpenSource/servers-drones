@@ -24,7 +24,7 @@ private:
 
         explicit ReaderInterface(const FileStream *file_stream);
 
-        void read(const StreamCallback& stream_callback, const TypeUtil::Callback& on_finish, const TypeUtil::ErrorCallback& error_callback = nullptr);
+        void read(const StreamCallback& stream_callback, const TypeUtil::Callback& on_finish = nullptr, const TypeUtil::ErrorCallback& error_callback = nullptr);
 
     private:
 

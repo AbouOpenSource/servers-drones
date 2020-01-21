@@ -74,7 +74,9 @@ void FileStream::ReaderInterface::read(const StreamCallback &stream_callback,
     }
 
     file.close();
-    on_finish();
+    if (on_finish) {
+        on_finish();
+    }
 }
 
 FileStream::WriterInterface::WriterInterface(const FileStream *file_stream)

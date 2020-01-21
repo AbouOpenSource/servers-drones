@@ -2,7 +2,6 @@
 #include "src/core/io/command/internal/ConfigCommand.hpp"
 #include "src/core/io/command/CommandParser.hpp"
 #include "src/core/io/reader/FileStream.hpp"
-#include "src/model/Matrix.hpp"
 #include "src/util/StringUtil.hpp"
 #include "src/util/VectorUtil.hpp"
 #include "src/model/Server.hpp"
@@ -32,15 +31,22 @@ int main(int argc, char** argv)
     service_container->register_service(&input_manager);
     service_container->register_service(&window);
 
-    //Read config file data
-    FileStream in_stream(command_wrapper.get_value("c"), {";", true});
+    // Retrieve service example
 
+    /*
+    ServiceContainer* container = ServiceContainer::get_instance();
+    InputManager* input_manager = static_cast<InputManager *>(container->get_service(InputManager::SERVICE));
+    input_manager->register_mouse_move_listener([this] (InputManager::MousePosition position) {})
+     */
+
+    //Read config file data
+    FileStream in_stream(command_container.get_value("c"), {";", true});
     auto reader_interface = in_stream.reader();
-  
+
     std::vector<Server> servers;
     std::array<std::string, 3> values;
     
-    reader_interface.read([&write_interface, &values, &servers] (const unsigned int row, const unsigned int col, const std::string& value) {
+    reader_interface.read([&values, &servers] (const unsigned int row, const unsigned int col, const std::string& value) {
         values[col] = value;
 
         if (col == 2) {
@@ -63,18 +69,12 @@ int main(int argc, char** argv)
 
                 Server server(name, server_pos, area_color);
 
-                std::cout << "name: " << server.get_name()
-                          << " position: x: " << server.getCurrentPosition().x_ << ", y: " << server.getCurrentPosition().y_
-                          << " color: " << server.get_color()
-                          << std::endl;
-
                 servers.push_back(server);
             }
         }
     });
-  
-    Circumscribe circumscribe;
 
+    Circumscribe circumscribe(servers);
     window.addDrawable(&circumscribe);
     window.start();
 

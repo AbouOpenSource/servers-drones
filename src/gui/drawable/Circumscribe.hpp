@@ -16,17 +16,20 @@ class Circumscribe: public Drawable
 
 public:
 
+    explicit Circumscribe(std::vector<Server>& servers);
+
     void start(InputManager* input_manager) override;
 
     void draw() const override;
-
-    Circumscribe();
 
 private:
 
     std::array<Vector2D, 5> vertices_;
     std::array<Triangle*, 3> tris_{};
+
     Mesh* mesh_{};
+
+    std::vector<Server> servers_;
 
 };
 
