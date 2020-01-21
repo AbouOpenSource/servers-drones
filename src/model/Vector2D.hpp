@@ -4,6 +4,9 @@
 
 #ifndef DRONEPROJECT_VECTOR2D_HPP
 #define DRONEPROJECT_VECTOR2D_HPP
+
+#include <ostream>
+
 class Vector2D
 {
 
@@ -31,6 +34,9 @@ public :
     void normalize();
 
     double norm();
+
+    /********** Operator overload **********/
+    friend std::ostream &operator<<(std::ostream &out, const Vector2D &vector);
 
     Vector2D ortho();
 };

@@ -19,9 +19,10 @@ class Polygon: public Drawable
     Vector2D* tab_pts_;
     int n_max_;
     int current_n_;
-    std::vector<Triangle> arr_triangle_;
+    std::vector<Triangle> triangles_;
     float color[4];
 
+    std::vector<Vector2D> interior_points;
     std::vector<Vector2D> points_to_build_polygon_;
 
 public:
@@ -75,6 +76,10 @@ public:
     bool is_inside_triangle(const Vector2D& p);
 
     void set_color(const float t_color[4]);
+
+    void delaunay_triangulation(std::vector<Vector2D>& pointsRelative);
+
+    void check_delaunay();
 };
 
 #endif //POINTS_AND_CONVEX_POLYGONS_MYPOLYGON_HPP
