@@ -2,6 +2,7 @@
 // Created by Maanrifa Bacar Ali on 19/12/2019.
 //
 
+#include <regex>
 #include "ConfigCommand.hpp"
 
 ConfigCommand::ConfigCommand()
@@ -10,8 +11,7 @@ ConfigCommand::ConfigCommand()
 
 char *ConfigCommand::validate(char *value, std::vector<Command *> &options, TypeUtil::ErrorCallback& on_error)
 {
-// TODO replace
-    if (true) {
+    if (!std::regex_match(value, std::regex(FILE_PATH_REGEX))) {
         on_error("The file \"" + std::string(value) + "\" is not a valid file.\nPlease give a valid file full path.");
     }
     return value;
@@ -22,5 +22,5 @@ const char* ConfigCommand::get_value() const
     if (value_) {
         return value_;
     }
-    return DEFAULT_FILE_2;
+    return DEFAULT_FILE;
 }

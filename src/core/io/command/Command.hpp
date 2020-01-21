@@ -9,7 +9,7 @@
 #include <functional>
 
 /**
- * This objects is the representation of an option and contain all its informations such as name, description, usage etc.
+ * This objects is the representation of an option and contain all its informations such as name_, description, usage etc.
  *
  * @author Maanrifa Bacar Ali <dev.manrif@gmail.com>
  */
@@ -22,7 +22,7 @@ public:
     /**
      * Main constructor
      *
-     * @param name The name of the option
+     * @param name The name_ of the option
      * @param shortcut The shortcut of the option
      * @param description The description of the option
      * @param usage The usage examples of the option
