@@ -2,29 +2,32 @@
 // Created by Maanrifa Bacar Ali on 24/12/2019.
 //
 
-#ifndef DRONEPROJECT_COMMANDWRAPPER_HPP
-#define DRONEPROJECT_COMMANDWRAPPER_HPP
+#ifndef DRONEPROJECT_COMMANDCONTAINER_HPP
+#define DRONEPROJECT_COMMANDCONTAINER_HPP
 
 
 #include <vector>
 #include "Command.hpp"
+#include "../../ServiceProvider.hpp"
 
 /**
  * A wrapper class to facilitate access to information concerning the arguments.
  *
  * @author Maanrifa Bacar Ali <dev.manrif@gmail.com>
  */
-class CommandWrapper
+class CommandContainer : public ServiceProvider
 {
 
 public:
+
+    static std::string SERVICE;
 
     /**
      * Main constructor
      *
      * @param options The options list
      */
-    explicit CommandWrapper(std::vector<Command*>& options);
+    explicit CommandContainer(std::vector<Command*>& options);
 
     /**
      *
@@ -57,4 +60,4 @@ private:
 };
 
 
-#endif //DRONEPROJECT_COMMANDWRAPPER_HPP
+#endif //DRONEPROJECT_COMMANDCONTAINER_HPP

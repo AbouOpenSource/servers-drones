@@ -7,29 +7,39 @@
 #include "src/util/VectorUtil.hpp"
 #include "src/model/Server.hpp"
 #include "src/gui/Window.hpp"
+#include "src/core/ServiceContainer.hpp"
+#include "src/gui/drawable/Circumscribe.hpp"
 
 using namespace std;
 
 int main(int argc, char** argv)
 {
 
-    // Init arguments
+    // Command Service
     std::vector<Command*> commands(Command::all_internals());
-
     CommandParser command_parser(commands, true);
-    CommandWrapper command_wrapper = command_parser.parse(argc, argv);
+    CommandContainer command_container = command_parser.parse(argc, argv);
 
-    // Read servers data
+    // Input Service
+    InputManager input_manager;
+
+    // Window Service
+    Window window(argc, argv, &input_manager);
+
+    // Instantiating service container
+    ServiceContainer* service_container = ServiceContainer::get_instance();
+    service_container->register_service(&command_container);
+    service_container->register_service(&input_manager);
+    service_container->register_service(&window);
+
+    //Read config file data
     FileStream in_stream(command_wrapper.get_value("c"), {";", true});
-    FileStream out_stream("../data/out.txt", {"///", true});
 
     auto reader_interface = in_stream.reader();
-    auto write_interface = out_stream.writer();
-
+  
     std::vector<Server> servers;
     std::array<std::string, 3> values;
-
-    // Usage example
+    
     reader_interface.read([&write_interface, &values, &servers] (const unsigned int row, const unsigned int col, const std::string& value) {
         values[col] = value;
 
@@ -49,7 +59,7 @@ int main(int argc, char** argv)
                 std::string name = values[0];
                 Vector2D server_pos(x, y);
                 std::string area_color = values[2];
-//                Color area_color = color_value_of(values[2]);
+                //Color area_color = color_value_of(values[2]);
 
                 Server server(name, server_pos, area_color);
 
@@ -61,13 +71,12 @@ int main(int argc, char** argv)
                 servers.push_back(server);
             }
         }
-    }, [&write_interface] () {
-        // Store on disk
-        write_interface.persist();
     });
+  
+    Circumscribe circumscribe;
 
-//    Window window("Triangulation", argc, argv, servers);
-//    window.start();
+    window.addDrawable(&circumscribe);
+    window.start();
 
     return 0;
 }

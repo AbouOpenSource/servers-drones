@@ -5,7 +5,7 @@
 #include <iostream>
 #include "CommandParser.hpp"
 #include "internal/HelpCommand.hpp"
-#include "CommandWrapper.hpp"
+#include "CommandContainer.hpp"
 
 CommandParser::CommandParser(std::vector<Command*>& options, bool strict)
         : options_(options), strict_(strict)
@@ -13,7 +13,7 @@ CommandParser::CommandParser(std::vector<Command*>& options, bool strict)
     options_.insert(options_.begin(), new HelpCommand);
 }
 
-CommandWrapper CommandParser::parse(int argc, char **args)
+CommandContainer CommandParser::parse(int argc, char **args)
 {
     std::string s_pre("-"), n_pre("--"), s_arg;
     int i(1), j(0), options_size(options_.size());
@@ -59,5 +59,5 @@ CommandWrapper CommandParser::parse(int argc, char **args)
         i++;
     }
 
-    return CommandWrapper(options_);
+    return CommandContainer(options_);
 }

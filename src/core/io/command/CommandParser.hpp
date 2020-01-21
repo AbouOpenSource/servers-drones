@@ -8,7 +8,7 @@
 
 #include <vector>
 #include "Command.hpp"
-#include "CommandWrapper.hpp"
+#include "CommandContainer.hpp"
 
 /**
  * A class that parse arguments and will setup options with their values and availability.
@@ -33,9 +33,9 @@ public:
      * @param argc The arguments count
      * @param args The arguments list
      * @return
-     * @see CommandWrapper
+     * @see CommandContainer
      */
-    CommandWrapper parse(int argc, char** args);
+    CommandContainer parse(int argc, char** args);
 
 private:
 

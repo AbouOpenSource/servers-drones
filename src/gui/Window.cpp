@@ -1,9 +1,23 @@
+//
+// Created by Maanrifa Bacar Ali on 21/01/2020.
+//
+
 #include "Window.hpp"
 
-Window::Window(const string &title, int argc, char **argv, std::vector<Server>& servers)
-    : GlutWindow(argc, argv, title, 1000, 800, FIXED),
-    servers_(servers)
+std::string Window::SERVICE = "WindowService";
+
+Window::Window(int argc, char **argv, InputManager* input_manager)
+        : GlutWindow(argc, argv, TITLE, 1000, 800, FIXED),
+          ServiceProvider(Window::SERVICE),
+          input_manager_(input_manager),
+          drawables_(std::vector<Drawable*>())
+{}
+
+void Window::onStart()
 {
+    for (auto & drawable : drawables_) {
+        drawable->start(input_manager_);
+    }
 }
 
 void Window::onStart()
@@ -27,72 +41,39 @@ void Window::onStart()
 
 //    mesh_ = new Mesh(tab_vect, 12, tab_tri, 15);
 
-    mesh_ = new Mesh(servers_);
-
     glClearColor(1.0,1.0,1.0,1.0); // background color
 }
 
 void Window::onDraw()
 {
-    // draw the referential
-    glPushMatrix();
-    glTranslatef(10,10,0);
-    glColor3fv(RED);
-    glBegin(GL_QUADS);
-    glVertex2f(0.0,-2.0);
-    glVertex2f(100.0,-2.0);
-    glVertex2f(100.0,2.0);
-    glVertex2f(0.0,2.0);
-    glEnd();
-    glBegin(GL_TRIANGLES);
-    glVertex2f(110.0,0.0);
-    glVertex2f(90.0,-10.0);
-    glVertex2f(90.0,10.0);
-    glEnd();
-    glColor3fv(GREEN);
-    glBegin(GL_QUADS);
-    glVertex2f(-2.0,0.0);
-    glVertex2f(2.0,0.0);
-    glVertex2f(2.0,100.0);
-    glVertex2f(-2.0,100.0);
-    glEnd();
-    glBegin(GL_TRIANGLES);
-    glVertex2f(0.0,110.0);
-    glVertex2f(-10.0,90.0);
-    glVertex2f(10.0,90.0);
-    glEnd();
-    glPopMatrix();
-
-//    for (auto t:tris_) {
-//        t->draw();
-//    }
-//    for (auto t:tris_) {
-//        t->drawCircle();
-//    }
-
-    mesh_->draw();
-}
-
-void Window::onMouseMove(double cx, double cy)
-{
-    Vector2D vertex((float) cx,(float) cy);
-//    for (auto t:tris_)
-//        t->onMouseMove(v);
-
-    mesh_->onMouseMove(vertex);
-}
-
-void Window::onMouseDown(int button, double cx, double cy)
-{
-    Vector2D vertex((float) cx, (float) cy);
-
-    mesh_->onMouseDown(vertex);
-}
-
-void Window::onKeyPressed(unsigned char c, double x, double y)
-{
+    for (auto & drawable : drawables_) {
+        drawable->draw();
+    }
 }
 
 void Window::onQuit()
 {
+    for (auto & drawable : drawables_) {
+        drawable->quit();
+    }
+}
+
+void Window::addDrawable(Drawable *drawable)
+{
+    drawables_.push_back(drawable);
+}
+
+void Window::onMouseMove(double cx, double cy)
+{
+    input_manager_->on_mouse_move(cx, cy);
+}
+
+void Window::onMouseDown(int button, double cx, double cy)
+{
+    input_manager_->on_mouse_down(button, cx, cy);
+}
+
+void Window::onKeyPressed(unsigned char c, double cx, double cy)
+{
+    input_manager_->on_key_pressed(c, cx, cy);
 }
