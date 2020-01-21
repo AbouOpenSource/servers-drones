@@ -13,11 +13,13 @@
 //why
 //#include "Server.hpp"
 #include <string>
-enum Color { red, green, blue };
+
+//enum Color { RED, GREEN, BLUE, PINK, YELLOW, CYAN };
+
 class Drone {
 
     Drone(const Vector2D &current_position, const Vector2D &speed, const Vector2D &acceleration, Vector2D forces,
-          float weight, Color color,std::string name);
+          float weight ,std::string name);
 
 
 private:
@@ -30,7 +32,6 @@ private:
     Vector2D forces_;
     float weight_;
     int delta_time = int(3);
-    Color color_;
     //Server my_server_;
 
 public:

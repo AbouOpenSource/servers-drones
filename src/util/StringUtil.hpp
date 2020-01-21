@@ -14,6 +14,9 @@ namespace StringUtil
     std::string trim(std::string& target);
 
     std::vector<std::string> split(const std::string& line, const char& delimiter);
+
+    template <typename cast_type>
+    cast_type string_cast_to(std::string& string_value);
 };
 
 

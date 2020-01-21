@@ -2,6 +2,7 @@
 #define DRONEPROJECT_MESH_HPP
 
 #include "Triangle.hpp"
+#include "Server.hpp"
 
 class Mesh
 {
@@ -9,6 +10,8 @@ class Mesh
 public:
     std::vector<Vector2D> vertices;
     std::vector<Triangle> triangles_;
+
+    Mesh(std::vector<Server> servers);
 
     Mesh(const float tab_vect[][2], int size_tab_vect, const int tab_tri[][3], int size_tab_tri);
 

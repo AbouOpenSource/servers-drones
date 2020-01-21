@@ -6,6 +6,25 @@
 #include "Server.hpp"
 #include "Circle.hpp"
 
+Server::Server(std::string& name, Vector2D &current_position, std::string color)
+    : name_(name),
+    current_position_(current_position),
+    color_(color),
+    raduisDeCollision(0),
+    desiredNumberOfDrones(0),
+    dMax(0)
+{
+}
+
+//Server::Server(std::string& name, Vector2D &current_position, Color color)
+//        : name_(name),
+//          current_position_(current_position),
+//          color_(color),
+//          raduisDeCollision(0),
+//          desiredNumberOfDrones(0),
+//          dMax(0)
+//{
+//}
 
 Server::Server(
         const Vector2D &speed,
@@ -119,3 +138,29 @@ void Server::setDMax(float d_max)
     dMax = d_max;
 }
 
+const std::string &Server::get_name() const
+{
+    return name_;
+}
+
+const std::string &Server::get_color() const
+{
+    return color_;
+}
+
+void Server::set_color(const std::string &color)
+{
+    color_ = color;
+}
+
+//Color color_value_of(std::string color)
+//{
+//    if (color == "RED") return Color::red;
+//    if (color == "GREEN") return Color::green;
+//    if (color == "BLUE") return Color::blue;
+//    if (color == "PINK") return Color::pink;
+//    if (color == "YELLOW") return Color::yellow;
+//    if (color == "CYAN") return Color::cyan;
+//
+//    return Color::red;
+//}

@@ -13,7 +13,7 @@ class Matrix
 {
 
     // Prevent the use of no numeric types.
-    static_assert(std::is_arithmetic<T>::value, "Type must be numeric.");
+//    static_assert(std::is_arithmetic<T>::value, "Type must be numeric.");
 
 public:
     /********** Constructor & destructor **********/
