@@ -6,6 +6,7 @@
 #define DRONEPROJECT_DRAWABLE_HPP
 
 
+#include <OpenGL/OpenGL.h>
 #include "../../core/event/input/InputManager.hpp"
 
 class Drawable
@@ -13,9 +14,11 @@ class Drawable
 
 public:
 
+    typedef std::function<int(const std::string& path, int& x, int& y)> TextureLoader;
+
     Drawable();
 
-    virtual void start(InputManager* input_manager);
+    virtual void start(InputManager* input_manager, TextureLoader texture_loader);
 
     virtual void draw() const;
 

@@ -8,7 +8,7 @@
 #include <vector>
 #include "../Command.hpp"
 
-#define DEFAULT_FILE "../data/servers.txt"
+#define DEFAULT_FILE "../data/config/servers.txt"
 #define FILE_PATH_REGEX R"(^(?:[a-zA-Z]\:(\\|\/)|\\\\|\.(\/|\\)|\/)([^\\\/\:\*\?\<\>\"\|]+(\\|\/)?)+.txt$)"
 
 class ConfigCommand: public Command
