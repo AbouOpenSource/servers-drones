@@ -76,4 +76,10 @@ Vector2D operator * (float a, const Vector2D &v)
     return Vector2D(v.x_/divisor,v.x_/divisor);
 }
 
+std::ostream &operator<<(std::ostream &out, const Vector2D &vector)
+{
+    out << "Vector2D | x: " << vector.x_ << ", y: " << vector.y_;
+    return out;
+}
+
 #pragma clang diagnostic pop

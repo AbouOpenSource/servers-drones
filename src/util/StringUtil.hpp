@@ -5,7 +5,6 @@
 #ifndef DRONEPROJECT_STRINGUTIL_HPP
 #define DRONEPROJECT_STRINGUTIL_HPP
 
-
 #include <string>
 
 namespace StringUtil
@@ -18,6 +17,5 @@ namespace StringUtil
     template <typename cast_type>
     cast_type string_cast_to(std::string& string_value);
 };
-
 
 #endif //DRONEPROJECT_STRINGUTIL_HPP

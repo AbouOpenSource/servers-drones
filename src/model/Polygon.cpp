@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <cstring>
 #include "Polygon.hpp"
+#include "../util/VectorUtil.hpp"
 
 Polygon::Polygon(int p_max)
         : tab_pts_{new Vector2D[p_max]},
@@ -11,7 +12,7 @@ Polygon::Polygon(int p_max)
     set_color(YELLOW);
 }
 
-Polygon::Polygon(std::vector<Server>& servers)
+Polygon::Polygon(std::vector<Server>& servers): Drawable()
 {
     std::vector<Vector2D> points;
 
@@ -19,9 +20,10 @@ Polygon::Polygon(std::vector<Server>& servers)
         points.push_back(server.getCurrentPosition());
     }
 
-    std::cout << "First point: " << points[0].x_ << points[0].y_;
-
     set_color(YELLOW);
+
+//    std::cout << "\n";
+//    VectorUtil::print_1D_vector(points);
 
 //    assert(points.size() > 3);
     points_to_build_polygon_ = points;
@@ -47,6 +49,7 @@ Polygon::Polygon(std::vector<Server>& servers)
 
     // Copy points in a set of points relative to points[0]
     vector<Vector2D> pointsRelative;
+
     for (auto pOrig: points)
         pointsRelative.push_back(Vector2D{pOrig.x_ - origin.x_, pOrig.y_ - origin.y_});
 
@@ -59,10 +62,12 @@ Polygon::Polygon(std::vector<Server>& servers)
     CHstack.push(&pointsRelative[1]);
     CHstack.push(&pointsRelative[2]);
 
-//    std::cout << CHstack.size() << std::endl;
+    // TODO START DELAUNAY TRIANGULATION.
     vector<Vector2D>::iterator pi = pointsRelative.begin() + 3;
+
     while (pi != pointsRelative.end())
     {
+        // Extract top and top_1.
         top = CHstack.top();
         CHstack.pop();
         top_1 = CHstack.top();
@@ -70,31 +75,37 @@ Polygon::Polygon(std::vector<Server>& servers)
 
         while (!is_on_the_left(&(*pi), top_1, top))
         {
-            CHstack.pop();
+            // Add interior point
+            const Vector2D interior_point(top->x_ + origin.x_, top->y_ + origin.y_);
+            interior_points.push_back(interior_point);
 
+            CHstack.pop();
             // Update values of top and top_1.
             top = CHstack.top();
             CHstack.pop();
             top_1 = CHstack.top();
             CHstack.push(top);
         }
+
         CHstack.push(&(*pi));
         pi++;
     }
 
-    // Get stack points to create current polygon
+    // Get stack points to create current polygon.
     current_n_ = CHstack.size();
     n_max_ = current_n_;
     tab_pts_ = new Vector2D[n_max_ + 1];
 
     int i = current_n_ - 1;
+
     while (!CHstack.empty())
     {
-        tab_pts_[i--] = *(CHstack.top()) + origin;
+        tab_pts_[i--] = *(CHstack.top()) + origin; // Place the popped point in the global referential.
         CHstack.pop();
     }
 
     tab_pts_[current_n_] = tab_pts_[0];
+    // TODO END DELAUNAY TRIANGULATION
 }
 
 Polygon::~Polygon()
@@ -134,7 +145,7 @@ bool Polygon::is_on_the_left(const Vector2D* p, const Vector2D* p1, const Vector
 
 bool Polygon::is_convex()
 {
-    uint i = 0;
+    unsigned int i = 0;
 
     while (i < current_n_ && is_on_the_left(tab_pts_[(i + 2) % current_n_], i))
         i++;
@@ -168,12 +179,12 @@ bool Polygon::is_inside(const Vector2D& p)
 
 bool Polygon::is_inside_triangle(const Vector2D& p)
 {
-    auto triangle = arr_triangle_.begin();
+    auto triangle = triangles_.begin();
 
-    while (triangle != arr_triangle_.end() && !(*triangle).is_inside(p))
+    while (triangle != triangles_.end() && !(*triangle).is_inside(p))
         triangle++;
 
-    return triangle != arr_triangle_.end();
+    return triangle != triangles_.end();
 }
 
 void Polygon::set_color(const float t_color[4])
@@ -183,33 +194,14 @@ void Polygon::set_color(const float t_color[4])
 
 void Polygon::draw()
 {
-//    // Draw the interior of the polygon.
-//    glColor3ub(255, 255, 0);
-//
-//    glBegin(GL_POLYGON);
-//    for (int i = 0; i < current_n_; i++)
-//    {
-//        glVertex2f(tab_pts_[i].x_, tab_pts_[i].y_);
-//    }
-//    glEnd();
-//
-//    // Draw the borders of the polygon.
-//    glColor3b(0, 0, 255);
-//
-//    glBegin(GL_LINE_LOOP);
-//        for (int i = 0; i < current_n_; i++)
-//    {
-//        glVertex2f(tab_pts_[i].x_, tab_pts_[i].y_);
-//    }
-//    glEnd();$
-    if (arr_triangle_.empty())
+    if (triangles_.empty())
         triangulation();
 
     // Draw the interior.
     glColor3fv(color);
 
     glBegin(GL_TRIANGLES);
-    for (auto t: arr_triangle_)
+    for (auto t: triangles_)
     {
         glVertex2f(t.ptr_[0]->x_, t.ptr_[0]->y_);
         glVertex2f(t.ptr_[1]->x_, t.ptr_[1]->y_);
@@ -221,13 +213,14 @@ void Polygon::draw()
     glColor3fv(BLACK);
     glLineWidth(3);
 
+    // Draw the triangles.
     glBegin(GL_LINE_LOOP);
-//    for (auto t: arr_triangle_)
-//    {
-//        glVertex2f(t.ptr_[0]->x_, t.ptr_[0]->y_);
-//        glVertex2f(t.ptr_[1]->x_, t.ptr_[1]->y_);
-//        glVertex2f(t.ptr_[2]->x_, t.ptr_[2]->y_);
-//    }
+    for (auto t: triangles_)
+    {
+        glVertex2f(t.ptr_[0]->x_, t.ptr_[0]->y_);
+        glVertex2f(t.ptr_[1]->x_, t.ptr_[1]->y_);
+        glVertex2f(t.ptr_[2]->x_, t.ptr_[2]->y_);
+    }
     for (int i = 0; i < current_n_; i++)
     {
         glVertex2f(tab_pts_[i].x_, tab_pts_[i].y_);
@@ -251,6 +244,7 @@ void Polygon::draw()
         GlutWindow::drawText(tab_pts_[i].x_ - 10, tab_pts_[i].y_, to_string(i), GlutWindow::ALIGN_RIGHT);
     }
 
+    // TODO
     for (Vector2D points: points_to_build_polygon_)
     {
         glColor3fv(RED);
@@ -341,9 +335,44 @@ void Polygon::triangulation()
         assert(i < n - 2);
 
         // Add T to tabTriangles.
-        arr_triangle_.push_back(T);
+        triangles_.push_back(T);
         tmp.erase(p + 1); // remove point(p + 1) from tmp.
         n--; // or n = tmp.size().
+    }
+
+    /********** Interior point triangles **********/
+    for (Vector2D interior_point: interior_points)
+    {
+//        std::cout << interior_point << "\n";
+
+        auto it_triangle = triangles_.begin();
+
+        while (it_triangle != triangles_.end())
+        {
+            if (it_triangle->is_inside(interior_point))
+            {
+                const Triangle triangle = *it_triangle;
+                Vector2D p1_triangle = *(triangle.ptr_[0]);
+                Vector2D p2_triangle = *(triangle.ptr_[1]);
+                Vector2D p3_triangle = *(triangle.ptr_[2]);
+
+//                std::cout << "before erase: " << triangles_.size() << "\n";
+//                it_triangle = triangles_.erase(it_triangle);
+//                std::cout << "after erase: " << triangles_.size() << "\n";
+
+                Triangle triangle1 = Triangle(&p1_triangle, &p2_triangle, &interior_point);
+                Triangle triangle2 = Triangle(&p2_triangle, &p3_triangle, &interior_point);
+                Triangle triangle3 = Triangle(&p3_triangle, &p1_triangle, &interior_point);
+
+                triangles_.push_back(triangle1);
+                triangles_.push_back(triangle2);
+                triangles_.push_back(triangle3);
+            }
+//            else
+//            {
+                ++it_triangle;
+//            }
+        }
     }
 }
 
@@ -351,3 +380,57 @@ float Polygon::cross_product(const Vector2D& u, const Vector2D& v)
 {
     return (u.x_ * v.y_ - u.y_ * v.x_);
 }
+
+//void Polygon::delaunay_triangulation(std::vector<Vector2D>& pointsRelative)
+//{
+//    vector<Vector2D>::iterator pi = pointsRelative.begin() + 3;
+//
+//    while (pi != pointsRelative.end())
+//    {
+//        // Extract top and top_1.
+//        top = CHstack.top();
+//        CHstack.pop();
+//        top_1 = CHstack.top();
+//        CHstack.push(top);
+//
+//        while (!is_on_the_left(&(*pi), top_1, top))
+//        {
+//            CHstack.pop();
+//
+//             Update values of top and top_1.
+//            top = CHstack.top();
+//            CHstack.pop();
+//            top_1 = CHstack.top();
+//            CHstack.push(top);
+//        }
+//
+//        CHstack.push(&(*pi));
+//        pi++;
+//    }
+//
+//     Get stack points to create current polygon.
+//    current_n_ = CHstack.size();
+//    n_max_ = current_n_;
+//    tab_pts_ = new Vector2D[n_max_ + 1];
+//
+//    int i = current_n_ - 1;
+//
+//    while (!CHstack.empty())
+//    {
+//        tab_pts_[i--] = *(CHstack.top()) + origin; // Place the popped point in the global referential.
+//        CHstack.pop();
+//    }
+//
+//    tab_pts_[current_n_] = tab_pts_[0];
+//}
+
+//void Polygon::check_delaunay()
+//{
+//    auto t = triangles_.begin();
+//
+//    while (t != triangles_.end())
+//    {
+//        t->check_delaunay(tab_pts_);
+//        t++;
+//    }
+//}

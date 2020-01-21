@@ -20,7 +20,7 @@ public:
 
     virtual void start(InputManager* input_manager, TextureLoader texture_loader);
 
-    virtual void draw() const;
+    virtual void draw();
 
     virtual void quit();
 };

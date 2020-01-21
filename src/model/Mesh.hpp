@@ -3,8 +3,9 @@
 
 #include "Triangle.hpp"
 #include "Server.hpp"
+#include "../gui/drawable/Drawable.hpp"
 
-class Mesh
+class Mesh: public Drawable
 {
 
 public:
