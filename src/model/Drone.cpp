@@ -79,7 +79,7 @@ void Drone::avoid_collision_with(Drone *ptrDrone)
     int ForceMAX = 10;
     //float dAB = this->distanceWithOtherDrone(*ptrDrone);
     //Computing of the
-    Vector2D BA = new Vector2D(
+    Vector2D *BA = new Vector2D(
             Drone::current_position_.x_ - ptrDrone->current_position_.x_,
             Drone::current_position_.y_ - ptrDrone->current_position_.y_
     );
