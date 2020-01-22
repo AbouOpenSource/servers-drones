@@ -77,9 +77,15 @@ public:
 
     void set_color(const float t_color[4]);
 
+    Triangle* neighborInside(Triangle* current);
+
+    void solveDelaunay();
+
     void delaunay_triangulation(std::vector<Vector2D>& pointsRelative);
 
     void check_delaunay();
+
+    void onMouseMove(const Vector2D& pos);
 };
 
 #endif //POINTS_AND_CONVEX_POLYGONS_MYPOLYGON_HPP

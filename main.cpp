@@ -57,8 +57,9 @@ int main(int argc, char** argv)
     Server katmandou(katmandou_name, katmandou_pos, katmandou_color);
     Server katmandou1(katmandou_name, katmandou_pos1, katmandou_color);
 
-//    servers.push_back(katmandou);
-//    servers.push_back(katmandou1);
+    servers.push_back(katmandou);
+    servers.push_back(katmandou1);
+
 
     std::array<std::string, 3> values;
     

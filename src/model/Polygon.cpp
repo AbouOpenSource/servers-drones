@@ -1,6 +1,7 @@
 #include <stack>
 #include <algorithm>
 #include <cstring>
+#include <list>
 #include "Polygon.hpp"
 #include "../util/VectorUtil.hpp"
 
@@ -298,6 +299,62 @@ std::vector<float> Polygon::intersections(const Vector2D& a, const Vector2D& u)
     return kres;
 }
 
+void Polygon::solveDelaunay()
+{
+    std::list<Triangle*> processList;
+    auto t = triangles_.begin(); // copy tabTriangles in a list
+
+    while (t != triangles_.end())
+    {
+        processList.push_back(&(*t));
+        t++;
+    }
+
+    while (processList.size() > 1)
+    {
+        // while a triangle is in the list
+        Triangle *current = processList.front(); // pop current
+        processList.pop_front();
+
+        if (!current->is_delaunay_)
+        {
+            // if current is not Delaunay.
+            Triangle *Tneighbor = neighborInside(current);
+
+            if (Tneighbor!=nullptr)
+            {
+                // and if a neighbor is available
+//                flip(current, Tneighbor); // flip the common edge
+
+                // remove Tneighbor form the list
+                auto tr=processList.begin();
+                while (tr!=processList.end() && (*tr)!=Tneighbor) tr++;
+                if (tr!=processList.end()) processList.erase(tr);
+            }
+            else
+                processList.push_back(current); // postpone the treatment
+        }
+    }
+}
+
+Triangle* Polygon::neighborInside(Triangle* current)
+{
+//    for (Triangle &triangle: triangles_)
+//    {
+//        if (&triangle == current)
+//            continue;
+
+//        if (current->is_inside_circle(*triangle.ptr_[0]))
+//        {
+//
+//        }
+    for (const Vector2D &vector: points_to_build_polygon_)
+    {
+        std::cout << current->is_inside_circle(vector);
+    }
+//    }
+}
+
 void Polygon::triangulation()
 {
     std::vector<Vector2D*> tmp;
@@ -351,7 +408,7 @@ void Polygon::triangulation()
                 Vector2D* p3_triangle = it_triangle->ptr_[2];
                 Vector2D *interior = new Vector2D(interior_point.x_, interior_point.y_);
 
-                Triangle triangle1= Triangle(p1_triangle, p2_triangle, interior);
+                Triangle triangle1 = Triangle(p1_triangle, p2_triangle, interior);
                 Triangle triangle2 = Triangle(p2_triangle, p3_triangle, interior);
                 Triangle triangle3 = Triangle(p3_triangle, p1_triangle, interior);
 
@@ -375,6 +432,36 @@ float Polygon::cross_product(const Vector2D& u, const Vector2D& v)
 {
     return (u.x_ * v.y_ - u.y_ * v.x_);
 }
+
+void Polygon::onMouseMove(const Vector2D& pos)
+{
+    for (Triangle& triangle: triangles_)
+    {
+        triangle.on_mouse_move(pos);
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //void Polygon::delaunay_triangulation(std::vector<Vector2D>& pointsRelative)
 //{
