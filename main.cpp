@@ -50,16 +50,15 @@ int main(int argc, char** argv)
 
     Vector2D katmandou_pos = Vector2D(420, 430);
     Vector2D katmandou_pos1 = Vector2D(500, 425);
-//    Vector2D katmandou_pos2 = Vector2D(900, 799);
+
     std::string katmandou_color = "RED";
     std::string katmandou_name = "Katmandou";
 
     Server katmandou(katmandou_name, katmandou_pos, katmandou_color);
     Server katmandou1(katmandou_name, katmandou_pos1, katmandou_color);
-//    Server katmandou2(katmandou_name, katmandou_pos2, katmandou_color);
 
-    servers.push_back(katmandou);
-    servers.push_back(katmandou1);
+//    servers.push_back(katmandou);
+//    servers.push_back(katmandou1);
 
     std::array<std::string, 3> values;
     

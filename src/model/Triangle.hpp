@@ -26,6 +26,10 @@ public:
     float circum_radius_;
     bool is_delaunay_;
 
+    Triangle();
+
+    Triangle(Triangle* toCopy);
+
     Triangle(Vector2D *ptr1, Vector2D *ptr2, Vector2D *ptr3);
 
     //bool is_equilateral() {
@@ -51,6 +55,8 @@ public:
     void draw();
 
     void draw_circle();
+
+    friend std::ostream &operator<<(std::ostream &out, const Triangle &triangle);
 };
 
 #endif //DRONEPROJECT_TRIANGLE_HPP

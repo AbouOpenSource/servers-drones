@@ -22,9 +22,6 @@ Polygon::Polygon(std::vector<Server>& servers): Drawable()
 
     set_color(YELLOW);
 
-//    std::cout << "\n";
-//    VectorUtil::print_1D_vector(points);
-
 //    assert(points.size() > 3);
     points_to_build_polygon_ = points;
 
@@ -343,35 +340,33 @@ void Polygon::triangulation()
     /********** Interior point triangles **********/
     for (Vector2D interior_point: interior_points)
     {
-//        std::cout << interior_point << "\n";
-
         auto it_triangle = triangles_.begin();
 
         while (it_triangle != triangles_.end())
         {
             if (it_triangle->is_inside(interior_point))
             {
-                const Triangle triangle = *it_triangle;
-                Vector2D p1_triangle = *(triangle.ptr_[0]);
-                Vector2D p2_triangle = *(triangle.ptr_[1]);
-                Vector2D p3_triangle = *(triangle.ptr_[2]);
+                Vector2D* p1_triangle = it_triangle->ptr_[0];
+                Vector2D* p2_triangle = it_triangle->ptr_[1];
+                Vector2D* p3_triangle = it_triangle->ptr_[2];
+                Vector2D *interior = new Vector2D(interior_point.x_, interior_point.y_);
 
-//                std::cout << "before erase: " << triangles_.size() << "\n";
-//                it_triangle = triangles_.erase(it_triangle);
-//                std::cout << "after erase: " << triangles_.size() << "\n";
+                Triangle triangle1= Triangle(p1_triangle, p2_triangle, interior);
+                Triangle triangle2 = Triangle(p2_triangle, p3_triangle, interior);
+                Triangle triangle3 = Triangle(p3_triangle, p1_triangle, interior);
 
-                Triangle triangle1 = Triangle(&p1_triangle, &p2_triangle, &interior_point);
-                Triangle triangle2 = Triangle(&p2_triangle, &p3_triangle, &interior_point);
-                Triangle triangle3 = Triangle(&p3_triangle, &p1_triangle, &interior_point);
+                it_triangle = triangles_.erase(it_triangle);
 
-//                triangles_.push_back(triangle1);
-//                triangles_.push_back(triangle2);
-//                triangles_.push_back(triangle3);
+                triangles_.push_back(triangle1);
+                triangles_.push_back(triangle2);
+                triangles_.push_back(triangle3);
+
+                break;
             }
-//            else
-//            {
+            else
+            {
                 ++it_triangle;
-//            }
+            }
         }
     }
 }

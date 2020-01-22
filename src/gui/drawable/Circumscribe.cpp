@@ -18,7 +18,7 @@ void Circumscribe::start(InputManager* input_manager, TextureLoader texture_load
 
     int x, y;
 
-    int h = texture_loader("", x, y);
+//    int h = texture_loader("", x, y);
 
 //    tris_[0] = new triangle(&vertices_[0],&vertices_[1],&vertices_[2]);
 //    tris_[1] = new triangle(&vertices_[1],&vertices_[3],&vertices_[2]);

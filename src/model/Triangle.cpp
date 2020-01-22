@@ -1,6 +1,21 @@
 #include "Triangle.hpp"
 
-Triangle::Triangle(Vector2D *ptr1,Vector2D *ptr2,Vector2D *ptr3): circum_center_({0, 0})
+Triangle::Triangle()
+{
+}
+
+Triangle::Triangle(Triangle* toCopy): circum_center_({0, 0})
+{
+    ptr_[0] = new Vector2D(toCopy->ptr_[0]->x_, toCopy->ptr_[0]->y_);
+    ptr_[1] = new Vector2D(toCopy->ptr_[1]->x_, toCopy->ptr_[1]->y_);
+    ptr_[2] = new Vector2D(toCopy->ptr_[2]->x_, toCopy->ptr_[2]->y_);
+
+    is_highlighted_ = false;
+
+    calculate_circle();
+}
+
+Triangle::Triangle(Vector2D *ptr1, Vector2D *ptr2, Vector2D *ptr3): circum_center_({0, 0})
 // TODO: Give a value for circum_center_ initialisation
 {
     ptr_[0] = ptr1;
@@ -66,6 +81,12 @@ bool Triangle::is_empty(const std::vector<Vector2D*> &tmp, int n)
 
 bool Triangle::is_inside(const Vector2D &p)
 {
+    std::cout << "Point to check if is inside: " << p << "\n";
+    std::cout << "ptr_0: " << *ptr_[0] << "\n";
+    std::cout << "ptr_1: " << *ptr_[1] << "\n";
+    std::cout << "ptr_2: " << *ptr_[2] << "\n";
+    std::cout << "\n";
+
     return is_on_the_left(&p, ptr_[0], ptr_[1]) && is_on_the_left(&p, ptr_[1], ptr_[2]) && is_on_the_left(&p, ptr_[2], ptr_[0]);
 }
 
@@ -142,3 +163,10 @@ void Triangle::draw_circle() {
         glPopMatrix();
     }
 }
+
+std::ostream &operator<<(std::ostream &out, const Triangle &triangle)
+{
+    out << "Triangle | ptr0: " << *triangle.ptr_[0] << " ptr1: " << *triangle.ptr_[1] <<" ptr2: " << *triangle.ptr_[2] << std::endl;
+    return out;
+}
+
