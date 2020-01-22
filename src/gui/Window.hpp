@@ -9,6 +9,7 @@
 
 #include <glutWindow.h>
 #include "../core/event/input/InputManager.hpp"
+#include "../core/event/EventManager.hpp"
 #include "../core/ServiceProvider.hpp"
 #include "drawable/Drawable.hpp"
 #include <vector>
@@ -22,7 +23,7 @@ public:
     static std::string SERVICE;
 
     /********** Constructor **********/
-    Window(int argc, char **argv, InputManager* input_manager);
+    Window(int argc, char **argv);
 
     /********** Event **********/
     void onStart() override;
@@ -42,6 +43,8 @@ public:
 private:
 
     InputManager* input_manager_;
+
+    EventManager* event_manager_;
 
     std::vector<Drawable*> drawables_;
 

@@ -6,12 +6,18 @@
 #define DRONEPROJECT_EVENT_HPP
 
 
+#include <string>
+
 class Event
 {
 
-public:
+protected:
 
-    Event();
+    Event(const std::string& name);
+
+private:
+
+    std::string name_;
 
 };
 
