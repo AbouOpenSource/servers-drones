@@ -4,6 +4,7 @@
 #include <list>
 #include "Polygon.hpp"
 #include "../util/VectorUtil.hpp"
+#include <array>
 
 Polygon::Polygon(int p_max)
         : tab_pts_{new Vector2D[p_max]},
@@ -324,7 +325,7 @@ void Polygon::solveDelaunay()
             if (Tneighbor!=nullptr)
             {
                 // and if a neighbor is available
-//                flip(current, Tneighbor); // flip the common edge
+                flip(current, Tneighbor); // flip the common edge
 
                 // remove Tneighbor form the list
                 auto tr=processList.begin();
@@ -339,20 +340,40 @@ void Polygon::solveDelaunay()
 
 Triangle* Polygon::neighborInside(Triangle* current)
 {
-//    for (Triangle &triangle: triangles_)
-//    {
-//        if (&triangle == current)
-//            continue;
-
-//        if (current->is_inside_circle(*triangle.ptr_[0]))
-//        {
-//
-//        }
-    for (const Vector2D &vector: points_to_build_polygon_)
+    // For each triangle.
+    for (Triangle &triangle: triangles_)
     {
-        std::cout << current->is_inside_circle(vector);
+        // If the triangle is the one passed in parameter.
+        if (&triangle == current)
+            continue;
+
+        int common_points(0);
+        bool point_inside_circle(false);
+
+        // For each point of the triangle.
+        for (Vector2D* point: triangle.ptr_)
+        {
+            // If the point is inside the circumscribe circle of the current triangle.
+            if (current->is_inside_circle(*point))
+                point_inside_circle = true;
+
+            // If the point is a common point with the triangle passed in parameter.
+            if (current->common_point(point))
+                common_points++;
+        }
+
+        // Found a triangle.
+        if (common_points == 2 && point_inside_circle)
+            return &triangle;
     }
-//    }
+
+    // No triangle found.
+    return nullptr;
+}
+
+void Polygon::flip(Triangle* current, Triangle* neighbor)
+{
+
 }
 
 void Polygon::triangulation()
@@ -426,6 +447,8 @@ void Polygon::triangulation()
             }
         }
     }
+
+    neighborInside(&triangles_[0]);
 }
 
 float Polygon::cross_product(const Vector2D& u, const Vector2D& v)

@@ -57,8 +57,8 @@ int main(int argc, char** argv)
     Server katmandou(katmandou_name, katmandou_pos, katmandou_color);
     Server katmandou1(katmandou_name, katmandou_pos1, katmandou_color);
 
-    servers.push_back(katmandou);
-    servers.push_back(katmandou1);
+//    servers.push_back(katmandou);
+//    servers.push_back(katmandou1);
 
 
     std::array<std::string, 3> values;
@@ -86,10 +86,10 @@ int main(int argc, char** argv)
 
                 Server server(name, server_pos, area_color);
 
-                std::cout << "name: " << server.get_name()
-                          << " position: x: " << server.getCurrentPosition().x_ << ", y: " << server.getCurrentPosition().y_
-                          << " color: " << server.get_color()
-                          << std::endl;
+//                std::cout << "name: " << server.get_name()
+//                          << " position: x: " << server.getCurrentPosition().x_ << ", y: " << server.getCurrentPosition().y_
+//                          << " color: " << server.get_color()
+//                          << std::endl;
 
                 servers.push_back(server);
             }

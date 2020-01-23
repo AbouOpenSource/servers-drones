@@ -79,6 +79,8 @@ public:
 
     Triangle* neighborInside(Triangle* current);
 
+    void flip(Triangle* current, Triangle* neighbor);
+
     void solveDelaunay();
 
     void delaunay_triangulation(std::vector<Vector2D>& pointsRelative);

@@ -7,6 +7,7 @@
 
 #include "Vector2D.hpp"
 #include "determinant.hpp"
+#include "../util/TypeUtil.hpp"
 
 const float BLACK[4] = {0.0, 0.0, 0.0, 1.0f};
 const float GREY[4] = {0.75f, 0.75f, 0.75f, 1.0f};
@@ -25,6 +26,8 @@ public:
     Vector2D circum_center_;
     float circum_radius_;
     bool is_delaunay_;
+
+    typedef std::function<void(Vector2D* point)> PointCallback;
 
     Triangle();
 
@@ -55,6 +58,10 @@ public:
     void draw();
 
     void draw_circle();
+
+    bool common_point(Vector2D* point);
+
+    void foreach_point(PointCallback cb);
 
     friend std::ostream &operator<<(std::ostream &out, const Triangle &triangle);
 };

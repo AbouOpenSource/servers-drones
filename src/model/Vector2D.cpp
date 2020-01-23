@@ -82,4 +82,9 @@ std::ostream &operator<<(std::ostream &out, const Vector2D &vector)
     return out;
 }
 
+bool operator==(const Vector2D &vector1, const Vector2D &vector2)
+{
+    return vector1.x_ == vector2.x_ && vector1.y_ == vector2.y_;
+}
+
 #pragma clang diagnostic pop

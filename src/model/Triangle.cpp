@@ -115,6 +115,13 @@ bool Triangle::check_delaunay(const std::vector<Vector2D> &points) {
     return is_delaunay_;
 }
 
+void Triangle::foreach_point(PointCallback cb)
+{
+    cb(ptr_[0]);
+    cb(ptr_[1]);
+    cb(ptr_[2]);
+}
+
 void Triangle::draw() {
     glColor3fv(is_delaunay_ ? (is_highlighted_ ? GREEN : GREY) : (is_highlighted_ ? ORANGE : YELLOW));
 
@@ -162,5 +169,14 @@ std::ostream &operator<<(std::ostream &out, const Triangle &triangle)
 {
     out << "Triangle | ptr0: " << *triangle.ptr_[0] << " ptr1: " << *triangle.ptr_[1] <<" ptr2: " << *triangle.ptr_[2] << std::endl;
     return out;
+}
+
+bool Triangle::common_point(Vector2D *point)
+{
+    //FIXME Best to just check if addresses are equal?
+
+    return *point == *ptr_[0] ||
+           *point == *ptr_[1] ||
+           *point == *ptr_[2];
 }
 
