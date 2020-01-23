@@ -5,25 +5,33 @@
 #include <iostream>
 #include "ServerDrawable.hpp"
 
-void ServerDrawable::start(InputManager *input_manager, Drawable::TextureLoader texture_loader)
+ServerDrawable::ServerDrawable() : serverTextureId_(0)
+{}
+
+ServerDrawable::ServerDrawable(Server *server): server_(server), serverTextureId_(0)
+{}
+
+void ServerDrawable::init(
+        InputManager *input_manager,
+        EventManager *event_manager,
+        const Drawable::TextureLoader &texture_loader)
 {
-    int lx = 0,ly=0;
-    serverId_ = texture_loader("../data/assets/server.tga",lx,ly);
-    std::cout<<"lx : "<<lx<<" ly"<< ly<< std::endl;
-    assert(serverId_!=0);
+    serverTextureId_ = texture_loader("server", serverTextureWidth_, serverTextureHeight_);
+}
+
+void ServerDrawable::start()
+{
     glClearColor(1.0,1.0,1.0,1.0); // background color
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
 }
 
 void ServerDrawable::draw()
 {
-
     glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D,serverId_);
+    glBindTexture(GL_TEXTURE_2D, serverTextureId_);
     glPushMatrix();
-    glTranslatef(server_.getCurrentPosition().x_,server_.getCurrentPosition().y_,1.0);
+    glTranslatef(server_->getCurrentPosition().x_,server_->getCurrentPosition().y_,1.0);
     glBegin(GL_QUADS);
     glTexCoord2f(0.0,0.0);
     glVertex2f(0.0,0.0);
@@ -40,10 +48,9 @@ void ServerDrawable::draw()
     glPopMatrix();
 
     glDisable(GL_TEXTURE_2D);
-
 }
 
 void ServerDrawable::quit()
 {
-    glDeleteTextures(1, reinterpret_cast<const GLuint *>(&serverId_));
+    glDeleteTextures(1, reinterpret_cast<const GLuint *>(&serverTextureId_));
 }

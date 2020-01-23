@@ -6,6 +6,7 @@
 #define DRONEPROJECT_WINDOW_HPP
 
 #define TITLE "Drone Project"
+#define TEXTURE_DIR "../data/assets/texture/"
 
 #include <glutWindow.h>
 #include "../core/event/input/InputManager.hpp"

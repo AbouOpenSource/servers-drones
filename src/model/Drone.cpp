@@ -4,15 +4,11 @@
 
 #include "Drone.hpp"
 #include "Circle.hpp"
-#include <glutWindow.h>
-
 
 Drone::Drone(const Vector2D &current_position, const Vector2D &speed, const Vector2D &acceleration,
              Vector2D forces, float weight, std::string id) : current_position_(
         current_position), speed_(speed), acceleration_(acceleration), forces_(forces), weight_(weight), id_(id)
-{
-
-}
+{}
 
 const Vector2D &Drone::get_current_position() const
 {
@@ -112,49 +108,6 @@ float Drone::distance_with_other_drone(Drone item)
                                                   item.current_position_.y_ -
                  Drone::current_position_.y_
             );
-}
-
-void Drone::draw()
-{
-    glEnable(GL_TEXTURE_2D);
-    glColor3f(1.0f,1.0f,1.0f);
-    glBindTexture(GL_TEXTURE_2D,droneId);
-    glPushMatrix();
-    glBegin(GL_QUADS);
-    glTexCoord2f(0.0,0.0);
-    glVertex2f(0.0,0.0);
-    glTexCoord2f(1.0,0.0);
-    glVertex2f(1200.0,0.0);
-    glTexCoord2f(1.0,1.0);
-    glVertex2f(1200.0,675.0);
-    glTexCoord2f(0.0,1.0);
-    glVertex2f(0.0,675.0);
-    glEnd();
-
-
-
-
-
-
-
-
-}
-
-void Drone::quit()
-{
-
-
-
-}
-
-void Drone::start(InputManager *input_manager,TextureLoader texture_loader)
-{
-    int lx,ly;
-   // droneId = GlutWindow::loadTGATexture("/home/abou/Bureau/COURSM1IOT/AdvancedAlgorithms/FinalProject/drones-servers/data/assets/drone.tga",lx,ly);
-    assert(droneId!=0);
-    glClearColor(1.0,1.0,1.0,1.0); // background color
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 Drone::Drone(const Vector2D &current_position, const Vector2D &speed, const Vector2D &acceleration, const Vector2D& forces,

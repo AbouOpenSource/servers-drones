@@ -8,19 +8,30 @@
 
 #include "Drawable.hpp"
 #include "../../model/Server.hpp"
-#include <cassert>
 
 class ServerDrawable: public Drawable
 {
 
-    Server server_;
-   int serverId_;
 public:
-    void start(InputManager *input_manager, TextureLoader texture_loader) override;
+
+    ServerDrawable();
+
+    explicit ServerDrawable(Server* server);
+
+    void init(InputManager *input_manager, EventManager* event_manager, const TextureLoader& texture_loader) override;
+
+    void start() override;
 
     void draw() override;
 
     void quit() override;
+private:
+
+    Server* server_;
+
+    int serverTextureId_;
+    int serverTextureWidth_;
+    int serverTextureHeight_;
 };
 
 

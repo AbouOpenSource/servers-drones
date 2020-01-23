@@ -7,6 +7,7 @@
 
 #include "../../core/event/input/InputManager.hpp"
 #include "../../core/event/EventManager.hpp"
+#include <glutWindow.h>
 
 class Drawable
 {
@@ -17,7 +18,7 @@ public:
 
     Drawable();
 
-    virtual void init(InputManager* input_manager, EventManager* event_manager, TextureLoader texture_loader);
+    virtual void init(InputManager* input_manager, EventManager* event_manager, const TextureLoader& texture_loader);
 
     virtual void start();
 

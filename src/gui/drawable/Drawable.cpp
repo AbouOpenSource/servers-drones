@@ -3,12 +3,11 @@
 //
 
 #include "Drawable.hpp"
-#include "../../core/event/EventManager.hpp"
 
 Drawable::Drawable()
 {}
 
-void Drawable::init(InputManager* input_manager, EventManager* event_manager, TextureLoader texture_loader)
+void Drawable::init(InputManager* input_manager, EventManager* event_manager, const TextureLoader& texture_loader)
 {}
 
 void Drawable::start()

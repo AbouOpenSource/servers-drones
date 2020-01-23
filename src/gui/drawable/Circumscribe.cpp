@@ -8,19 +8,19 @@
 Circumscribe::Circumscribe(std::vector<Server>& servers): Drawable(), servers_(servers)
 {}
 
-void Circumscribe::init(InputManager* input_manager, EventManager* event_manager, TextureLoader texture_loader)
+void Circumscribe::init(InputManager* input_manager, EventManager* event_manager, const TextureLoader& texture_loader)
 {
     input_manager->register_mouse_move_listener([this] (InputManager::MousePosition position) {
         Vector2D vertex((float)position.X, (float)position.Y);
         //for (auto t:tris_)
         //  t->onMouseMove(v);
-        mesh_->onMouseMove(vertex);
+        //mesh_->onMouseMove(vertex);
     });
 
     input_manager->register_mouse_click_listener([this] (InputManager::MouseClick click,
                                                          InputManager::MousePosition position) {
         Vector2D vertex((float)position.X, (float)position.Y);
-        mesh_->onMouseDown(vertex);
+        //mesh_->onMouseDown(vertex);
     });
 }
 
@@ -35,7 +35,7 @@ void Circumscribe::start() {
 //    tris_[1] = new triangle(&vertices_[1],&vertices_[3],&vertices_[2]);
 //    tris_[2] = new triangle(&vertices_[2],&vertices_[3],&vertices_[4]);
 
-//    float tab_vect[][2] = {{280, 740}, {700, 750}, {500, 700}, {900, 720}, {50, 410}, {340 , 400} , {650 , 390},
+//    float tab_vect[][2] = {{280, 740}, {700, 750}, {500, 700}, {900, 720}, {50,È 410}, {340 , 400} , {650 , 390},
 //                           {950 , 300} , {400 , 200} , {550 , 190} , {200 , 50} , {800 , 100}};
 
 //    int tab_tri[][3] = {{0,  2,   1}, {0, 4, 2}, {1, 6, 3}, {2, 5, 8}, {2, 6, 1}, {2, 8, 6}, {3, 6, 11},

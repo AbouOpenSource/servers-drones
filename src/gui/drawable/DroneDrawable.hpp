@@ -11,20 +11,28 @@
 
 class DroneDrawable: public Drawable
 {
-private:
-    int droneId_{};
-    Drone *drone_{};
 
 public:
-    DroneDrawable();
-    explicit DroneDrawable(Drone * drone);
 
-    void start(InputManager *input_manager, TextureLoader texture_loader) override;
+    DroneDrawable();
+
+    explicit DroneDrawable(Drone* drone);
+
+    void init(InputManager *input_manager, EventManager* event_manager, const TextureLoader& texture_loader) override;
+
+    void start() override;
 
     void draw() override;
 
     void quit() override;
 
+private:
+
+    Drone* drone_;
+
+    int droneTextureId_{};
+    int droneTextureWidth_;
+    int droneTextureHeight_;
 };
 
 

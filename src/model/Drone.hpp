@@ -11,33 +11,15 @@
 #include "../gui/drawable/Drawable.hpp"
 #include <math.h>
 
-//why
-//#include "Server.hpp"
 #include <string>
-#include <GL/gl.h>
 
-//enum Color { RED, GREEN, BLUE, PINK, YELLOW, CYAN };
+class Drone
+{
 
-class Drone : public Drawable {
+public:
 
     Drone(const Vector2D &current_position, const Vector2D &speed, const Vector2D &acceleration, Vector2D forces,
           float weight ,std::string name);
-
-
-private:
-    const std::string filemane="../../data/";
-    std::string id_;
-    Vector2D current_position_;
-    Vector2D speed_;
-    Vector2D acceleration_;
-    Vector2D forces_;
-    float weight_;
-    int delta_time = int(1);
-    GLuint droneId=0;
-
-    //Server my_server_;
-
-public:
 
     Drone(const Vector2D &current_position, const Vector2D &speed, const Vector2D &acceleration,
           const Vector2D& forces, float weight);
@@ -66,17 +48,23 @@ public:
 
     float distance_with_other_drone(Drone item);
 
-    void draw() override;
-
-    void quit() override ;
-
-    void start(InputManager* input_manager,TextureLoader texture_loader) override ;
-
     friend std::ostream& operator<<(std::ostream& os, const Drone& dt);
 
     Drone(const Vector2D &current_position, const Vector2D &forces, float weight);
 
     void addGoal(Vector2D item);
+
+private:
+
+    std::string id_;
+    Vector2D current_position_;
+    Vector2D speed_;
+    Vector2D acceleration_;
+    Vector2D forces_;
+    float weight_;
+    int delta_time = int(1);
+    int droneId = 0;
+    int serverId = 0;
 };
 
 

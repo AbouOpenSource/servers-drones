@@ -13,9 +13,7 @@ Window::Window(int argc, char **argv)
     input_manager_(static_cast<InputManager *>(ServiceContainer::get_instance()->get_service(InputManager::SERVICE))),
     event_manager_(static_cast<EventManager *>(ServiceContainer::get_instance()->get_service(EventManager::SERVICE))),
     drawables_(std::vector<Drawable*>())
-{
-
-}
+{}
 
 void Window::onStart()
 {
@@ -41,8 +39,11 @@ void Window::onQuit()
 void Window::addDrawable(Drawable* drawable)
 {
     drawables_.push_back(drawable);
-    drawable->init(input_manager_, event_manager_,[](const std::string &path, int &x, int &y) {
-        return loadTGATexture(path, x, y);
+    drawable->init(
+            input_manager_,
+            event_manager_,
+            [] (const std::string &file_name, int &x, int &y) {
+        return loadTGATexture(TEXTURE_DIR + file_name + ".tga", x, y);
     });
 
 }

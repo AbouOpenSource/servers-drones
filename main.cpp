@@ -112,12 +112,12 @@ int main(int argc, char** argv)
     //Drone *drone = new Drone(Vector2D(500,500),Vector2D(10,10),Vector2D(15,15),Vector2D(10,10),1);
     Drone *drone = new Drone(Vector2D(0,0), Vector2D(150000,150000),10);
 
-    DroneDrawable drone_drawale=DroneDrawable(drone);
+    DroneDrawable drone_drawable(drone);
 
 
     window.addDrawable(&circumscribe);
     window.addDrawable(&convex_polygon);
-    window.addDrawable(&drone_drawale);
+    window.addDrawable(&drone_drawable);
 
     window.start();
 

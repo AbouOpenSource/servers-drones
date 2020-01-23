@@ -5,26 +5,31 @@
 #include "DroneDrawable.hpp"
 #include <iostream>
 
-void DroneDrawable::start(InputManager *input_manager, Drawable::TextureLoader texture_loader)
+DroneDrawable::DroneDrawable() : droneTextureId_(0)
+{}
+
+DroneDrawable::DroneDrawable(Drone *drone): drone_(drone), droneTextureId_(0)
+{}
+
+void DroneDrawable::init(
+        InputManager *input_manager,
+        EventManager* event_manager,
+        const Drawable::TextureLoader& texture_loader)
 {
-    int lx = 0,ly=0;
-   // droneId_ = texture_loader("../../../data/assets/drone.tga",lx,ly);
-    std::cout<<"The id of drone: ";
+    droneTextureId_ = texture_loader("drone", droneTextureWidth_, droneTextureHeight_);
+}
 
-    droneId_ = texture_loader("../data/assets/drone.tga",lx,ly);
-    //assert(droneId_!=0);
-
+void DroneDrawable::start()
+{
     glClearColor(1.0,1.0,1.0,1.0); // background color
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
 }
 
 void DroneDrawable::draw()
 {
-
     glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D,droneId_);
+    glBindTexture(GL_TEXTURE_2D, droneTextureId_);
     glPushMatrix();
     glTranslatef(drone_->get_current_position().x_,drone_->get_current_position().y_,1.0);
     glBegin(GL_QUADS);
@@ -45,17 +50,5 @@ void DroneDrawable::draw()
 
 void DroneDrawable::quit()
 {
-
-    glDeleteTextures(1, reinterpret_cast<const GLuint *>(&droneId_));
-
-}
-
-DroneDrawable::DroneDrawable()
-{
-    droneId_=0;
-}
-
-DroneDrawable::DroneDrawable(Drone *drone):drone_(drone)
-{
-    droneId_=0;
+    glDeleteTextures(1, reinterpret_cast<const GLuint *>(&droneTextureId_));
 }

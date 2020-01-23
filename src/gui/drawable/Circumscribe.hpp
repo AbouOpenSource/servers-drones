@@ -18,7 +18,7 @@ public:
 
     explicit Circumscribe(std::vector<Server>& servers);
 
-    void init(InputManager* input_manager, EventManager* event_manager, TextureLoader texture_loader) override;
+    void init(InputManager* input_manager, EventManager* event_manager, const TextureLoader& texture_loader) override;
 
     void start() override;
 
