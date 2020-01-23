@@ -11,12 +11,12 @@
 #include "src/gui/Window.hpp"
 #include "src/core/ServiceContainer.hpp"
 #include "src/gui/drawable/Circumscribe.hpp"
+#include "src/gui/drawable/DroneDrawable.hpp"
 
 using namespace std;
 
 int main(int argc, char** argv)
 {
-
     // Command Service
     std::vector<Command*> commands(Command::all_internals());
     CommandParser command_parser(commands, true);
@@ -98,9 +98,18 @@ int main(int argc, char** argv)
 
     Polygon convex_polygon = Polygon(servers);
     Circumscribe circumscribe(servers);
+    // ce qe Abou a ajouté dans le main
+
+    //Drone *drone = new Drone(Vector2D(500,500),Vector2D(10,10),Vector2D(15,15),Vector2D(10,10),1);
+    Drone *drone = new Drone(Vector2D(0,0), Vector2D(150000,150000),10);
+
+    DroneDrawable drone_drawale=DroneDrawable(drone);
+
 
     window.addDrawable(&circumscribe);
     window.addDrawable(&convex_polygon);
+    window.addDrawable(&drone_drawale);
+
     window.start();
 
     return 0;

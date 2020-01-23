@@ -153,6 +153,16 @@ void Server::set_color(const std::string &color)
     color_ = color;
 }
 
+bool Server::is_selected() const
+{
+    return selected_;
+}
+
+void Server::set_selected(bool selected)
+{
+    Server::selected_ = selected;
+}
+
 //Color color_value_of(std::string color)
 //{
 //    if (color == "RED") return Color::red;

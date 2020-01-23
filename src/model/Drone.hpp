@@ -14,7 +14,7 @@
 //why
 //#include "Server.hpp"
 #include <string>
-#include <OpenGL/OpenGL.h>
+#include <GL/gl.h>
 
 //enum Color { RED, GREEN, BLUE, PINK, YELLOW, CYAN };
 
@@ -25,7 +25,6 @@ class Drone : public Drawable {
 
 
 private:
-    Drone(const Vector2D &current_position, const Vector2D &forces, float weight);
     const std::string filemane="../../data/";
     std::string id_;
     Vector2D current_position_;
@@ -33,7 +32,7 @@ private:
     Vector2D acceleration_;
     Vector2D forces_;
     float weight_;
-    int delta_time = int(3);
+    int delta_time = int(1);
     GLuint droneId=0;
 
     //Server my_server_;
@@ -41,7 +40,7 @@ private:
 public:
 
     Drone(const Vector2D &current_position, const Vector2D &speed, const Vector2D &acceleration,
-          Vector2D forces, float weight);
+          const Vector2D& forces, float weight);
 
     const Vector2D &get_current_position() const;
 
@@ -72,6 +71,12 @@ public:
     void quit() override ;
 
     void start(InputManager* input_manager,TextureLoader texture_loader) override ;
+
+    friend std::ostream& operator<<(std::ostream& os, const Drone& dt);
+
+    Drone(const Vector2D &current_position, const Vector2D &forces, float weight);
+
+    void addGoal(Vector2D item);
 };
 
 

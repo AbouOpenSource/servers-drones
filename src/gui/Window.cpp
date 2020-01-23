@@ -19,11 +19,9 @@ void Window::onStart()
 
 
    for (auto & drawable : drawables_) {
-        drawable->start(input_manager_, [this] (const std::string &path, int &x, int &y)->int {
-
-//                return this->loadTGATexture(path, x, y);
-                            return 0;
-                        });
+        drawable->start(input_manager_, [this] (const std::string &path, int &x, int &y) {
+            return loadTGATexture(path, x, y);
+        });
     }
 }
 

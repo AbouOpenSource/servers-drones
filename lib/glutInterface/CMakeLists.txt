@@ -12,11 +12,11 @@ endif()
 IF (WIN32)
     message(STATUS ">>> Win32")
     add_compile_definitions(USE_FREEGLUT)
-    set(GLUT_DIR "C:/Program Files (x86)/freeglut-3.0.0")
+    set(GLUT_DIR F:/freeglut-3.0.0)
     set(CMAKE_PREFIX_PATH FREEGLUT)
 
-    set(FREEGLUT_INCLUDE_DIRS "C:/Program Files (x86)/freeglut-3.0.0/include")
-    set(FREEGLUT_LIBRARY_DIRS "C:/Program Files (x86)/freeglut-3.0.0/cmake-build-debug/lib")
+    set(FREEGLUT_INCLUDE_DIRS F:/freeglut-3.0.0/include)
+    set(FREEGLUT_LIBRARY_DIRS F:/freeglut-3.0.0/cmake-build-debug/lib)
     set(FREEGLUT_LIBRARIES freeglutd.lib)
 
     find_package(OPENGL REQUIRED)
@@ -79,5 +79,9 @@ ENDIF(APPLE)
 
 add_definitions(${FREEGLUT_DEFINITIONS} ${OPENGL_DEFINITIONS})
 
+<<<<<<< Updated upstream
 add_executable(Test main.cpp)
+=======
+#add_executable(glutInterface main.cpp glutWindow.cpp glutWindow.h)
+>>>>>>> Stashed changes
 target_link_libraries(glutInterface ${FREEGLUT_LIBRARIES} ${GLUT_LIBRARIES} ${OPENGL_LIBRARIES})
