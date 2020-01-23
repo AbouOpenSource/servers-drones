@@ -3,3 +3,6 @@
 //
 
 #include "Event.hpp"
+
+Event::Event(const std::string &name): name_(name)
+{}

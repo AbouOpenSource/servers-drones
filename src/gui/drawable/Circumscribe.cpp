@@ -8,17 +8,29 @@
 Circumscribe::Circumscribe(std::vector<Server>& servers): Drawable(), servers_(servers)
 {}
 
-void Circumscribe::start(InputManager* input_manager, TextureLoader texture_loader)
+void Circumscribe::init(InputManager* input_manager, EventManager* event_manager, TextureLoader texture_loader)
 {
+    input_manager->register_mouse_move_listener([this] (InputManager::MousePosition position) {
+        Vector2D vertex((float)position.X, (float)position.Y);
+        //for (auto t:tris_)
+        //  t->onMouseMove(v);
+        mesh_->onMouseMove(vertex);
+    });
+
+    input_manager->register_mouse_click_listener([this] (InputManager::MouseClick click,
+                                                         InputManager::MousePosition position) {
+        Vector2D vertex((float)position.X, (float)position.Y);
+        mesh_->onMouseDown(vertex);
+    });
+}
+
+void Circumscribe::start() {
     vertices_[0].set(40, 80);
     vertices_[1].set(460, 80);
     vertices_[2].set(240, 360);
     vertices_[3].set(890, 400);
     vertices_[4].set(220, 600);
-
-    int x, y;
-    // int h = texture_loader("", x, y);
-
+  
 //    tris_[0] = new triangle(&vertices_[0],&vertices_[1],&vertices_[2]);
 //    tris_[1] = new triangle(&vertices_[1],&vertices_[3],&vertices_[2]);
 //    tris_[2] = new triangle(&vertices_[2],&vertices_[3],&vertices_[4]);
@@ -33,20 +45,6 @@ void Circumscribe::start(InputManager* input_manager, TextureLoader texture_load
     //mesh_ = new Mesh(servers_);
 
     glClearColor(1.0,1.0,1.0,1.0); // background color
-
-    input_manager->register_mouse_move_listener([this] (InputManager::MousePosition position) {
-        Vector2D vertex((float)position.X, (float)position.Y);
-        //for (auto t:tris_)
-        //  t->onMouseMove(v);
-//        mesh_->onMouseMove(vertex);
-    });
-
-    input_manager->register_mouse_click_listener([this] (InputManager::MouseClick click,
-                                                         InputManager::MousePosition position) {
-        Vector2D vertex((int)position.X, (int)position.Y);
-
-    });
-
 }
 
 void Circumscribe::draw()

@@ -7,27 +7,30 @@
 
 
 #include <map>
-#include "../ServiceProvider.hpp"
+#include <vector>
 #include "Event.hpp"
+#include "../ServiceProvider.hpp"
 
-class EventManager: ServiceProvider
+class EventManager: public ServiceProvider
 {
 
 public:
 
     static std::string SERVICE;
 
+    typedef std::function<void(Event*)> Subscription;
+
     EventManager();
 
     void publish(const std::string& event_type, Event* event);
 
-    void subscribe(const std::string& event_type);
+    void subscribe(const std::string& event_type, Subscription&);
 
 private:
 
-    void ensure_subscription_exists();
+    std::vector<Subscription> get_subscriptions_for(const std::string& event_type);
 
-    //std::map<std::string, std::call> subsciptions_;
+    std::map<std::string, std::vector<Subscription>> subscriptions_;
 
 };
 

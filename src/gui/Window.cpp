@@ -3,25 +3,24 @@
 //
 
 #include "Window.hpp"
-#include <glutWindow.h>
+#include "../core/ServiceContainer.hpp"
 
 std::string Window::SERVICE = "WindowService";
 
-Window::Window(int argc, char **argv, InputManager* input_manager)
-        : GlutWindow(argc, argv, TITLE, 1000, 800, FIXED),
-          ServiceProvider(Window::SERVICE),
-          input_manager_(input_manager),
-          drawables_(std::vector<Drawable*>())
-{}
+Window::Window(int argc, char **argv)
+    : GlutWindow(argc, argv, TITLE, 1000, 800, FIXED),
+    ServiceProvider(Window::SERVICE),
+    input_manager_(static_cast<InputManager *>(ServiceContainer::get_instance()->get_service(InputManager::SERVICE))),
+    event_manager_(static_cast<EventManager *>(ServiceContainer::get_instance()->get_service(EventManager::SERVICE))),
+    drawables_(std::vector<Drawable*>())
+{
+
+}
 
 void Window::onStart()
 {
-
-
-   for (auto & drawable : drawables_) {
-        drawable->start(input_manager_, [this] (const std::string &path, int &x, int &y) {
-            return loadTGATexture(path, x, y);
-        });
+    for (auto & drawable : drawables_) {
+        drawable->start();
     }
 }
 
@@ -42,6 +41,10 @@ void Window::onQuit()
 void Window::addDrawable(Drawable* drawable)
 {
     drawables_.push_back(drawable);
+    drawable->init(input_manager_, event_manager_,[](const std::string &path, int &x, int &y) {
+        return loadTGATexture(path, x, y);
+    });
+
 }
 
 void Window::onMouseMove(double cx, double cy)

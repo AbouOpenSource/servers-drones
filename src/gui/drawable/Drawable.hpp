@@ -6,6 +6,7 @@
 #define DRONEPROJECT_DRAWABLE_HPP
 
 #include "../../core/event/input/InputManager.hpp"
+#include "../../core/event/EventManager.hpp"
 
 class Drawable
 {
@@ -16,7 +17,9 @@ public:
 
     Drawable();
 
-    virtual void start(InputManager* input_manager, TextureLoader texture_loader);
+    virtual void init(InputManager* input_manager, EventManager* event_manager, TextureLoader texture_loader);
+
+    virtual void start();
 
     virtual void draw();
 

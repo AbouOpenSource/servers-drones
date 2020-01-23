@@ -4,14 +4,15 @@
 #include "src/core/io/reader/FileStream.hpp"
 #include "src/util/StringUtil.hpp"
 #include "src/util/VectorUtil.hpp"
-
 #include "src/model/Server.hpp"
 #include "src/model/Polygon.hpp"
-
+#include "src/gui/drawable/DroneDrawable.hpp"
+#include "src/model/ServerManager.hpp"
 #include "src/gui/Window.hpp"
 #include "src/core/ServiceContainer.hpp"
 #include "src/gui/drawable/Circumscribe.hpp"
-#include "src/gui/drawable/DroneDrawable.hpp"
+#include "src/core/event/EventManager.hpp"
+#include "src/core/event/input/InputManager.hpp"
 
 using namespace std;
 
@@ -22,17 +23,25 @@ int main(int argc, char** argv)
     CommandParser command_parser(commands, true);
     CommandContainer command_container = command_parser.parse(argc, argv);
 
-    // Input Service
-    InputManager input_manager;
-
-    // Window Service
-    Window window(argc, argv, &input_manager);
-
     // Instantiating service container
     ServiceContainer* service_container = ServiceContainer::get_instance();
     service_container->register_service(&command_container);
+
+    // Input Service
+    InputManager input_manager;
     service_container->register_service(&input_manager);
+
+    // Event Service;
+    EventManager event_manager;
+    service_container->register_service(&event_manager);
+
+    // Window Service
+    Window window(argc, argv);
     service_container->register_service(&window);
+
+    // Server Manager Service
+    ServerManager server_manager;
+    service_container->register_service(&server_manager);
 
     // Retrieve service example
 
