@@ -27,7 +27,7 @@ public:
     float circum_radius_;
     bool is_delaunay_;
 
-    typedef std::function<void(Vector2D* point)> PointCallback;
+    typedef std::function<void(Vector2D* point, unsigned int index)> PointCallback;
 
     Triangle();
 

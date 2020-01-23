@@ -53,7 +53,7 @@ Polygon::Polygon(std::vector<Server>& servers): Drawable()
         pointsRelative.push_back(Vector2D{pOrig.x_ - origin.x_, pOrig.y_ - origin.y_});
 
     // Sorting point with angular criteria.
-    sort(pointsRelative.begin() + 1, pointsRelative.end(), polarComparison);
+    sort(pointsRelative.begin() + 1, pointsRelative.end(), polar_comparison);
 
     std::stack<Vector2D*> CHstack;
     Vector2D *top_1, *top;
@@ -112,7 +112,7 @@ Polygon::~Polygon()
     delete [] tab_pts_;
 }
 
-bool Polygon::polarComparison(Vector2D p1, Vector2D p2)
+bool Polygon::polar_comparison(Vector2D p1, Vector2D p2)
 {
     double a1 = asin(p1.y_ / sqrt(p1.x_ * p1.x_ + p1.y_ * p1.y_));
     if (p1.x_ < 0.0)
@@ -194,7 +194,11 @@ void Polygon::set_color(const float t_color[4])
 void Polygon::draw()
 {
     if (triangles_.empty())
+    {
         triangulation();
+        interior_triangulation();
+        solve_delaunay();
+    }
 
     // Draw the interior.
     glColor3fv(color);
@@ -300,7 +304,7 @@ std::vector<float> Polygon::intersections(const Vector2D& a, const Vector2D& u)
     return kres;
 }
 
-void Polygon::solveDelaunay()
+void Polygon::solve_delaunay()
 {
     std::list<Triangle*> processList;
     auto t = triangles_.begin(); // copy tabTriangles in a list
@@ -319,8 +323,10 @@ void Polygon::solveDelaunay()
 
         if (!current->is_delaunay_)
         {
+            // TODO Solve the bug of the infinite loop when we add more servers.
+
             // if current is not Delaunay.
-            Triangle *Tneighbor = neighborInside(current);
+            Triangle *Tneighbor = neighbor_inside(current);
 
             if (Tneighbor!=nullptr)
             {
@@ -338,7 +344,7 @@ void Polygon::solveDelaunay()
     }
 }
 
-Triangle* Polygon::neighborInside(Triangle* current)
+Triangle* Polygon::neighbor_inside(Triangle* current)
 {
     // For each triangle.
     for (Triangle &triangle: triangles_)
@@ -373,7 +379,44 @@ Triangle* Polygon::neighborInside(Triangle* current)
 
 void Polygon::flip(Triangle* current, Triangle* neighbor)
 {
+    std::vector<unsigned int> index_common_points_current;
+    unsigned int index_no_common_points_current;
 
+    current->foreach_point([&](Vector2D* point, unsigned int index) {
+        if (neighbor->common_point(point))
+        {
+            index_common_points_current.push_back(index);
+        }
+        else
+        {
+            index_no_common_points_current = index;
+        }
+    });
+
+    std::vector<unsigned int> index_common_points_neighbor;
+    unsigned int index_no_common_points_neighbor;
+
+    neighbor->foreach_point([&](Vector2D* point, unsigned int index) {
+        if (current->common_point(point))
+        {
+            index_common_points_neighbor.push_back(index);
+        }
+        else
+        {
+            index_no_common_points_neighbor = index;
+        }
+    });
+
+    if (current->ptr_[index_common_points_current[0]] == neighbor->ptr_[index_common_points_neighbor[0]])
+    {
+        neighbor->ptr_[index_common_points_neighbor[1]] = current->ptr_[index_no_common_points_current];
+    }
+    else
+    {
+        neighbor->ptr_[index_common_points_neighbor[0]] = current->ptr_[index_no_common_points_current];
+    }
+
+    current->ptr_[index_common_points_current[0]] = neighbor->ptr_[index_no_common_points_neighbor];
 }
 
 void Polygon::triangulation()
@@ -414,8 +457,11 @@ void Polygon::triangulation()
         tmp.erase(p + 1); // remove point(p + 1) from tmp.
         n--; // or n = tmp.size().
     }
+//    neighbor_inside(&triangles_[0]);
+}
 
-    /********** Interior point triangles **********/
+void Polygon::interior_triangulation()
+{
     for (Vector2D interior_point: interior_points)
     {
         auto it_triangle = triangles_.begin();
@@ -447,8 +493,6 @@ void Polygon::triangulation()
             }
         }
     }
-
-    neighborInside(&triangles_[0]);
 }
 
 float Polygon::cross_product(const Vector2D& u, const Vector2D& v)
@@ -463,6 +507,10 @@ void Polygon::onMouseMove(const Vector2D& pos)
         triangle.on_mouse_move(pos);
     }
 }
+
+
+
+
 
 
 

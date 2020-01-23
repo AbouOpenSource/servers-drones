@@ -63,7 +63,7 @@ public:
 
     void triangulation();
 
-    static bool polarComparison(Vector2D p1, Vector2D p2);
+    static bool polar_comparison(Vector2D p1, Vector2D p2);
 
     bool is_on_the_left(const Vector2D* p, const Vector2D* p1, const Vector2D* p2);
 
@@ -77,11 +77,13 @@ public:
 
     void set_color(const float t_color[4]);
 
-    Triangle* neighborInside(Triangle* current);
+    void interior_triangulation();
+
+    Triangle* neighbor_inside(Triangle* current);
 
     void flip(Triangle* current, Triangle* neighbor);
 
-    void solveDelaunay();
+    void solve_delaunay();
 
     void delaunay_triangulation(std::vector<Vector2D>& pointsRelative);
 

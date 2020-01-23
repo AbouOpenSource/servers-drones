@@ -117,9 +117,9 @@ bool Triangle::check_delaunay(const std::vector<Vector2D> &points) {
 
 void Triangle::foreach_point(PointCallback cb)
 {
-    cb(ptr_[0]);
-    cb(ptr_[1]);
-    cb(ptr_[2]);
+    cb(ptr_[0], 0);
+    cb(ptr_[1], 1);
+    cb(ptr_[2], 2);
 }
 
 void Triangle::draw() {
