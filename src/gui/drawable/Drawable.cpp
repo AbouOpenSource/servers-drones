@@ -14,7 +14,7 @@ void Drawable::init(InputManager* input_manager, EventManager* event_manager, Te
 void Drawable::start()
 {}
 
-void Drawable::draw() const
+void Drawable::draw()
 {}
 
 void Drawable::quit()

@@ -21,11 +21,10 @@ private:
     float raduisDeCollision;
     int desiredNumberOfDrones;
     float dMax;
-
     const std::string name_;
     std::string color_;
 //    Color color_;
-
+    bool selected_ ;
 public:
     /**
      *
@@ -61,11 +60,15 @@ public:
 
     void setTheDrone(const std::vector<Drone*> &the_drone);
 
+    void set_selected(bool selected);
+
     void detectCollision();
 
     int getCurrentNumberOfDrones();
 
     int getDesiredNumberOfDrones();
+
+    bool is_selected() const;
 
     void connectDrone(Drone* ptrDrone);
 

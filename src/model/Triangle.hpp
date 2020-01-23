@@ -26,7 +26,7 @@ public:
     float circum_radius_;
     bool is_delaunay_;
 
-    Triangle(Vector2D *ptr1,Vector2D *ptr2,Vector2D *ptr3);
+    Triangle(Vector2D *ptr1, Vector2D *ptr2, Vector2D *ptr3);
 
     //bool is_equilateral() {
     //  return true;

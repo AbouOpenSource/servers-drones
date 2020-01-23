@@ -22,7 +22,7 @@ public:
 
     void start() override;
 
-    void draw() const override;
+    void draw() override;
 
 private:
 

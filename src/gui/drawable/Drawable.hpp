@@ -5,8 +5,6 @@
 #ifndef DRONEPROJECT_DRAWABLE_HPP
 #define DRONEPROJECT_DRAWABLE_HPP
 
-
-#include <OpenGL/OpenGL.h>
 #include "../../core/event/input/InputManager.hpp"
 #include "../../core/event/EventManager.hpp"
 
@@ -23,7 +21,7 @@ public:
 
     virtual void start();
 
-    virtual void draw() const;
+    virtual void draw();
 
     virtual void quit();
 };
