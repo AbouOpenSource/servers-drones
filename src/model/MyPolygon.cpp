@@ -2,11 +2,15 @@
 #include <algorithm>
 #include <cstring>
 #include <list>
-#include "Polygon.hpp"
+#include "MyPolygon.hpp"
 #include "../util/VectorUtil.hpp"
 #include <array>
 
-Polygon::Polygon(int p_max)
+MyPolygon::MyPolygon()
+{
+}
+
+MyPolygon::MyPolygon(int p_max)
         : tab_pts_{new Vector2D[p_max]},
           n_max_{p_max},
           current_n_{0}
@@ -14,7 +18,7 @@ Polygon::Polygon(int p_max)
     set_color(YELLOW);
 }
 
-Polygon::Polygon(std::vector<Server>& servers): Drawable()
+MyPolygon::MyPolygon(std::vector<Server>& servers): Drawable()
 {
     std::vector<Vector2D> points;
 
@@ -107,12 +111,12 @@ Polygon::Polygon(std::vector<Server>& servers): Drawable()
     // TODO END DELAUNAY TRIANGULATION
 }
 
-Polygon::~Polygon()
+MyPolygon::~MyPolygon()
 {
     delete [] tab_pts_;
 }
 
-bool Polygon::polar_comparison(Vector2D p1, Vector2D p2)
+bool MyPolygon::polar_comparison(Vector2D p1, Vector2D p2)
 {
     double a1 = asin(p1.y_ / sqrt(p1.x_ * p1.x_ + p1.y_ * p1.y_));
     if (p1.x_ < 0.0)
@@ -125,7 +129,7 @@ bool Polygon::polar_comparison(Vector2D p1, Vector2D p2)
     return a1 < a2;
 }
 
-bool Polygon::is_on_the_left(const Vector2D& p, int i)
+bool MyPolygon::is_on_the_left(const Vector2D& p, int i)
 {
     Vector2D ab = tab_pts_[i + 1] - tab_pts_[i],
             ap = p - tab_pts_[i];
@@ -133,7 +137,7 @@ bool Polygon::is_on_the_left(const Vector2D& p, int i)
     return cross_product(ab, ap) >= 0;
 }
 
-bool Polygon::is_on_the_left(const Vector2D* p, const Vector2D* p1, const Vector2D* p2)
+bool MyPolygon::is_on_the_left(const Vector2D* p, const Vector2D* p1, const Vector2D* p2)
 {
     Vector2D ab = *p2 - *p1,
             ap = *p - *p1;
@@ -142,7 +146,7 @@ bool Polygon::is_on_the_left(const Vector2D* p, const Vector2D* p1, const Vector
 //    (ab.x_ * ap.y_ - ab.y_ * ap.x_) >= 0;
 }
 
-bool Polygon::is_convex()
+bool MyPolygon::is_convex()
 {
     unsigned int i = 0;
 
@@ -152,7 +156,7 @@ bool Polygon::is_convex()
     return i == current_n_;
 }
 
-bool Polygon::add_vertex(const Vector2D &p)
+bool MyPolygon::add_vertex(const Vector2D &p)
 {
 //    if (n_max_ == current_n_ - 2)
 //        return false;
@@ -167,7 +171,7 @@ bool Polygon::add_vertex(const Vector2D &p)
 }
 
 // Complexity is N because for each edge and there is N edges.
-bool Polygon::is_inside(const Vector2D& p)
+bool MyPolygon::is_inside(const Vector2D& p)
 {
     int i = 0;
     while (i < current_n_ && is_on_the_left(p, i))
@@ -176,7 +180,7 @@ bool Polygon::is_inside(const Vector2D& p)
     return i == current_n_;
 }
 
-bool Polygon::is_inside_triangle(const Vector2D& p)
+bool MyPolygon::is_inside_triangle(const Vector2D& p)
 {
     auto triangle = triangles_.begin();
 
@@ -186,49 +190,54 @@ bool Polygon::is_inside_triangle(const Vector2D& p)
     return triangle != triangles_.end();
 }
 
-void Polygon::set_color(const float t_color[4])
+void MyPolygon::set_color(const float t_color[4])
 {
     memcpy(color, t_color, 4 * sizeof(float));
 }
 
-void Polygon::draw()
+void MyPolygon::draw()
 {
     if (triangles_.empty())
     {
         triangulation();
         interior_triangulation();
-        solve_delaunay();
+//        solve_delaunay();
+    }
+
+    for (auto& triangle: triangles_)
+    {
+        triangle.draw();
     }
 
     // Draw the interior.
-    glColor3fv(color);
-
-    glBegin(GL_TRIANGLES);
-    for (auto t: triangles_)
-    {
-        glVertex2f(t.ptr_[0]->x_, t.ptr_[0]->y_);
-        glVertex2f(t.ptr_[1]->x_, t.ptr_[1]->y_);
-        glVertex2f(t.ptr_[2]->x_, t.ptr_[2]->y_);
-    }
-    glEnd();
+//    glColor3fv(color);
+//
+//    glBegin(GL_TRIANGLES);
+//    for (auto t: triangles_)
+//    {
+//        glVertex2f(t.ptr_[0]->x_, t.ptr_[0]->y_);
+//        glVertex2f(t.ptr_[1]->x_, t.ptr_[1]->y_);
+//        glVertex2f(t.ptr_[2]->x_, t.ptr_[2]->y_);
+//    }
+//    glEnd();
 
     // Draw the border
-    glColor3fv(BLACK);
-    glLineWidth(3);
+//    glColor3fv(BLACK);
+//    glLineWidth(3);
 
     // Draw the triangles.
-    glBegin(GL_LINE_LOOP);
-    for (auto t: triangles_)
-    {
-        glVertex2f(t.ptr_[0]->x_, t.ptr_[0]->y_);
-        glVertex2f(t.ptr_[1]->x_, t.ptr_[1]->y_);
-        glVertex2f(t.ptr_[2]->x_, t.ptr_[2]->y_);
-    }
-    for (int i = 0; i < current_n_; i++)
-    {
-        glVertex2f(tab_pts_[i].x_, tab_pts_[i].y_);
-    }
-    glEnd();
+//    glBegin(GL_LINE_LOOP);
+//    for (auto t: triangles_)
+//    {
+//        glVertex2f(t.ptr_[0]->x_, t.ptr_[0]->y_);
+//        glVertex2f(t.ptr_[1]->x_, t.ptr_[1]->y_);
+//        glVertex2f(t.ptr_[2]->x_, t.ptr_[2]->y_);
+//    }
+//    for (int i = 0; i < current_n_; i++)
+//    {
+//        glVertex2f(tab_pts_[i].x_, tab_pts_[i].y_);
+//    }
+//    glEnd();
 
     // Draw the number of points.
     glLineWidth(1);
@@ -255,7 +264,7 @@ void Polygon::draw()
     }
 }
 
-vector<float> Polygon::intersect(const Vector2D& a, const Vector2D& u, const Vector2D& p, const Vector2D& q)
+vector<float> MyPolygon::intersect(const Vector2D& a, const Vector2D& u, const Vector2D& p, const Vector2D& q)
 {
     std::vector<float> k;
 
@@ -273,7 +282,7 @@ vector<float> Polygon::intersect(const Vector2D& a, const Vector2D& u, const Vec
     return k;
 }
 
-std::vector<float> Polygon::intersections(const Vector2D& a, const Vector2D& u)
+std::vector<float> MyPolygon::intersections(const Vector2D& a, const Vector2D& u)
 {
     std::vector<float> k1k2;
     std::vector<float> kres;
@@ -304,7 +313,7 @@ std::vector<float> Polygon::intersections(const Vector2D& a, const Vector2D& u)
     return kres;
 }
 
-void Polygon::solve_delaunay()
+void MyPolygon::solve_delaunay()
 {
     std::list<Triangle*> processList;
     auto t = triangles_.begin(); // copy tabTriangles in a list
@@ -344,7 +353,7 @@ void Polygon::solve_delaunay()
     }
 }
 
-Triangle* Polygon::neighbor_inside(Triangle* current)
+Triangle* MyPolygon::neighbor_inside(Triangle* current)
 {
     // For each triangle.
     for (Triangle &triangle: triangles_)
@@ -377,7 +386,7 @@ Triangle* Polygon::neighbor_inside(Triangle* current)
     return nullptr;
 }
 
-void Polygon::flip(Triangle* current, Triangle* neighbor)
+void MyPolygon::flip(Triangle* current, Triangle* neighbor)
 {
     std::vector<unsigned int> index_common_points_current;
     unsigned int index_no_common_points_current;
@@ -419,7 +428,7 @@ void Polygon::flip(Triangle* current, Triangle* neighbor)
     current->ptr_[index_common_points_current[0]] = neighbor->ptr_[index_no_common_points_neighbor];
 }
 
-void Polygon::triangulation()
+void MyPolygon::triangulation()
 {
     std::vector<Vector2D*> tmp;
 
@@ -460,7 +469,7 @@ void Polygon::triangulation()
 //    neighbor_inside(&triangles_[0]);
 }
 
-void Polygon::interior_triangulation()
+void MyPolygon::interior_triangulation()
 {
     for (Vector2D interior_point: interior_points)
     {
@@ -495,12 +504,12 @@ void Polygon::interior_triangulation()
     }
 }
 
-float Polygon::cross_product(const Vector2D& u, const Vector2D& v)
+float MyPolygon::cross_product(const Vector2D& u, const Vector2D& v)
 {
     return (u.x_ * v.y_ - u.y_ * v.x_);
 }
 
-void Polygon::onMouseMove(const Vector2D& pos)
+void MyPolygon::onMouseMove(const Vector2D& pos)
 {
     for (Triangle& triangle: triangles_)
     {
@@ -508,6 +517,30 @@ void Polygon::onMouseMove(const Vector2D& pos)
     }
 }
 
+void MyPolygon::foreach_vertex(VertexCallback cb)
+{
+    for (unsigned int i = 0; i < points_to_build_polygon_.size(); i++)
+    {
+        cb(points_to_build_polygon_[i], i);
+    }
+}
+
+std::vector<Triangle> MyPolygon::get_triangles_from(Vector2D v1)
+{
+    std::vector<Triangle> triangles;
+
+    for (Triangle& triangle: triangles_)
+    {
+        triangle.foreach_point([&](Vector2D* vertex, unsigned int index) {
+            if (*vertex == v1)
+            {
+                triangles.push_back(triangle);
+            }
+        });
+    }
+
+    return triangles;
+}
 
 
 
@@ -534,7 +567,8 @@ void Polygon::onMouseMove(const Vector2D& pos)
 
 
 
-//void Polygon::delaunay_triangulation(std::vector<Vector2D>& pointsRelative)
+
+//void MyPolygon::delaunay_triangulation(std::vector<Vector2D>& pointsRelative)
 //{
 //    vector<Vector2D>::iterator pi = pointsRelative.begin() + 3;
 //
@@ -577,7 +611,7 @@ void Polygon::onMouseMove(const Vector2D& pos)
 //    tab_pts_[current_n_] = tab_pts_[0];
 //}
 
-//void Polygon::check_delaunay()
+//void MyPolygon::check_delaunay()
 //{
 //    auto t = triangles_.begin();
 //

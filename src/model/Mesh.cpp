@@ -1,10 +1,10 @@
 #include "Mesh.hpp"
-#include "Polygon.hpp"
+#include "MyPolygon.hpp"
 
 Mesh::Mesh(std::vector<Server> servers)
 {
     // TODO Convex hull
-//    Polygon convex_polygon = Polygon(servers);
+//    MyPolygon convex_polygon = MyPolygon(servers);
 
     // TODO Triangulation
 

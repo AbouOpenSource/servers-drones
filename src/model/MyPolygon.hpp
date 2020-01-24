@@ -14,7 +14,7 @@
 //const float GREEN[4] = { 0.0, 1.0, 0.0, 1.0};
 //const float BLUE[4] = { 0.0, 0.0, 1.0, 1.0};
 
-class Polygon: public Drawable
+class MyPolygon: public Drawable
 {
     Vector2D* tab_pts_;
     int n_max_;
@@ -25,15 +25,21 @@ class Polygon: public Drawable
     std::vector<Vector2D> interior_points;
     std::vector<Vector2D> points_to_build_polygon_;
 
+private:
+    /********** typedef **********/
+    typedef std::function<void(Vector2D point, unsigned int index)> VertexCallback;
+
 public:
     /********** Constructor & destructor **********/
-    Polygon(int p_max);
+    MyPolygon();
 
-    Polygon(std::vector<Server>& servers);
+    MyPolygon(int p_max);
 
-//    Polygon(std::vector<Vector2D> &vertices);
+    MyPolygon(std::vector<Server>& servers);
 
-    ~Polygon();
+//    MyPolygon(std::vector<Vector2D> &vertices);
+
+    ~MyPolygon();
 
     /********** Modifier **********/
     bool add_vertex(const Vector2D &p);
@@ -90,6 +96,11 @@ public:
     void check_delaunay();
 
     void onMouseMove(const Vector2D& pos);
+
+    void foreach_vertex(VertexCallback cb);
+
+    // Return the subset of triangles of the mesh that have v1 as vertex.
+    std::vector<Triangle> get_triangles_from(Vector2D v1);
 };
 
 #endif //POINTS_AND_CONVEX_POLYGONS_MYPOLYGON_HPP

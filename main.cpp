@@ -6,7 +6,8 @@
 #include "src/util/VectorUtil.hpp"
 
 #include "src/model/Server.hpp"
-#include "src/model/Polygon.hpp"
+#include "src/model/MyPolygon.hpp"
+#include "src/model/VoronoiDiagram.hpp"
 
 #include "src/gui/Window.hpp"
 #include "src/core/ServiceContainer.hpp"
@@ -96,7 +97,8 @@ int main(int argc, char** argv)
         }
     });
 
-    Polygon convex_polygon = Polygon(servers);
+    MyPolygon convex_polygon = MyPolygon(servers);
+    VoronoiDiagram voronoi_diagram = VoronoiDiagram(convex_polygon);
     Circumscribe circumscribe(servers);
 
     window.addDrawable(&circumscribe);
