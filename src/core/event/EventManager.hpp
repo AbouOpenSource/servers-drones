@@ -9,7 +9,7 @@
 #include <map>
 #include <vector>
 #include "Event.hpp"
-#include "../ServiceProvider.hpp"
+#include "../service/ServiceProvider.hpp"
 
 class EventManager: public ServiceProvider
 {

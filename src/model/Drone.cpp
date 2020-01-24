@@ -5,10 +5,37 @@
 #include "Drone.hpp"
 #include "Circle.hpp"
 
-Drone::Drone(const Vector2D &current_position, const Vector2D &speed, const Vector2D &acceleration,
-             Vector2D forces, float weight, std::string id) : current_position_(
-        current_position), speed_(speed), acceleration_(acceleration), forces_(forces), weight_(weight), id_(id)
+Drone::Drone(const int id)
+    : id_(id),
+    weight_(0),
+    delta_time_(1)
 {}
+
+void Drone::init(const Vector2D &current_position, const Vector2D &forces, float weight, const Vector2D &speed,
+                 const Vector2D &acceleration)
+{
+    current_position_ = current_position;
+    speed_ = speed;
+    acceleration_ = acceleration;
+    forces_ = forces;
+    weight_ = weight;
+}
+
+int Drone::get_id() const
+{
+    return id_;
+}
+
+const string &Drone::get_server_name() const
+{
+    return server_name_;
+}
+
+void Drone::set_server_name(const string &server_name)
+{
+    server_name_ = server_name;
+}
+
 
 const Vector2D &Drone::get_current_position() const
 {
@@ -56,20 +83,12 @@ void Drone::set_weight(float weight)
     Drone::weight_ = weight;
 }
 
-Drone::Drone(const Vector2D &current_position, const Vector2D &forces, float weight)
-        : current_position_(
-        current_position), forces_(forces), weight_(weight), acceleration_(forces / weight),
-          speed_((forces / weight) / delta_time)
-{
-
-}
-
 void Drone::update_position()
 {
-    current_position_ = current_position_ + speed_ / delta_time;
+    current_position_ = current_position_ + speed_ / delta_time_;
 }
 
-void Drone::avoid_collision_with(Drone *ptrDrone)
+void Drone::avoid_collision_with(Drone* drone)
 {
     //TODO define the force to avoid the collison with the drone passing in args
 
@@ -77,12 +96,12 @@ void Drone::avoid_collision_with(Drone *ptrDrone)
     //float dAB = this->distanceWithOtherDrone(*ptrDrone);
     //Computing of the
     Vector2D *BA = new Vector2D(
-            Drone::current_position_.x_ - ptrDrone->current_position_.x_,
-            Drone::current_position_.y_ - ptrDrone->current_position_.y_
+            Drone::current_position_.x_ - drone->current_position_.x_,
+            Drone::current_position_.y_ - drone->current_position_.y_
     );
 
 
-    float distance = Drone::distance_with_other_drone(*ptrDrone);
+    float distance = Drone::distance_from(drone);
     //10 raduis
     if (distance < 10) {
         //First case
@@ -97,35 +116,29 @@ void Drone::avoid_collision_with(Drone *ptrDrone)
 
 }
 
-float Drone::distance_with_other_drone(Drone item)
+float Drone::distance_from(Drone *item)
 {
-    return
-            sqrt(item.current_position_.x_ - Drone::current_position_.x_ *
-                                                  item.current_position_.x_ -
-                 Drone::current_position_.x_
-                 +
-                         item.current_position_.y_ - Drone::current_position_.y_ *
-                                                  item.current_position_.y_ -
-                 Drone::current_position_.y_
-            );
+    return sqrt(
+            item->current_position_.x_
+            - Drone::current_position_.x_
+            * item->current_position_.x_
+            - Drone::current_position_.x_
+            + item->current_position_.y_
+            - Drone::current_position_.y_
+            * item->current_position_.y_
+            - Drone::current_position_.y_
+    );
 }
 
-Drone::Drone(const Vector2D &current_position, const Vector2D &speed, const Vector2D &acceleration, const Vector2D& forces,
-             float weight):current_position_(current_position),speed_(speed),acceleration_(acceleration),forces_(forces),weight_(weight)
+std::ostream &operator<<(std::ostream &os, const Drone &dt)
 {
-
-}
-
-std::ostream &operator << (std::ostream &os, const Drone &dt)
-{
-    os <<"My position :"<< dt.get_current_position().x_ << '/' << dt.get_current_position().y_ << '/' ;
+    os << "Drone(" << dt.id_ << ") :" << dt.get_current_position().x_ << '/' << dt.get_current_position().y_ << '/';
     return os;
 }
 
-void Drone::addGoal(Vector2D item)
+void Drone::add_target(Vector2D item)
 {
 
 }
-
 
 

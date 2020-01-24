@@ -101,7 +101,7 @@ bool Triangle::check_delaunay(const std::vector<Vector2D> &points) {
 }
 
 void Triangle::draw() {
-    glColor3fv(is_delaunay_ ? (is_highlighted_ ? GREEN : GREY) : (is_highlighted_ ? ORANGE : YELLOW));
+    /*glColor3fv(is_delaunay_ ? (is_highlighted_ ? GREEN : GREY) : (is_highlighted_ ? ORANGE : YELLOW));
 
     // Draw the triangle.
     glBegin(GL_TRIANGLES);
@@ -116,12 +116,12 @@ void Triangle::draw() {
     glVertex2f(ptr_[0]->x_, ptr_[0]->y_);
     glVertex2f(ptr_[1]->x_, ptr_[1]->y_);
     glVertex2f(ptr_[2]->x_, ptr_[2]->y_);
-    glEnd();
+    glEnd();*/
 }
 
 void Triangle::draw_circle() {
     // draw circle
-    if (is_highlighted_)
+    /*if (is_highlighted_)
     {
         glColor3fv(RED);
         glPushMatrix();
@@ -140,5 +140,25 @@ void Triangle::draw_circle() {
         glEnd();
         glLineWidth(1);
         glPopMatrix();
-    }
+    }*/
+}
+
+float Triangle::get_circum_radius() const
+{
+    return circum_radius_;
+}
+
+bool Triangle::is_highlighted() const
+{
+    return is_highlighted_;
+}
+
+bool Triangle::is_delaunay() const
+{
+    return is_delaunay_;
+}
+
+const Vector2D &Triangle::get_circum_center() const
+{
+    return circum_center_;
 }

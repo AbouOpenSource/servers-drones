@@ -3,49 +3,58 @@
 //
 
 #include "Window.hpp"
-#include "../core/ServiceContainer.hpp"
+#include "core/service/ServiceContainer.hpp"
+#include "util/VectorUtil.hpp"
 
 std::string Window::SERVICE = "WindowService";
 
 Window::Window(int argc, char **argv)
     : GlutWindow(argc, argv, TITLE, 1000, 800, FIXED),
     ServiceProvider(Window::SERVICE),
-    input_manager_(static_cast<InputManager *>(ServiceContainer::get_instance()->get_service(InputManager::SERVICE))),
-    event_manager_(static_cast<EventManager *>(ServiceContainer::get_instance()->get_service(EventManager::SERVICE))),
-    drawables_(std::vector<Drawable*>())
-{}
+    input_manager_((InputManager *) ServiceContainer::get_instance()->get_service(InputManager::SERVICE)),
+    event_manager_((EventManager *) ServiceContainer::get_instance()->get_service(EventManager::SERVICE)),
+    views_(std::vector<View*>())
+{
+    draw_helper_ = View::DrawHelper();
+}
 
 void Window::onStart()
 {
-    for (auto & drawable : drawables_) {
-        drawable->start();
+    glClearColor(1.0,1.0,1.0,1.0); // background color
+
+    for (auto & view : views_) {
+        view->start();
     }
 }
 
 void Window::onDraw()
 {
-    for (auto & drawable : drawables_) {
-        drawable->draw();
+    for (auto & view : views_) {
+        view->draw(&draw_helper_);
     }
 }
 
 void Window::onQuit()
 {
-    for (auto & drawable : drawables_) {
-        drawable->quit();
+    for (auto & view : views_) {
+        view->quit();
     }
 }
 
-void Window::addDrawable(Drawable* drawable)
+void Window::addView(View* view)
 {
-    drawables_.push_back(drawable);
-    drawable->init(
+    views_.push_back(view);
+    view->init(
             input_manager_,
             event_manager_,
             [] (const std::string &file_name, int &x, int &y) {
         return loadTGATexture(TEXTURE_DIR + file_name + ".tga", x, y);
     });
+}
 
+void Window::removeView(View *view)
+{
+    VectorUtil::delete_object(views_, view);
 }
 
 void Window::onMouseMove(double cx, double cy)

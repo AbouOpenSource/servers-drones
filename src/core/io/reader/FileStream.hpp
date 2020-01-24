@@ -24,7 +24,11 @@ private:
 
         explicit ReaderInterface(const FileStream *file_stream);
 
-        void read(const StreamCallback& stream_callback, const TypeUtil::Callback& on_finish = nullptr, const TypeUtil::ErrorCallback& error_callback = nullptr);
+        void read(
+                const StreamCallback& stream_callback,
+                const TypeUtil::Callback& on_finish = nullptr,
+                const TypeUtil::ErrorCallback& error_callback = nullptr
+        );
 
     private:
 
@@ -40,7 +44,10 @@ private:
 
         void write(unsigned int row, unsigned int col, const std::string& value);
 
-        void persist(const TypeUtil::ErrorCallback& error_callback = nullptr) const;
+        void persist(
+                const TypeUtil::Callback& on_finish = nullptr,
+                const TypeUtil::ErrorCallback& error_callback = nullptr
+        ) const;
 
     private:
 

@@ -6,7 +6,7 @@
 #define DRONEPROJECT_INPUTMANAGER_HPP
 
 
-#include "../../ServiceProvider.hpp"
+#include "../../service/ServiceProvider.hpp"
 #include <functional>
 #include <vector>
 

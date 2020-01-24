@@ -9,12 +9,11 @@
 #include "Vector2D.hpp"
 
 class Position {
-private :
-    int x_;
-    int y_;
-
 
 public:
+
+    Position(int x, int y);
+
     int get_x() const;
 
     int get_y() const;
@@ -23,9 +22,12 @@ public:
 
     void set_y(int y);
 
-    Position(int x, int y);
-
     Position operator=(const Vector2D& item);
+
+private :
+
+    int x_;
+    int y_;
 };
 
 

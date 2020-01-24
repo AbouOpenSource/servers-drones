@@ -28,6 +28,15 @@ namespace VectorUtil
 
     template <typename cast_type>
     std::vector<std::vector<cast_type>> cast_2d_string_vector_to_vector_of(std::vector<std::vector<std::string>> &vector);
+
+    template <typename T>
+    void delete_object(std::vector<T*> &vector, T* object);
+
+    template <typename T>
+    void delete_object(std::vector<T> &vector, T* object);
+
+    template <typename T>
+    void ensure_size(const std::vector<T>& vector, unsigned long expected_size, const std::function<void()>& init_function);
 };
 
 #include "VectorUtil.tcc"

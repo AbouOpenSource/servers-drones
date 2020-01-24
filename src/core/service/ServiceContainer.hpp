@@ -7,7 +7,7 @@
 
 
 #include <map>
-#include "io/command/CommandContainer.hpp"
+#include "../io/command/CommandContainer.hpp"
 #include "ServiceProvider.hpp"
 
 class ServiceContainer

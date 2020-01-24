@@ -4,29 +4,25 @@
 #include "Polygon.hpp"
 #include "../util/VectorUtil.hpp"
 
-Polygon::Polygon(int p_max)
-        : tab_pts_{new Vector2D[p_max]},
-          n_max_{p_max},
-          current_n_{0}
-{
-    set_color(YELLOW);
-}
+Polygon::Polygon(): tab_pts_(new Vector2D[0]), n_max_(0), current_n_(0)
+{}
 
-Polygon::Polygon(std::vector<Server>& servers): Drawable()
+Polygon::Polygon(int p_max): tab_pts_{new Vector2D[p_max]}, n_max_{p_max}, current_n_{0}
+{}
+
+void Polygon::init(std::vector<Server>& servers)
 {
     std::vector<Vector2D> points;
 
-    for (const Server &server: servers) {
-        points.push_back(server.getCurrentPosition());
+    for (const Server& server: servers) {
+        points.push_back(server.get_position());
     }
-
-    set_color(YELLOW);
 
 //    std::cout << "\n";
 //    VectorUtil::print_1D_vector(points);
 
 //    assert(points.size() > 3);
-    points_to_build_polygon_ = points;
+    build_points = points;
 
     auto p = points.begin();
     auto pymin = points.begin();
@@ -42,19 +38,21 @@ Polygon::Polygon(std::vector<Server>& servers): Drawable()
     }
 
     // Swap
-    if (pymin != points.begin())
+    if (pymin != points.begin()) {
         iter_swap(points.begin(), pymin);
+    }
 
     Vector2D origin{points.begin()->x_, points.begin()->y_};
 
     // Copy points in a set of points relative to points[0]
     vector<Vector2D> pointsRelative;
 
-    for (auto pOrig: points)
+    for (auto pOrig: points) {
         pointsRelative.push_back(Vector2D{pOrig.x_ - origin.x_, pOrig.y_ - origin.y_});
+    }
 
     // Sorting point with angular criteria.
-    sort(pointsRelative.begin() + 1, pointsRelative.end(), polarComparison);
+    sort(pointsRelative.begin() + 1, pointsRelative.end(), polar_comparison);
 
     std::stack<Vector2D*> CHstack;
     Vector2D *top_1, *top;
@@ -113,7 +111,42 @@ Polygon::~Polygon()
     delete [] tab_pts_;
 }
 
-bool Polygon::polarComparison(Vector2D p1, Vector2D p2)
+int Polygon::get_n_max() const
+{
+    return n_max_;
+}
+
+int Polygon::get_current_n() const
+{
+    return current_n_;
+}
+
+const std::string Polygon::get_color() const
+{
+    return color_;
+}
+
+Vector2D *Polygon::get_tab_pts() const
+{
+    return tab_pts_;
+}
+
+const vector<Triangle> &Polygon::get_triangles() const
+{
+    return triangles_;
+}
+
+const vector<Vector2D> &Polygon::get_interior_points() const
+{
+    return interior_points;
+}
+
+const vector<Vector2D> &Polygon::get_build_points() const
+{
+    return build_points;
+}
+
+bool Polygon::polar_comparison(Vector2D p1, Vector2D p2)
 {
     double a1 = asin(p1.y_ / sqrt(p1.x_ * p1.x_ + p1.y_ * p1.y_));
     if (p1.x_ < 0.0)
@@ -187,69 +220,9 @@ bool Polygon::is_inside_triangle(const Vector2D& p)
     return triangle != triangles_.end();
 }
 
-void Polygon::set_color(const float t_color[4])
+void Polygon::set_color(const std::string& color)
 {
-    memcpy(color, t_color, 4 * sizeof(float));
-}
-
-void Polygon::draw()
-{
-    if (triangles_.empty())
-        triangulation();
-
-    // Draw the interior.
-    glColor3fv(color);
-
-    glBegin(GL_TRIANGLES);
-    for (auto t: triangles_)
-    {
-        glVertex2f(t.ptr_[0]->x_, t.ptr_[0]->y_);
-        glVertex2f(t.ptr_[1]->x_, t.ptr_[1]->y_);
-        glVertex2f(t.ptr_[2]->x_, t.ptr_[2]->y_);
-    }
-    glEnd();
-
-    // Draw the border
-    glColor3fv(BLACK);
-    glLineWidth(3);
-
-    // Draw the triangles.
-    glBegin(GL_LINE_LOOP);
-    for (auto t: triangles_)
-    {
-        glVertex2f(t.ptr_[0]->x_, t.ptr_[0]->y_);
-        glVertex2f(t.ptr_[1]->x_, t.ptr_[1]->y_);
-        glVertex2f(t.ptr_[2]->x_, t.ptr_[2]->y_);
-    }
-    for (int i = 0; i < current_n_; i++)
-    {
-        glVertex2f(tab_pts_[i].x_, tab_pts_[i].y_);
-    }
-    glEnd();
-
-    // Draw the number of points.
-    glLineWidth(1);
-    for (int i = 0; i < current_n_; i++)
-    {
-        glBegin(GL_LINES);
-        glVertex2f(tab_pts_[i].x_ - 10, tab_pts_[i].y_ - 10);
-        glVertex2f(tab_pts_[i].x_ + 10, tab_pts_[i].y_ + 10);
-        glEnd();
-
-        glBegin(GL_LINES);
-        glVertex2f(tab_pts_[i].x_ + 10, tab_pts_[i].y_ - 10);
-        glVertex2f(tab_pts_[i].x_ - 10, tab_pts_[i].y_ + 10);
-        glEnd();
-
-        GlutWindow::drawText(tab_pts_[i].x_ - 10, tab_pts_[i].y_, to_string(i), GlutWindow::ALIGN_RIGHT);
-    }
-
-    // TODO
-    for (Vector2D points: points_to_build_polygon_)
-    {
-        glColor3fv(RED);
-        GlutWindow::fillEllipse(points.x_, points.y_, 2.5, 2.5);
-    }
+    color_ = color;
 }
 
 vector<float> Polygon::intersect(const Vector2D& a, const Vector2D& u, const Vector2D& p, const Vector2D& q)
@@ -379,6 +352,16 @@ void Polygon::triangulation()
 float Polygon::cross_product(const Vector2D& u, const Vector2D& v)
 {
     return (u.x_ * v.y_ - u.y_ * v.x_);
+}
+
+void Polygon::delaunay_triangulation(std::vector<Vector2D> &relative_points)
+{
+
+}
+
+void Polygon::delaunay_check()
+{
+
 }
 
 //void Polygon::delaunay_triangulation(std::vector<Vector2D>& pointsRelative)

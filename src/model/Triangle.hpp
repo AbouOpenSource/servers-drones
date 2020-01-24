@@ -8,23 +8,9 @@
 #include "Vector2D.hpp"
 #include "determinant.hpp"
 
-const float BLACK[4] = {0.0, 0.0, 0.0, 1.0f};
-const float GREY[4] = {0.75f, 0.75f, 0.75f, 1.0f};
-const float RED[4] = {1.0f, 0.0, 0.0, 1.0f};
-const float ORANGE[4] = {1.0f, 0.27f, 0.0, 1.0f};
-const float YELLOW[4] = {1.0f, 1.0f, 0.0, 1.0f};
-const float GREEN[4] = {0.0, 1.0f, 0.0, 1.0f};
-const float BLUE[4] = {0.0, 0.0, 1.0f, 1.0f};
-
 class Triangle {
 
 public:
-
-    Vector2D *ptr_[3];
-    bool is_highlighted_;
-    Vector2D circum_center_;
-    float circum_radius_;
-    bool is_delaunay_;
 
     Triangle(Vector2D *ptr1, Vector2D *ptr2, Vector2D *ptr3);
 
@@ -51,6 +37,24 @@ public:
     void draw();
 
     void draw_circle();
+
+    float get_circum_radius() const;
+
+    bool is_highlighted() const;
+
+    bool is_delaunay() const;
+
+    const Vector2D &get_circum_center() const;
+
+    Vector2D *ptr_[3];
+
+private:
+
+    float circum_radius_;
+
+    bool is_highlighted_;
+    bool is_delaunay_;
+    Vector2D circum_center_;
 };
 
 #endif //DRONEPROJECT_TRIANGLE_HPP

@@ -1,4 +1,6 @@
 #include "iostream"
+#include "VectorUtil.hpp"
+
 #include <sstream>
 
 namespace VectorUtil {
@@ -102,6 +104,22 @@ namespace VectorUtil {
         }
 
         return vector_of_cast_type;
+    }
+
+    template<typename T>
+    void delete_object(std::vector<T*>& vector, T *object)
+    {
+        vector.erase(std::remove_if(vector.begin(), vector.end(), [&object](T* i) {
+            return i && (i == object);
+        }));
+    }
+
+    template<typename T>
+    void delete_object(std::vector<T>& vector, T *object)
+    {
+        vector.erase(std::remove_if(vector.begin(), vector.end(), [&object](T i) {
+            return &i == object;
+        }));
     }
 
     template <typename T>

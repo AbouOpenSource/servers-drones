@@ -8,7 +8,7 @@
 
 #include <vector>
 #include "Command.hpp"
-#include "../../ServiceProvider.hpp"
+#include "../../service/ServiceProvider.hpp"
 
 /**
  * A wrapper class to facilitate access to information concerning the arguments.

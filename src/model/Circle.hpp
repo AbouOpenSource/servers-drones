@@ -8,28 +8,32 @@
 
 #include "Position.hpp"
 #include <math.h>
+
 class Circle
 {
-private:
-            Position center_;
-            float raduis_;
 public:
 
-    Circle(const Position &center, float raduis) ;
+    Circle(const Position &center, float radius);
 
     const Position &get_center() const;
 
-    float get_raduis() const;
+    float get_radius() const;
 
     void set_center(const Position &center);
 
-    void set_raduis(float raduis);
+    void set_radius(float raduis);
 
     float area();
 
-    float distance_with_other(Circle item);
+    float distance_from(Circle* item);
 
-    bool touch_with_other(Circle item);
+    bool touch_from(Circle* item);
+
+private:
+
+    Position center_;
+
+    float radius;
 };
 
 

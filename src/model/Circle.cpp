@@ -4,19 +4,17 @@
 
 #include "Circle.hpp"
 
-Circle::Circle(const Position &center, float raduis) : center_(center), raduis_(raduis)
-{
-
-}
+Circle::Circle(const Position &center, float radius) : center_(center), radius(radius)
+{}
 
 const Position &Circle::get_center() const
 {
     return center_;
 }
 
-float Circle::get_raduis() const
+float Circle::get_radius() const
 {
-    return raduis_;
+    return radius;
 }
 
 void Circle::set_center(const Position &center)
@@ -24,28 +22,28 @@ void Circle::set_center(const Position &center)
     center_ = center;
 }
 
-void Circle::set_raduis(float raduis)
+void Circle::set_radius(float raduis)
 {
-    raduis_ = raduis;
+    radius = raduis;
 }
 
 float Circle::area()
 {
-    return Circle::get_raduis()*Circle::get_raduis()*M_PI;
+    return get_radius() * Circle::get_radius() * M_PI;
 }
 
-float Circle::distance_with_other(Circle item)
+float Circle::distance_from(Circle *item)
 {
 
-   return sqrt(
-           center_.get_x() - item.center_.get_x() * center_.get_x() - item.center_.get_x() +
-                   center_.get_y() - item.center_.get_y() * center_.get_y() - item.center_.get_y()
-            );
+    return sqrt(
+            center_.get_x() - item->center_.get_x() * center_.get_x() - item->center_.get_x() +
+            center_.get_y() - item->center_.get_y() * center_.get_y() - item->center_.get_y()
+    );
 }
 
-bool Circle::touch_with_other(Circle item)
+bool Circle::touch_from(Circle *item)
 {
-    return Circle::distance_with_other(item) < item.get_raduis() + Circle::get_raduis();
+    return distance_from(item) < item->get_radius() + get_radius();
 }
 
 

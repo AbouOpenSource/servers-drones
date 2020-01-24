@@ -3,33 +3,21 @@
 
 #include <glutWindow.h>
 
+#include <vector>
 #include "Vector2D.hpp"
 #include "Triangle.hpp"
 #include "Server.hpp"
-#include "../gui/drawable/Drawable.hpp"
+#include "../view/View.hpp"
 
-//const float BLACK[4] = { 0.0, 0.0, 0.0, 1.0};
-//const float RED[4] = { 1.0, 0.0, 0.0, 1.0};
-//const float YELLOW[4] = { 1.0, 1.0, 0.0, 1.0};
-//const float GREEN[4] = { 0.0, 1.0, 0.0, 1.0};
-//const float BLUE[4] = { 0.0, 0.0, 1.0, 1.0};
-
-class Polygon: public Drawable
+class Polygon
 {
-    Vector2D* tab_pts_;
-    int n_max_;
-    int current_n_;
-    std::vector<Triangle> triangles_;
-    float color[4];
-
-    std::vector<Vector2D> interior_points;
-    std::vector<Vector2D> points_to_build_polygon_;
 
 public:
     /********** Constructor & destructor **********/
-    Polygon(int p_max);
 
-    Polygon(std::vector<Server>& servers);
+    Polygon();
+
+    Polygon(int p_max);
 
 //    Polygon(std::vector<Vector2D> &vertices);
 
@@ -38,7 +26,7 @@ public:
     /********** Modifier **********/
     bool add_vertex(const Vector2D &p);
 
-    void draw() override;
+    void init(std::vector<Server>& servers);
 
     /**
      * @brief Check if the vertex p is inside the polygon.
@@ -63,7 +51,7 @@ public:
 
     void triangulation();
 
-    static bool polarComparison(Vector2D p1, Vector2D p2);
+    static bool polar_comparison(Vector2D p1, Vector2D p2);
 
     bool is_on_the_left(const Vector2D* p, const Vector2D* p1, const Vector2D* p2);
 
@@ -73,13 +61,40 @@ public:
 
     float cross_product(const Vector2D& u, const Vector2D& v);
 
+    int get_n_max() const;
+
+    int get_current_n() const;
+
+    const std::string get_color() const;
+
+    Vector2D *get_tab_pts() const;
+
+    const vector<Triangle> &get_triangles() const;
+
+    const vector<Vector2D> &get_interior_points() const;
+
+    const vector<Vector2D> &get_build_points() const;
+
     bool is_inside_triangle(const Vector2D& p);
 
-    void set_color(const float t_color[4]);
+    void set_color(const std::string& color);
 
-    void delaunay_triangulation(std::vector<Vector2D>& pointsRelative);
+    void delaunay_triangulation(std::vector<Vector2D>& relative_points);
 
-    void check_delaunay();
+    void delaunay_check();
+
+private:
+
+    int n_max_;
+    int current_n_;
+
+    std::string color_;
+
+    Vector2D* tab_pts_;
+
+    std::vector<Triangle> triangles_;
+    std::vector<Vector2D> interior_points;
+    std::vector<Vector2D> build_points;
 };
 
 #endif //POINTS_AND_CONVEX_POLYGONS_MYPOLYGON_HPP

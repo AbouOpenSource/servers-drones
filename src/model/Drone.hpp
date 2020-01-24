@@ -8,7 +8,7 @@
 
 #include "Position.hpp"
 #include "Vector2D.hpp"
-#include "../gui/drawable/Drawable.hpp"
+#include "../view/View.hpp"
 #include <math.h>
 
 #include <string>
@@ -18,11 +18,23 @@ class Drone
 
 public:
 
-    Drone(const Vector2D &current_position, const Vector2D &speed, const Vector2D &acceleration, Vector2D forces,
-          float weight ,std::string name);
+    explicit Drone(int id);
 
-    Drone(const Vector2D &current_position, const Vector2D &speed, const Vector2D &acceleration,
-          const Vector2D& forces, float weight);
+    void init(
+            const Vector2D &current_position,
+            const Vector2D& forces,
+            float weight,
+            const Vector2D &speed = {},
+            const Vector2D &acceleration = {}
+    );
+
+    //Drone(const Vector2D &current_position, const Vector2D &forces, float weight);
+
+    int get_id() const;
+
+    const string &get_server_name() const;
+
+    void set_server_name(const string &server_name);
 
     const Vector2D &get_current_position() const;
 
@@ -44,27 +56,27 @@ public:
 
     void update_position();
 
-    void avoid_collision_with(Drone *ptrDrone);
+    void avoid_collision_with(Drone* drone);
 
-    float distance_with_other_drone(Drone item);
+    float distance_from(Drone* item);
+
+    void add_target(Vector2D item);
 
     friend std::ostream& operator<<(std::ostream& os, const Drone& dt);
 
-    Drone(const Vector2D &current_position, const Vector2D &forces, float weight);
-
-    void addGoal(Vector2D item);
-
 private:
 
-    std::string id_;
+    int delta_time_;
+    int id_;
+
+    float weight_;
+
+    std::string server_name_;
+
     Vector2D current_position_;
     Vector2D speed_;
     Vector2D acceleration_;
     Vector2D forces_;
-    float weight_;
-    int delta_time = int(1);
-    int droneId = 0;
-    int serverId = 0;
 };
 
 

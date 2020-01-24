@@ -74,6 +74,7 @@ void FileStream::ReaderInterface::read(const StreamCallback &stream_callback,
     }
 
     file.close();
+
     if (on_finish) {
         on_finish();
     }
@@ -90,7 +91,8 @@ void FileStream::WriterInterface::write(unsigned int row, unsigned int col, cons
     data_[row][col] = value;
 }
 
-void FileStream::WriterInterface::persist(const TypeUtil::ErrorCallback& error_callback) const
+void FileStream::WriterInterface::persist(const TypeUtil::Callback &on_finish,
+                                          const TypeUtil::ErrorCallback &error_callback) const
 {
     std::ofstream file;
     file.open(file_stream_->file_path_);
@@ -113,4 +115,8 @@ void FileStream::WriterInterface::persist(const TypeUtil::ErrorCallback& error_c
     }
 
     file.close();
+
+    if (on_finish) {
+        on_finish();
+    }
 }

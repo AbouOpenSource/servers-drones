@@ -9,10 +9,10 @@
 #define TEXTURE_DIR "../data/assets/texture/"
 
 #include <glutWindow.h>
-#include "../core/event/input/InputManager.hpp"
-#include "../core/event/EventManager.hpp"
-#include "../core/ServiceProvider.hpp"
-#include "drawable/Drawable.hpp"
+#include "core/event/input/InputManager.hpp"
+#include "core/event/EventManager.hpp"
+#include "core/service/ServiceProvider.hpp"
+#include "view/View.hpp"
 #include <vector>
 #include <string>
 
@@ -27,11 +27,14 @@ public:
     Window(int argc, char **argv);
 
     /********** Event **********/
+
     void onStart() override;
 
     void onDraw() override;
 
-    void addDrawable(Drawable* drawable);
+    void addView(View* view);
+
+    void removeView(View* view);
 
     void onMouseMove(double cx,double cy) override;
 
@@ -47,7 +50,9 @@ private:
 
     EventManager* event_manager_;
 
-    std::vector<Drawable*> drawables_;
+    View::DrawHelper draw_helper_;
+
+    std::vector<View*> views_;
 
 };
 
