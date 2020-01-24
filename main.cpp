@@ -13,6 +13,7 @@
 #include "src/gui/drawable/Circumscribe.hpp"
 #include "src/core/event/EventManager.hpp"
 #include "src/core/event/input/InputManager.hpp"
+#include "src/gui/drawable/ServerDrawable.hpp"
 
 using namespace std;
 
@@ -50,6 +51,11 @@ int main(int argc, char** argv)
     InputManager* input_manager = static_cast<InputManager *>(container->get_service(InputManager::SERVICE));
     input_manager->register_mouse_move_listener([this] (InputManager::MousePosition position) {})
      */
+
+    /*
+     * launch of the thread the update of coordinate or check if there are possibilities od collision
+     */
+
 
     //Read config file data
     FileStream in_stream(command_container.get_value("c"), {";", true});
@@ -110,16 +116,36 @@ int main(int argc, char** argv)
     // ce qe Abou a ajouté dans le main
 
     //Drone *drone = new Drone(Vector2D(500,500),Vector2D(10,10),Vector2D(15,15),Vector2D(10,10),1);
-    Drone *drone = new Drone(Vector2D(0,0), Vector2D(150000,150000),10);
-
+    Drone *drone = new Drone(Vector2D(0,0), Vector2D(15000,15000),1);
+    Drone *drone1 = new Drone(Vector2D(500,400), Vector2D(-150000,-150000),1);
+    //Server *server = new Server("Ouaga",Vector2D(0,0), "RED");
     DroneDrawable drone_drawable(drone);
+    DroneDrawable drone_drawable1(drone1);
 
+
+    katmandou.connectDrone(drone);
+    katmandou.connectDrone(drone1);
+
+    ServerDrawable server_drawable(&katmandou);
+
+
+  //  DroneDrawable drone_drawable1(drone1);
 
     window.addDrawable(&circumscribe);
     window.addDrawable(&convex_polygon);
-    window.addDrawable(&drone_drawable);
 
-    window.start();
+
+    window.addDrawable(&drone_drawable);
+    window.addDrawable(&drone_drawable1);
+
+    window.addDrawable(&server_drawable);
+
+    // window.addDrawable(&drone_drawable1);
+/*
+    std::thread my_thread= server_manager.for_start_thread();
+    my_thread.join();
+  */
+window.start();
 
     return 0;
 }

@@ -16,7 +16,7 @@ void ServerDrawable::init(
         EventManager *event_manager,
         const Drawable::TextureLoader &texture_loader)
 {
-    serverTextureId_ = texture_loader("server", serverTextureWidth_, serverTextureHeight_);
+    serverTextureId_ = texture_loader("server1", serverTextureWidth_, serverTextureHeight_);
 }
 
 void ServerDrawable::start()
@@ -46,11 +46,17 @@ void ServerDrawable::draw()
     glVertex2f(0.0,96.0);
     glEnd();
     glPopMatrix();
-
     glDisable(GL_TEXTURE_2D);
+    detect_collision();
 }
 
 void ServerDrawable::quit()
 {
     glDeleteTextures(1, reinterpret_cast<const GLuint *>(&serverTextureId_));
+}
+
+void ServerDrawable::detect_collision()
+{
+    server_->detectCollision();
+
 }

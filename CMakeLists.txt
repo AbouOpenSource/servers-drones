@@ -3,6 +3,8 @@ set(CMAKE_CXX_STANDARD 17)
 
 set(PROJECT_NAME DroneProject)
 
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pthread")
+
 file(GLOB_RECURSE PROJECT_FILES "*.cpp" "*.hpp" "*.tcc")
 list(FILTER PROJECT_FILES EXCLUDE REGEX "(.CompilerId.cpp$|glut)")
 

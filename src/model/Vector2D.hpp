@@ -27,6 +27,9 @@ public :
 
     friend Vector2D operator*(float a, const Vector2D &v);
 
+    friend Vector2D operator*(const Vector2D &v, float a);
+
+
     friend Vector2D operator / ( const Vector2D &v,float divisor);
 
     void set(float p_x,float p_y);

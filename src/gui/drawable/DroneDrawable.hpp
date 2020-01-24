@@ -18,6 +18,8 @@ public:
 
     explicit DroneDrawable(Drone* drone);
 
+    void avoid_collision_with_drone(Drone *item);
+
     void init(InputManager *input_manager, EventManager* event_manager, const TextureLoader& texture_loader) override;
 
     void start() override;
@@ -25,6 +27,8 @@ public:
     void draw() override;
 
     void quit() override;
+
+    void update_position();
 
 private:
 

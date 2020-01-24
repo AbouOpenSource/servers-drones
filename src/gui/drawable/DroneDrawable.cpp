@@ -45,10 +45,20 @@ void DroneDrawable::draw()
     glPopMatrix();
     glDisable(GL_TEXTURE_2D);
     std::cout<< *drone_<< std::endl;
-    drone_->update_position();
+    update_position();
 }
 
 void DroneDrawable::quit()
 {
     glDeleteTextures(1, reinterpret_cast<const GLuint *>(&droneTextureId_));
+}
+
+void DroneDrawable::avoid_collision_with_drone(Drone *item)
+{
+    drone_->avoid_collision_with(item);
+}
+
+void DroneDrawable::update_position()
+{
+    drone_->update_position();
 }

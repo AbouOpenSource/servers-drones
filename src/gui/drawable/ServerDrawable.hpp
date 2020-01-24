@@ -25,6 +25,8 @@ public:
     void draw() override;
 
     void quit() override;
+
+    void detect_collision();
 private:
 
     Server* server_;

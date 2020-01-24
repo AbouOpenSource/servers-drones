@@ -82,4 +82,9 @@ std::ostream &operator<<(std::ostream &out, const Vector2D &vector)
     return out;
 }
 
+Vector2D operator*(const Vector2D &v, float a)
+{
+    return Vector2D(a * v.x_, a * v.y_);
+}
+
 #pragma clang diagnostic pop

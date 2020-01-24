@@ -8,6 +8,7 @@
 
 #include <map>
 #include <vector>
+#include <functional>
 #include "Event.hpp"
 #include "../ServiceProvider.hpp"
 

@@ -54,6 +54,12 @@ public:
 
     void addGoal(Vector2D item);
 
+    void update_speed();
+
+    void update_acceleration();
+
+    void check_border();
+
 private:
 
     std::string id_;
@@ -62,6 +68,7 @@ private:
     Vector2D acceleration_;
     Vector2D forces_;
     float weight_;
+    //float k = 0.8;
     int delta_time = int(1);
     int droneId = 0;
     int serverId = 0;

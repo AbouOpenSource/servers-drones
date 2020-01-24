@@ -94,3 +94,20 @@ InputManager::MouseClickListener ServerManager::on_mouse_click()
     };
 }
 
+
+std::thread ServerManager::for_start_thread() {
+    return std::thread([=] { to_call_each_time(); });
+}
+
+
+
+void ServerManager::to_call_each_time(){
+
+    while (true){
+        std::cout<<"to each second"<<std::endl;
+
+    }
+   /* for (Server* server: servers_) {
+        server->detectCollision();
+    }*/
+}

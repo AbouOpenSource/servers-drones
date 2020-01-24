@@ -13,6 +13,8 @@
 #include "Server.hpp"
 #include "../util/TypeUtil.hpp"
 #include "../core/event/EventManager.hpp"
+#include <thread>
+
 
 class ServerManager: public ServiceProvider
 {
@@ -20,6 +22,7 @@ class ServerManager: public ServiceProvider
 public:
 
     static std::string SERVICE;
+
 
     ServerManager();
 
@@ -38,6 +41,9 @@ public:
     void add_server(Server* server);
 
     void add_server_at(Server* server, InputManager::MousePosition position);
+
+    std::thread for_start_thread();
+    void to_call_each_time();
 
 private:
 
