@@ -26,12 +26,12 @@ Vector2D::Vector2D(float p_x, float p_y)
 {
 }
 
-Vector2D Vector2D::operator-(const Vector2D &op2) const
+Vector2D Vector2D::operator - (const Vector2D &op2) const
 {
     return Vector2D(x_ - op2.x_, y_ - op2.y_);
 }
 
-Vector2D Vector2D::operator+(const Vector2D &op2) const
+Vector2D Vector2D::operator + (const Vector2D &op2) const
 {
     return Vector2D(x_ + op2.x_, y_ + op2.y_);
 }

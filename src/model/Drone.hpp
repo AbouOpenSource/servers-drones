@@ -52,7 +52,7 @@ public:
 
     Drone(const Vector2D &current_position, const Vector2D &forces, float weight);
 
-    void addGoal(Vector2D item);
+    void addGoal(const Vector2D& item);
 
     void update_speed();
 
