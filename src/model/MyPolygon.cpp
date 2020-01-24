@@ -201,7 +201,8 @@ void MyPolygon::draw()
     {
         triangulation();
         interior_triangulation();
-//        solve_delaunay();
+        solve_delaunay();
+        check_delaunay();
     }
 
     for (auto& triangle: triangles_)
@@ -540,6 +541,17 @@ std::vector<Triangle> MyPolygon::get_triangles_from(Vector2D v1)
     }
 
     return triangles;
+}
+
+void MyPolygon::check_delaunay()
+{
+    auto t = triangles_.begin();
+
+    while (t != triangles_.end())
+    {
+        t->check_delaunay(points_to_build_polygon_);
+        t++;
+    }
 }
 
 

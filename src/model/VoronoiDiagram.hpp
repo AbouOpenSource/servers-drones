@@ -12,7 +12,7 @@ class VoronoiDiagram
 public:
     VoronoiDiagram(MyPolygon& polygon);
 
-    Triangle left_triangle(std::vector<Triangle> triangles) const;
+//    Triangle left_triangle(std::vector<Triangle> triangles) const;
 
 private:
 };

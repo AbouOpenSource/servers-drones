@@ -31,20 +31,19 @@ VoronoiDiagram::VoronoiDiagram(MyPolygon& mesh)
 {
     mesh.foreach_vertex([&mesh, this](Vector2D vertex, unsigned int index) {
 
-        MyPolygon polygon = MyPolygon();
+//        MyPolygon polygon = MyPolygon();
 
         // subset of triangles of D that have Qi as vertex
         std::vector<Triangle> triangles = mesh.get_triangles_from(vertex);
 
-        Triangle triangle = left_triangle(triangles);
-
+//        Triangle triangle = left_triangle(triangles);
 
         std::cout << vertex << std::endl;
     });
 }
 
-Triangle VoronoiDiagram::left_triangle(std::vector<Triangle> triangles) const
-{
-
-    return Triangle();
-}
+//Triangle VoronoiDiagram::left_triangle(std::vector<Triangle> triangles) const
+//{
+//
+//    return Triangle();
+//}
