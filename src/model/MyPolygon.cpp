@@ -6,9 +6,13 @@
 #include "../util/VectorUtil.hpp"
 #include <array>
 
-MyPolygon::MyPolygon()
-{
-}
+//MyPolygon::MyPolygon()
+//    : tab_pts_{new Vector2D[p_max]},
+//      n_max_{p_max},
+//      current_n_{0}
+//{
+//    set_color(YELLOW);
+//}
 
 MyPolygon::MyPolygon(int p_max)
         : tab_pts_{new Vector2D[p_max]},
@@ -109,6 +113,11 @@ MyPolygon::MyPolygon(std::vector<Server>& servers): Drawable()
 
     tab_pts_[current_n_] = tab_pts_[0];
     // TODO END DELAUNAY TRIANGULATION
+
+    triangulation();
+    interior_triangulation();
+    solve_delaunay();
+    check_delaunay();
 }
 
 MyPolygon::~MyPolygon()
@@ -197,13 +206,13 @@ void MyPolygon::set_color(const float t_color[4])
 
 void MyPolygon::draw()
 {
-    if (triangles_.empty())
-    {
-        triangulation();
-        interior_triangulation();
-        solve_delaunay();
-        check_delaunay();
-    }
+//    if (triangles_.empty())
+//    {
+//        triangulation();
+//        interior_triangulation();
+//        solve_delaunay();
+//        check_delaunay();
+//    }
 
     for (auto& triangle: triangles_)
     {

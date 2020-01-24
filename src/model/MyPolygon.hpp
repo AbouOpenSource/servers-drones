@@ -19,7 +19,7 @@ class MyPolygon: public Drawable
     Vector2D* tab_pts_;
     int n_max_;
     int current_n_;
-    std::vector<Triangle> triangles_;
+//    std::vector<Triangle> triangles_;
     float color[4];
 
     std::vector<Vector2D> interior_points;
@@ -30,6 +30,8 @@ private:
     typedef std::function<void(Vector2D point, unsigned int index)> VertexCallback;
 
 public:
+    std::vector<Triangle> triangles_;
+
     /********** Constructor & destructor **********/
     MyPolygon();
 

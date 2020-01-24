@@ -99,6 +99,7 @@ int main(int argc, char** argv)
 
     MyPolygon convex_polygon = MyPolygon(servers);
     VoronoiDiagram voronoi_diagram = VoronoiDiagram(convex_polygon);
+
     Circumscribe circumscribe(servers);
 
     window.addDrawable(&circumscribe);

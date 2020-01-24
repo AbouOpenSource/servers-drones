@@ -3,6 +3,7 @@
 //
 
 #include "VoronoiDiagram.hpp"
+#include "../util/VectorUtil.hpp"
 
 // TODO PSEUDO CODE: Voronoi Diagram.
 //
@@ -33,17 +34,16 @@ VoronoiDiagram::VoronoiDiagram(MyPolygon& mesh)
 
 //        MyPolygon polygon = MyPolygon();
 
-        // subset of triangles of D that have Qi as vertex
+//         subset of triangles of D that have Qi as vertex
         std::vector<Triangle> triangles = mesh.get_triangles_from(vertex);
 
-//        Triangle triangle = left_triangle(triangles);
+        Triangle triangle = left_triangle(triangles);
 
-        std::cout << vertex << std::endl;
+//        std::cout << vertex << std::endl;
     });
 }
 
-//Triangle VoronoiDiagram::left_triangle(std::vector<Triangle> triangles) const
-//{
-//
-//    return Triangle();
-//}
+Triangle VoronoiDiagram::left_triangle(std::vector<Triangle> triangles) const
+{
+    return Triangle();
+}
