@@ -14,6 +14,10 @@ public:
 
     Triangle left_triangle(std::vector<Triangle> triangles) const;
 
+    Vector2D* next_edge(Triangle triangle, Vector2D vertex);
+
+    Vector2D* prevEdge(Triangle triangle, Vector2D vertex);
+
 private:
 };
 

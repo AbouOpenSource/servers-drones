@@ -50,7 +50,6 @@ int main(int argc, char** argv)
     std::vector<Server> servers;
 
     Vector2D katmandou_pos = Vector2D(420, 430);
-//    Vector2D katmandou_pos1 = Vector2D(500, 425);
     Vector2D katmandou_pos1 = Vector2D(280, 500);
 
     std::string katmandou_color = "RED";

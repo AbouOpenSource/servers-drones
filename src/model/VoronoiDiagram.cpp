@@ -47,3 +47,39 @@ Triangle VoronoiDiagram::left_triangle(std::vector<Triangle> triangles) const
 {
     return Triangle();
 }
+
+Vector2D* VoronoiDiagram::next_edge(Triangle triangle, Vector2D vertex)
+{
+    Vector2D* next_vertex(nullptr);
+
+    triangle.foreach_point([&next_vertex, &vertex, &triangle](Vector2D* point, unsigned int index) {
+        if (*point == vertex)
+        {
+            next_vertex = triangle.ptr_[(index + 1) % 3];
+        }
+    });
+
+    return next_vertex;
+}
+
+Vector2D* VoronoiDiagram::prevEdge(Triangle triangle, Vector2D vertex)
+{
+    Vector2D* previous_vertex(nullptr);
+
+    triangle.foreach_point([&previous_vertex, &vertex, &triangle](Vector2D* point, unsigned int index) {
+        if (*point == vertex)
+        {
+            if (index == 0)
+            {
+                previous_vertex = triangle.ptr_[2];
+            }
+            else
+            {
+                previous_vertex = triangle.ptr_[index - 1];
+            }
+        }
+    });
+
+    return previous_vertex;
+}
+
