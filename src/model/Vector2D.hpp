@@ -13,12 +13,26 @@ class Vector2D
 public :
     float x_, y_;
 
+    /********** Constructor & destructor **********/
     Vector2D();
 
     Vector2D(const Vector2D &v);
 
     Vector2D(float p_x, float p_y);
 
+    /********** Others **********/
+
+    static Vector2D center(const Vector2D& point1, const Vector2D& point2);
+
+    void set(float p_x, float p_y);
+
+    void normalize();
+
+    double norm();
+
+    Vector2D ortho();
+
+    /********** Operator overload **********/
     Vector2D operator-(const Vector2D &op2) const;
 
     Vector2D operator+(const Vector2D &op2) const;
@@ -27,20 +41,11 @@ public :
 
     friend Vector2D operator*(float a, const Vector2D &v);
 
+    friend std::ostream &operator<<(std::ostream &out, const Vector2D &vector);
+
     friend bool operator==(const Vector2D& vector1, const Vector2D& vector2);
 
     friend Vector2D operator / ( const Vector2D &v,float divisor);
-
-    void set(float p_x,float p_y);
-
-    void normalize();
-
-    double norm();
-
-    /********** Operator overload **********/
-    friend std::ostream &operator<<(std::ostream &out, const Vector2D &vector);
-
-    Vector2D ortho();
 };
 
 

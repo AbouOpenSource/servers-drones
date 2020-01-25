@@ -222,36 +222,6 @@ void MyPolygon::draw()
         triangle.draw();
     }
 
-    // Draw the interior.
-//    glColor3fv(color_);
-//
-//    glBegin(GL_TRIANGLES);
-//    for (auto t: triangles_)
-//    {
-//        glVertex2f(t.ptr_[0]->x_, t.ptr_[0]->y_);
-//        glVertex2f(t.ptr_[1]->x_, t.ptr_[1]->y_);
-//        glVertex2f(t.ptr_[2]->x_, t.ptr_[2]->y_);
-//    }
-//    glEnd();
-
-    // Draw the border
-//    glColor3fv(BLACK);
-//    glLineWidth(3);
-
-    // Draw the triangles.
-//    glBegin(GL_LINE_LOOP);
-//    for (auto t: triangles_)
-//    {
-//        glVertex2f(t.ptr_[0]->x_, t.ptr_[0]->y_);
-//        glVertex2f(t.ptr_[1]->x_, t.ptr_[1]->y_);
-//        glVertex2f(t.ptr_[2]->x_, t.ptr_[2]->y_);
-//    }
-//    for (int i = 0; i < current_n_; i++)
-//    {
-//        glVertex2f(tab_pts_[i].x_, tab_pts_[i].y_);
-//    }
-//    glEnd();
-
     // Draw the number of points.
     glLineWidth(1);
     for (int i = 0; i < current_n_; i++)

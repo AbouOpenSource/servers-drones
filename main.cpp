@@ -66,8 +66,10 @@ int main(int argc, char** argv)
     reader_interface.read([&values, &servers] (const unsigned int row, const unsigned int col, const std::string& value) {
         values[col] = value;
 
-        if (col == 2) {
-            if (values[1].front() == '(' && values[1].back() == ')') {
+        if (col == 2)
+        {
+            if (values[1].front() == '(' && values[1].back() == ')')
+            {
                 values[1].erase(values[1].begin());
                 values[1].erase(values[1].end() - 1);
 

@@ -183,6 +183,11 @@ bool Triangle::common_point(Vector2D *point)
     std::cout << "ptr1: " << *ptr_[2] << std::endl;
     std::cout << std::endl;
 
+//    if (*point == *ptr_[0])
+//    {
+//        return 0;
+//    }
+
     return *point == *ptr_[0] ||
            *point == *ptr_[1] ||
            *point == *ptr_[2];

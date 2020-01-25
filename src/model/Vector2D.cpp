@@ -26,21 +26,6 @@ Vector2D::Vector2D(float p_x, float p_y)
 {
 }
 
-Vector2D Vector2D::operator-(const Vector2D &op2) const
-{
-    return Vector2D(x_ - op2.x_, y_ - op2.y_);
-}
-
-Vector2D Vector2D::operator+(const Vector2D &op2) const
-{
-    return Vector2D(x_ + op2.x_, y_ + op2.y_);
-}
-
-float Vector2D::operator*(const Vector2D &op2) const
-{
-    return x_*op2.x_+y_*op2.y_;
-}
-
 void Vector2D::set(float p_x,float p_y)
 {
     x_=p_x;
@@ -65,13 +50,33 @@ Vector2D Vector2D::ortho()
     return Vector2D(-y_,x_);
 }
 
-Vector2D operator * (float a, const Vector2D &v)
+Vector2D Vector2D::center(const Vector2D &vertex1, const Vector2D &vertex2)
+{
+    return (vertex1 + vertex2) / 2;
+}
+
+Vector2D Vector2D::operator-(const Vector2D &op2) const
+{
+    return Vector2D(x_ - op2.x_, y_ - op2.y_);
+}
+
+Vector2D Vector2D::operator+(const Vector2D &op2) const
+{
+    return Vector2D(x_ + op2.x_, y_ + op2.y_);
+}
+
+float Vector2D::operator*(const Vector2D &op2) const
+{
+    return x_*op2.x_+y_*op2.y_;
+}
+
+Vector2D operator*(float a, const Vector2D &v)
 {
     return Vector2D(a * v.x_, a * v.y_);
 }
 
 
- Vector2D operator / ( const Vector2D &v, float divisor)
+ Vector2D operator/(const Vector2D &v, float divisor)
 {
     return Vector2D(v.x_ / divisor,v.y_ / divisor);
 }
