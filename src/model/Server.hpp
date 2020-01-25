@@ -35,7 +35,7 @@ public:
      */
 
     Server(std::string& name, Vector2D &current_position, std::string color);
-//    Server(std::string& name, Vector2D &current_position, Color color);
+//    Server(std::string& name, Vector2D &current_position, Color color_);
 
     Server(const Vector2D &speed, const Vector2D &current_position, const std::vector<Drone*> &the_drone);
 
@@ -77,7 +77,7 @@ public:
 
     void set_color(const std::string &color);
 
-//    Color color_value_of(std::string color);
+//    Color color_value_of(std::string color_);
 };
 
 

@@ -88,7 +88,7 @@ int main(int argc, char** argv)
 
 //                std::cout << "name: " << server.get_name()
 //                          << " position: x: " << server.getCurrentPosition().x_ << ", y: " << server.getCurrentPosition().y_
-//                          << " color: " << server.get_color()
+//                          << " color_: " << server.get_color()
 //                          << std::endl;
 
                 servers.push_back(server);

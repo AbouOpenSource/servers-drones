@@ -17,7 +17,8 @@ const float YELLOW[4] = {1.0f, 1.0f, 0.0, 1.0f};
 const float GREEN[4] = {0.0, 1.0f, 0.0, 1.0f};
 const float BLUE[4] = {0.0, 0.0, 1.0f, 1.0f};
 
-class Triangle {
+class Triangle
+{
 
 public:
 
@@ -38,6 +39,8 @@ public:
     //bool is_equilateral() {
     //  return true;
     //}
+
+    bool is_empty();
 
     void update_vertices(Vector2D *ptr1, Vector2D *ptr2, Vector2D *ptr3);
 
@@ -62,6 +65,9 @@ public:
     bool common_point(Vector2D* point);
 
     void foreach_point(PointCallback cb);
+
+    /********** Operator overloading **********/
+    friend bool operator==(const Triangle& triangle1, const Triangle& triangle2);
 
     friend std::ostream &operator<<(std::ostream &out, const Triangle &triangle);
 };

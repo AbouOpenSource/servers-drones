@@ -16,10 +16,10 @@ Server::Server(std::string& name, Vector2D &current_position, std::string color)
 {
 }
 
-//Server::Server(std::string& name, Vector2D &current_position, Color color)
+//Server::Server(std::string& name, Vector2D &current_position, Color color_)
 //        : name_(name),
 //          current_position_(current_position),
-//          color_(color),
+//          color_(color_),
 //          raduisDeCollision(0),
 //          desiredNumberOfDrones(0),
 //          dMax(0)
@@ -153,14 +153,14 @@ void Server::set_color(const std::string &color)
     color_ = color;
 }
 
-//Color color_value_of(std::string color)
+//Color color_value_of(std::string color_)
 //{
-//    if (color == "RED") return Color::red;
-//    if (color == "GREEN") return Color::green;
-//    if (color == "BLUE") return Color::blue;
-//    if (color == "PINK") return Color::pink;
-//    if (color == "YELLOW") return Color::yellow;
-//    if (color == "CYAN") return Color::cyan;
+//    if (color_ == "RED") return Color::red;
+//    if (color_ == "GREEN") return Color::green;
+//    if (color_ == "BLUE") return Color::blue;
+//    if (color_ == "PINK") return Color::pink;
+//    if (color_ == "YELLOW") return Color::yellow;
+//    if (color_ == "CYAN") return Color::cyan;
 //
 //    return Color::red;
 //}

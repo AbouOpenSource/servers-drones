@@ -20,7 +20,7 @@ class MyPolygon: public Drawable
     int n_max_;
     int current_n_;
 //    std::vector<Triangle> triangles_;
-    float color[4];
+    float color_[4];
 
     std::vector<Vector2D> interior_points;
     std::vector<Vector2D> points_to_build_polygon_;
@@ -93,7 +93,7 @@ public:
 
     void solve_delaunay();
 
-    void delaunay_triangulation(std::vector<Vector2D>& pointsRelative);
+    void delaunay_triangulation(std::vector<Vector2D>& points_relative);
 
     void check_delaunay();
 

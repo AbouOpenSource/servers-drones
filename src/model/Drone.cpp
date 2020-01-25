@@ -152,7 +152,7 @@ void Drone::start(InputManager *input_manager,TextureLoader texture_loader)
     int lx,ly;
     //droneId = GlutWindow::loadTGATexture("../../data/assets/drone.tga",lx,ly);
     assert(droneId!=0);
-    glClearColor(1.0,1.0,1.0,1.0); // background color
+    glClearColor(1.0,1.0,1.0,1.0); // background color_
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }

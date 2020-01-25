@@ -6,13 +6,14 @@
 #include "../util/VectorUtil.hpp"
 #include <array>
 
-//MyPolygon::MyPolygon()
-//    : tab_pts_{new Vector2D[p_max]},
-//      n_max_{p_max},
-//      current_n_{0}
-//{
-//    set_color(YELLOW);
-//}
+MyPolygon::MyPolygon()
+    : tab_pts_{new Vector2D[100]},
+      n_max_{100},
+      current_n_{0},
+      points_to_build_polygon_{}
+{
+    set_color(YELLOW);
+}
 
 MyPolygon::MyPolygon(int p_max)
         : tab_pts_{new Vector2D[p_max]},
@@ -176,6 +177,8 @@ bool MyPolygon::add_vertex(const Vector2D &p)
     tab_pts_[current_n_++] = p;
     tab_pts_[current_n_] = tab_pts_[0];
 
+    points_to_build_polygon_.push_back(p);
+
     return true;
 }
 
@@ -201,7 +204,7 @@ bool MyPolygon::is_inside_triangle(const Vector2D& p)
 
 void MyPolygon::set_color(const float t_color[4])
 {
-    memcpy(color, t_color, 4 * sizeof(float));
+    memcpy(color_, t_color, 4 * sizeof(float));
 }
 
 void MyPolygon::draw()
@@ -220,7 +223,7 @@ void MyPolygon::draw()
     }
 
     // Draw the interior.
-//    glColor3fv(color);
+//    glColor3fv(color_);
 //
 //    glBegin(GL_TRIANGLES);
 //    for (auto t: triangles_)
@@ -589,7 +592,7 @@ void MyPolygon::check_delaunay()
 
 
 
-//void MyPolygon::delaunay_triangulation(std::vector<Vector2D>& pointsRelative)
+//void MyPolygon::delaunay_triangulation(std::vector<Vector2D>& delaunay_triangulation)
 //{
 //    vector<Vector2D>::iterator pi = pointsRelative.begin() + 3;
 //

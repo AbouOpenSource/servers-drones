@@ -172,12 +172,42 @@ std::ostream &operator<<(std::ostream &out, const Triangle &triangle)
     return out;
 }
 
+
+
 bool Triangle::common_point(Vector2D *point)
 {
     //FIXME Best to just check if addresses are equal?
+    std::cout << "next point: " << *point << std::endl;
+    std::cout << "ptr0: " << *ptr_[0] << std::endl;
+    std::cout << "ptr1: " << *ptr_[1] << std::endl;
+    std::cout << "ptr1: " << *ptr_[2] << std::endl;
+    std::cout << std::endl;
 
     return *point == *ptr_[0] ||
            *point == *ptr_[1] ||
            *point == *ptr_[2];
+}
+
+bool operator==(const Triangle& triangle1, const Triangle& triangle2)
+{
+    return &triangle1 == &triangle2;
+}
+
+// TODO A REFAIRE ABSOLUMENT, C EST HORRIBLE.
+bool Triangle::is_empty()
+{
+    return ptr_[0] == nullptr;
+}
+
+Triangle::Triangle(Triangle *toCopy)
+{
+    ptr_[0] = new Vector2D(toCopy->ptr_[0]->x_, toCopy->ptr_[0]->y_);
+    ptr_[1] = new Vector2D(toCopy->ptr_[1]->x_, toCopy->ptr_[1]->y_);
+    ptr_[2] = new Vector2D(toCopy->ptr_[2]->x_, toCopy->ptr_[2]->y_);
+
+    is_highlighted_ = toCopy->is_highlighted_;
+    circum_center_ = Vector2D(toCopy->circum_center_.x_, toCopy->circum_center_.y_);
+    circum_radius_ = toCopy->circum_radius_;
+    is_delaunay_ = toCopy->is_delaunay_;
 }
 

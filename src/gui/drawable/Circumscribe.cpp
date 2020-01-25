@@ -33,7 +33,7 @@ void Circumscribe::start(InputManager* input_manager, TextureLoader texture_load
 //    mesh_ = new Mesh(tab_vect, 12, tab_tri, 15);
     //mesh_ = new Mesh(servers_);
 
-    glClearColor(1.0,1.0,1.0,1.0); // background color
+    glClearColor(1.0,1.0,1.0,1.0); // background color_
 
     input_manager->register_mouse_move_listener([this] (InputManager::MousePosition position) {
         Vector2D vertex((float)position.X, (float)position.Y);
