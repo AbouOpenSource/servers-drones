@@ -16,7 +16,6 @@
 
 class MyPolygon: public Drawable
 {
-    Vector2D* tab_pts_;
     int n_max_;
     int current_n_;
 //    std::vector<Triangle> triangles_;
@@ -30,6 +29,8 @@ private:
     typedef std::function<void(Vector2D point, unsigned int index)> VertexCallback;
 
 public:
+    Vector2D* tab_pts_;
+//    std::vector<Vector2D*> tab_pts_;
     std::vector<Triangle> triangles_;
 
     /********** Constructor & destructor **********/
@@ -103,6 +104,9 @@ public:
 
     // Return the subset of triangles of the mesh that have v1 as vertex.
     std::vector<Triangle> get_triangles_from(Vector2D v1);
+
+    /********** Operator overloading **********/
+    friend std::ostream &operator<<(std::ostream &out, MyPolygon &polygon);
 };
 
 #endif //POINTS_AND_CONVEX_POLYGONS_MYPOLYGON_HPP

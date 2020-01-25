@@ -16,7 +16,6 @@ Triangle::Triangle()
 //}
 
 Triangle::Triangle(Vector2D *ptr1, Vector2D *ptr2, Vector2D *ptr3): circum_center_({0, 0})
-// TODO: Give a value for circum_center_ initialisation
 {
     ptr_[0] = ptr1;
     ptr_[1] = ptr2;
@@ -117,6 +116,9 @@ bool Triangle::check_delaunay(const std::vector<Vector2D> &points) {
 
 void Triangle::foreach_point(PointCallback cb)
 {
+//    std::cout << ptr_[0] << std::endl;
+//    std::cout << ptr_[1] << std::endl;
+//    std::cout << ptr_[2] << std::endl;
 
     cb(ptr_[0], 0);
     cb(ptr_[1], 1);
@@ -172,16 +174,14 @@ std::ostream &operator<<(std::ostream &out, const Triangle &triangle)
     return out;
 }
 
-
-
 bool Triangle::common_point(Vector2D *point)
 {
     //FIXME Best to just check if addresses are equal?
-    std::cout << "next point: " << *point << std::endl;
-    std::cout << "ptr0: " << *ptr_[0] << std::endl;
-    std::cout << "ptr1: " << *ptr_[1] << std::endl;
-    std::cout << "ptr1: " << *ptr_[2] << std::endl;
-    std::cout << std::endl;
+//    std::cout << "next point: " << *point << std::endl;
+//    std::cout << "ptr0: " << *ptr_[0] << std::endl;
+//    std::cout << "ptr1: " << *ptr_[1] << std::endl;
+//    std::cout << "ptr1: " << *ptr_[2] << std::endl;
+//    std::cout << std::endl;
 
 //    if (*point == *ptr_[0])
 //    {

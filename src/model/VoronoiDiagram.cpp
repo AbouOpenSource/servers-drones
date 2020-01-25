@@ -29,26 +29,20 @@
 // Else E=T.first
 // Done
 
-VoronoiDiagram::VoronoiDiagram(MyPolygon& mesh)
+VoronoiDiagram::VoronoiDiagram(MyPolygon& mesh): Drawable()
 {
-//    for (Triangle triangle: mesh.triangles_)
-//    {
-//        std::cout << triangle << std::endl;
-//    }
-
     mesh.foreach_vertex([&mesh, this](Vector2D vertex, unsigned int index) {
         MyPolygon* polygon = new MyPolygon(100);
 
         // subset of triangles of D that have Qi as vertex
-        if (index == 0)
-        {
+//        if (index == 0)
+//        {
             std::vector<Triangle> triangles = mesh.get_triangles_from(vertex);
             Triangle* triangle = left_triangle(triangles, vertex);
 
-            Vector2D* b = next_vertex(*triangle, vertex);
-
             if (triangle != nullptr)
             {
+                Vector2D* b = next_vertex(*triangle, vertex);
                 Vector2D E = *b - vertex;
                 Vector2D center = Vector2D::center(vertex, *b);
 
@@ -57,6 +51,8 @@ VoronoiDiagram::VoronoiDiagram(MyPolygon& mesh)
                 Vector2D Q = intersection_with_borders(center, u, 0, 0, GlutWindow::getWindowWidth(), GlutWindow::getWindowHeight());
 //                std::cout << "Q: " << Q << "\n";
 
+                // TODO Be careful, it doens't add the point to << points_to_build_polygon_ >>
+                // TODO this means that the foreach method will not gives you the added point.
                 add_point(Q, *polygon);
             }
             else
@@ -64,14 +60,46 @@ VoronoiDiagram::VoronoiDiagram(MyPolygon& mesh)
                 triangle = &triangles[0];
             }
 
-//            while (triangles.size() > 1)
-//            {
-//                add_point(triangle->circum_center_, *polygon);
-//                Triangle* previous_triangle = triangle;
-//                triangle = right_neighbor(mesh, *triangle, vertex);
-//                remove_triangle(*previous_triangle, triangles);
-//            }
+            triangle->calculate_circle();
+
+            while (triangles.size() > 1)
+            {
+                // TODO Be careful, it doens't add the point to << points_to_build_polygon_ >>
+                // TODO this means that the foreach method will not gives you the added point.
+
+                add_point(triangle->circum_center_, *polygon);
+                Triangle* previous_triangle = triangle;
+                triangle = right_neighbor(mesh, *triangle, vertex);
+                remove_triangle(*previous_triangle, triangles);
+            }
+
+            add_point(triangle->circum_center_, *polygon);
+
+            if (triangle != nullptr)
+            {
+                Vector2D* b = prev_vertex(*triangle, vertex);
+                Vector2D E = *b - vertex;
+                Vector2D center = Vector2D::center(vertex, *b);
+
+                Vector2D u = right_orthogonal_vector(E);
+                Vector2D Q = intersection_with_borders(center, u, 0, 0, GlutWindow::getWindowWidth(), GlutWindow::getWindowHeight());
+
+                // TODO Be careful, it doens't add the point to << points_to_build_polygon_ >>
+                // TODO this means that the foreach method will not gives you the added point.
+                add_point(Q, *polygon);
+            }
+
+            remove_triangle(*triangle, triangles);
+            addCornerPoints(*polygon);
+//        }
+
+        for (unsigned int i = 0; i < sizeof(polygon->tab_pts_); i++)
+        {
+            std::cout << polygon->tab_pts_[i];
         }
+        std::cout << std::endl;
+
+        push(*polygon);
     });
 }
 
@@ -81,11 +109,11 @@ void VoronoiDiagram::remove_triangle(Triangle& triangle, std::vector<Triangle>& 
 
     while (it_triangle != triangles.end())
     {
-        std::cout << &triangle << std::endl;
-        std::cout << *it_triangle << std::endl;
-//        if (it_triangle->is_inside(interior_point)) {
-//            it_triangle = triangles_.erase(it_triangle);
-//        }
+        if (triangle.common_point(it_triangle->ptr_[0]) && triangle.common_point(it_triangle->ptr_[1]) && triangle.common_point(it_triangle->ptr_[2]))
+        {
+            triangles.erase(it_triangle);
+            return;
+        }
 
         it_triangle++;
     }
@@ -98,20 +126,15 @@ Triangle* VoronoiDiagram::right_neighbor(MyPolygon& mesh, Triangle& current, Vec
     // For each triangle and point of this triangle.
     for (Triangle& triangle: mesh.triangles_)
     {
-        for (Vector2D* vertex: triangle.ptr_)
+        if (triangle.common_point(current.ptr_[0]) && triangle.common_point(current.ptr_[1]) && triangle.common_point(current.ptr_[2]))
         {
-            // Check if the triangle own the point a.
-            if (triangle.common_point(&a))
-            {
-                Vector2D* b_triangle = prev_vertex(triangle, a);
+            continue;
+        }
 
-                // if the previous point of the a of the triangle is the same
-                // than the previous point of the a of the current triangle.
-                if (*b_triangle == *b_current)
-                {
-                    return &triangle;
-                }
-            }
+        // Check if the triangle own the point a.
+        if (triangle.common_point(&a) && triangle.common_point(b_current))
+        {
+            return &triangle;
         }
     }
 
@@ -127,13 +150,13 @@ Triangle* VoronoiDiagram::left_triangle(std::vector<Triangle> triangles, Vector2
 {
     bool is_shared(false);
 
-    std::cout << "\n\n\n\n\n\n";
-    std::cout << "Qi point: " << vertex << "\n\n";
+//    std::cout << "\n\n\n\n\n\n";
+//    std::cout << "Qi point: " << vertex << "\n\n";
 
     for (unsigned int i = 0; i < triangles.size(); i++)
     {
         is_shared = false;
-        std::cout << triangles[i];
+//        std::cout << triangles[i];
 
         Vector2D* next_point = next_vertex(triangles[i], vertex);
 
@@ -143,12 +166,12 @@ Triangle* VoronoiDiagram::left_triangle(std::vector<Triangle> triangles, Vector2
             {
                 if (triangles[j].common_point(next_point))
                 {
-                    std::cout << "common\n\n";
+//                    std::cout << "common\n\n";
                     is_shared = true;
                     break;
                 }
 
-                std::cout << "not common\n\n";
+//                std::cout << "not common\n\n";
             }
         }
 
@@ -161,7 +184,7 @@ Triangle* VoronoiDiagram::left_triangle(std::vector<Triangle> triangles, Vector2
     return nullptr;
 }
 
-Vector2D* VoronoiDiagram::next_vertex(Triangle triangle, Vector2D vertex)
+Vector2D* VoronoiDiagram::next_vertex(Triangle& triangle, Vector2D& vertex)
 {
     Vector2D* next_vertex(nullptr);
 
@@ -228,7 +251,77 @@ Vector2D VoronoiDiagram::intersection_with_borders(Vector2D a, Vector2D u, float
     return P;
 }
 
-void VoronoiDiagram::add_point(Vector2D A, MyPolygon& P)
+void VoronoiDiagram::add_point(Vector2D A, MyPolygon& polygon)
 {
-    P.add_vertex(A);
+    polygon.add_vertex(A);
 }
+
+void VoronoiDiagram::addCornerPoints(MyPolygon &polygon)
+{
+    float window_width(GlutWindow::getWindowWidth());
+    float window_height(GlutWindow::getWindowHeight());
+
+    Vector2D* previous_point;
+
+    float x0(0);
+    float y0(0);
+
+    polygon.foreach_vertex([&](Vector2D current_point, unsigned int index) {
+        if (index == 0)
+        {
+            return;
+        }
+
+        if ((current_point.x_ == x0 || previous_point->x_ == x0) && (current_point.y_ == y0 || previous_point->y_ == y0))
+        {
+            Vector2D left_bottom_border_point(x0, y0);
+
+            polygon.add_vertex(left_bottom_border_point);
+        }
+        else if ((current_point.x_ == x0 || previous_point->x_ == x0) && (current_point.y_ == window_height || previous_point->y_ == window_height))
+        {
+            Vector2D left_top_border_point(x0, window_height);
+
+            polygon.add_vertex(left_top_border_point);
+        }
+        else if ((current_point.x_ == window_width || previous_point->x_ == window_width) && (current_point.y_ == y0 || previous_point->y_ == y0))
+        {
+            Vector2D right_bottom_border_point(window_width, y0);
+
+            polygon.add_vertex(right_bottom_border_point);
+        } else if ((current_point.x_ == window_width || previous_point->x_ == window_width) && (current_point.y_ == window_height || previous_point->y_ == window_height))
+        {
+            Vector2D right_top_border_point(window_width, window_height);
+
+            polygon.add_vertex(right_top_border_point);
+        }
+
+        previous_point = &current_point;
+    });
+}
+
+void VoronoiDiagram::push(MyPolygon& polygon)
+{
+    voronoi_diagram_.push_back(polygon);
+}
+
+void VoronoiDiagram::start(InputManager *input_manager, Drawable::TextureLoader texture_loader)
+{
+//    Drawable::start(input_manager, texture_loader);
+}
+
+void VoronoiDiagram::draw()
+{
+//    for (MyPolygon& polygon: voronoi_diagram_)
+//    {
+//        std::cout << sizeof(polygon.tab_pts_) << "\n";
+
+//        std::cout << polygon;
+//        polygon.draw();
+//    }
+}
+
+void VoronoiDiagram::quit()
+{
+}
+

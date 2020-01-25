@@ -98,6 +98,7 @@ int main(int argc, char** argv)
         }
     });
 
+
     MyPolygon convex_polygon = MyPolygon(servers);
     VoronoiDiagram voronoi_diagram = VoronoiDiagram(convex_polygon);
 
@@ -105,6 +106,7 @@ int main(int argc, char** argv)
 
     window.addDrawable(&circumscribe);
     window.addDrawable(&convex_polygon);
+    window.addDrawable(&voronoi_diagram);
     window.start();
 
     return 0;

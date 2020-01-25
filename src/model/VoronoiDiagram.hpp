@@ -7,13 +7,21 @@
 
 #include "MyPolygon.hpp"
 
-class VoronoiDiagram
+class VoronoiDiagram: public Drawable
 {
 public:
     VoronoiDiagram(MyPolygon& polygon);
 
+    void start(InputManager* input_manager, TextureLoader texture_loader);
+
+    void draw();
+
+    void quit();
+
 private:
-    Vector2D* next_vertex(Triangle triangle, Vector2D vertex);
+    std::vector<MyPolygon> voronoi_diagram_;
+
+    Vector2D* next_vertex(Triangle& triangle, Vector2D& vertex);
 
     Vector2D *next_edge(Triangle triangle, Vector2D vertex);
 
@@ -27,11 +35,15 @@ private:
 
     Triangle* left_triangle(std::vector<Triangle> triangles, Vector2D& vertex);
 
-    void add_point(Vector2D A, MyPolygon& P);
+    void add_point(Vector2D A, MyPolygon& polygon);
 
     Vector2D right_orthogonal_vector(Vector2D& vertex);
 
     void remove_triangle(Triangle &triangle, vector<Triangle> &triangles);
+
+    void addCornerPoints(MyPolygon& polygon);
+
+    void push(MyPolygon& polygon);
 };
 
 

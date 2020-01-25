@@ -4,7 +4,6 @@
 #include <list>
 #include "MyPolygon.hpp"
 #include "../util/VectorUtil.hpp"
-#include <array>
 
 MyPolygon::MyPolygon()
     : tab_pts_{new Vector2D[100]},
@@ -104,10 +103,15 @@ MyPolygon::MyPolygon(std::vector<Server>& servers): Drawable()
     n_max_ = current_n_;
     tab_pts_ = new Vector2D[n_max_ + 1];
 
+    std::vector<Vector2D*> test;
+    test.resize(n_max_ + 1);
+
     int i = current_n_ - 1;
 
     while (!CHstack.empty())
     {
+
+//        test[i--] = *(CHstack.top()) + origin);
         tab_pts_[i--] = *(CHstack.top()) + origin; // Place the popped point in the global referential.
         CHstack.pop();
     }
@@ -123,7 +127,7 @@ MyPolygon::MyPolygon(std::vector<Server>& servers): Drawable()
 
 MyPolygon::~MyPolygon()
 {
-    delete [] tab_pts_;
+//    delete [] tab_pts_;
 }
 
 bool MyPolygon::polar_comparison(Vector2D p1, Vector2D p2)
@@ -168,9 +172,6 @@ bool MyPolygon::is_convex()
 
 bool MyPolygon::add_vertex(const Vector2D &p)
 {
-//    if (n_max_ == current_n_ - 2)
-//        return false;
-
     if(current_n_ == n_max_)
         return false;
 
@@ -536,6 +537,16 @@ void MyPolygon::check_delaunay()
     }
 }
 
+std::ostream &operator<<(std::ostream &out, MyPolygon &polygon)
+{
+    out << "Polygon | ";
+
+    polygon.foreach_vertex([&out](Vector2D vertex, unsigned int index) {
+        out << vertex << std::endl;
+    });
+
+    return out;
+}
 
 
 
