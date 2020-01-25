@@ -62,16 +62,19 @@ public:
 
 private:
 
+    std::string server;
     std::string id_;
     Vector2D current_position_;
     Vector2D speed_;
     Vector2D acceleration_;
     Vector2D forces_;
     float weight_;
-    //float k = 0.8;
+    float temps=int(0);
     int delta_time = int(1);
     int droneId = 0;
     int serverId = 0;
+
+    bool target_is_get= bool(false);
 };
 
 

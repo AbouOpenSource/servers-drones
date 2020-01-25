@@ -44,7 +44,6 @@ void DroneDrawable::draw()
     glEnd();
     glPopMatrix();
     glDisable(GL_TEXTURE_2D);
-    std::cout<< *drone_<< std::endl;
     update_position();
 }
 
@@ -60,5 +59,7 @@ void DroneDrawable::avoid_collision_with_drone(Drone *item)
 
 void DroneDrawable::update_position()
 {
+    drone_->update_acceleration();
+    drone_->update_speed();
     drone_->update_position();
 }

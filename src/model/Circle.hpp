@@ -30,6 +30,9 @@ public:
     float distance_with_other(Circle item);
 
     bool touch_with_other(Circle item);
+
+    friend std::ostream &operator<<(std::ostream &out, const Circle &circle);
+
 };
 
 

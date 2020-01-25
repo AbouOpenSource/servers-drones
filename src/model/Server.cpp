@@ -69,29 +69,35 @@ void Server::detectCollision()
 
     //TODO i want some this thing like constant for the size of windows
         if(!the_drone_.empty()){
-            std::cout<<"i am in detection of collisison de raduis"<<Server::getRaduisDeCollision()<<std::endl;
+
             for(int i = 0; the_drone_.size() > i; i++){
                 //TODO make more test to check if i get the right values
-                //I create here the circle circoncrit of my drone for test if the collision event can occurs
+
                 Position center = Position(the_drone_.at(i)->get_current_position().x_,
                                            the_drone_.at(i)->get_current_position().y_);
                 Circle zone =Circle(center,Server::getRaduisDeCollision());
 
                 for (int j = 0; j < the_drone_.size(); ++j) {
-                    //i don't need to test with itself
                     if(i!=j){
                             Position otherCenter =Position(the_drone_.at(j)->get_current_position().x_,
                                                         the_drone_.at(j)->get_current_position().y_);
-                       // std::cout<<" Le i" <<i<< " Le j"<< j <<std::endl;
-                        Circle otherZone =Circle(otherCenter,Server::getRaduisDeCollision());
+                            Circle otherZone =Circle(otherCenter,Server::getRaduisDeCollision());
 
-                            if(zone.touch_with_other(otherZone)){
-                              std::cout<<"The event of collision is occurring"<<std::endl;
-                                the_drone_.at(i)->avoid_collision_with(the_drone_.at(j));
+                      /*  std::cout<<"otherCenter x"<<otherCenter.get_x()<<std::endl;
+                        std::cout<<"otherCenter y"<<otherCenter.get_y()<<std::endl;
 
+                        std::cout<<"second otherCenter x"<<center.get_x()<<std::endl;
+                        std::cout<<"second otherCenter y"<<center.get_y()<<std::endl;
+*/
+
+
+                        if(zone.touch_with_other(otherZone)){
+                           std::cout<<"The collision"<<std::endl;
+                            the_drone_.at(i)->avoid_collision_with(the_drone_.at(j));
                             }
                         }
                 }
+
                 the_drone_.at(i)->check_border();
 
             }
@@ -168,15 +174,3 @@ void Server::set_selected(bool selected)
 {
     Server::selected_ = selected;
 }
-
-//Color color_value_of(std::string color)
-//{
-//    if (color == "RED") return Color::red;
-//    if (color == "GREEN") return Color::green;
-//    if (color == "BLUE") return Color::blue;
-//    if (color == "PINK") return Color::pink;
-//    if (color == "YELLOW") return Color::yellow;
-//    if (color == "CYAN") return Color::cyan;
-//
-//    return Color::red;
-//}

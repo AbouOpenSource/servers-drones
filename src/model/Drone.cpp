@@ -1,19 +1,20 @@
 #include "Drone.hpp"
 
 #include "Circle.hpp"
+#include "../core/ServiceContainer.hpp"
+#include "../gui/Window.hpp"
 
 //
 // Created by abou on 19/12/2019.
+
 Drone::Drone(const Vector2D &current_position, const Vector2D &forces, float weight)
         : current_position_(
-        current_position), forces_(forces), weight_(weight), acceleration_(forces / weight),
-          speed_((forces / weight) / delta_time)
+        current_position), forces_(forces), weight_(weight), acceleration_(forces/weight),
+          speed_(Vector2D(0,0))
 {
 
 }
-//
 
-#define D_MAX 96
 
 Drone::Drone(const Vector2D &current_position, const Vector2D &speed, const Vector2D &acceleration,
              Vector2D forces, float weight, std::string id) : current_position_(
@@ -70,49 +71,68 @@ void Drone::set_weight(float weight)
 
 void Drone::update_position()
 {
-    current_position_ = current_position_ + (speed_ / delta_time);
+    temps+=0.1;
+
+   // if(temps>10)
+     //   target_is_get=true;
+
+
+    if(!target_is_get)
+
+        current_position_ = current_position_ + speed_ ;
+/**
+ * Pour un mouvement circulaire
+ */
+if(target_is_get){
+
+    int radius = 100;
+    float w = 1;
+    float thetaZero=0;
+    current_position_.x_ = radius* cos(w*temps+thetaZero);
+    current_position_.y_ = radius* sin(w*temps+thetaZero);
+}
 }
 
 void Drone::avoid_collision_with(Drone *ptrDrone)
 {
     //TODO define the force to avoid the collison with the drone passing in args
 
-    int ForceMAX = 15000;
-    Vector2D *BA = new Vector2D(
-             ptrDrone->current_position_.x_-Drone::current_position_.x_ ,
-             Drone::current_position_.x_ -Drone::current_position_.y_
+
+    int ForceMAX = 200;
+    float dAB = Drone::distance_with_other_drone(*ptrDrone);
+    Vector2D BA =  Vector2D(
+            Drone::current_position_.x_-ptrDrone->current_position_.x_ ,
+             Drone::current_position_.y_-ptrDrone->current_position_.y_
     );
 
-    float dAB = Drone::distance_with_other_drone(*ptrDrone);
-    if (dAB < 96) {
-        //First case
-         Vector2D forceBA = ForceMAX * (*BA / dAB);
-        forces_=forceBA;
-        std::cout<<forces_<<std::endl;
-        update_acceleration();
-       // update_speed();
 
-    } else {
-        //Second case
-       Vector2D forceBA = (ForceMAX * (*BA/dAB)) *   ((dAB- 96)/(48-96));
+    if (dAB < 48 ) {
+        Vector2D forceBA = ForceMAX * (BA / dAB);
         forces_=forceBA;
         update_acceleration();
         update_speed();
-    }
+
+    } else {
+        if(dAB<96)
+        {
+            Vector2D forceBA = (ForceMAX * (BA/dAB)) *   ((dAB- 96)/(48-96));
+            forces_=forceBA;
+            update_acceleration();
+            update_speed();
+        }
+       }
+
 
 }
 
 float Drone::distance_with_other_drone(Drone item)
 {
-    return
-            sqrt(item.current_position_.x_ - Drone::current_position_.x_ *
-                                                  item.current_position_.x_ -
-                 Drone::current_position_.x_
-                 +
-                         item.current_position_.y_ - Drone::current_position_.y_ *
-                                                  item.current_position_.y_ -
-                 Drone::current_position_.y_
-            );
+    float racine= sqrt((item.current_position_.x_ - Drone::current_position_.x_) * (item.current_position_.x_ - Drone::current_position_.x_)
+         +
+                               (item.current_position_.y_ - Drone::current_position_.y_) * (item.current_position_.y_ - Drone::current_position_.y_)
+    );
+    std::cout<<racine;
+    return racine;
 }
 
 Drone::Drone(const Vector2D &current_position, const Vector2D &speed, const Vector2D &acceleration, const Vector2D& forces,
@@ -135,27 +155,81 @@ void Drone::addGoal(const Vector2D& item)
 /**
  * the formula of acceleration computing
  */
-void Drone::update_acceleration()
-{
-    acceleration_ = forces_ / weight_;
-}
+
 void Drone::check_border(){
 
-    if(abs(this->current_position_.x_-1000)<900 || abs(1000-this->current_position_.x_)<100 ){
-      //  std::cout<<"first condition of border";
+    /**
+     *
+     */
+    ServiceContainer *container = ServiceContainer::get_instance();
+    Window *window = (Window*) container->get_service(Window::SERVICE);
+
+    /**
+        * if we move to the border of the border up
+        */
+    if(abs(this->current_position_.y_- window->getWindowHeight())<100 && this->speed_.y_>0){
+        this->acceleration_.y_=-this->acceleration_.y_;
+        this->acceleration_.x_=-this->acceleration_.x_;
+        this->speed_.y_ = -this->speed_.y_;
+
+    }
+    /**
+     * if we move to the border of the border bottom
+     */
+
+    if(this->current_position_.y_<10 && this->speed_.y_<0){
+
+        this->acceleration_.y_=-this->acceleration_.y_;
+        this->acceleration_.x_=-this->acceleration_.x_;
+        this->speed_.y_ = -this->speed_.y_;
+
+    }
+/**
+ *
+ */
+    if(this->current_position_.x_<10 && this->speed_.x_<0){
+        this->acceleration_.y_=-this->acceleration_.y_;
+        this->acceleration_.x_=-this->acceleration_.x_;
         this->speed_.x_ = -this->speed_.x_;
     }
-
-    if(abs(this->current_position_.y_-800)<700|| abs(1000-this->current_position_.y_)<100 ){
-       // std::cout<<"second condition of border";
+/**
+ *
+ */
+    if(abs(this->current_position_.x_- window->getWindowWidth())<100 && this->speed_.x_>0){
+        this->acceleration_.y_=-this->acceleration_.y_;
+        this->acceleration_.x_=-this->acceleration_.x_;
         this->speed_.x_ = -this->speed_.x_;
     }
-
 }
 
 void Drone::update_speed(){
-    std::cout << "The speed" << speed_ <<"The acceleration" <<acceleration_<<endl;
+if(speed_.x_>10)
+    acceleration_.x_=0;
+if(speed_.y_>10)
+    acceleration_.y_=0;
     speed_ = (speed_ + acceleration_);
+
+}
+
+void Drone::update_acceleration()
+{
+   if(!target_is_get)
+    acceleration_ = forces_ / weight_;
+/**
+ * Acceleration pour mouvement circulaire
+ */
+if (target_is_get){
+    int radius =100;
+    float thetaZero=0;
+    float w=1;
+    acceleration_.x_= -radius*(w*w)*cos(w*temps+thetaZero);
+    acceleration_.y_= -radius*(w*w)*sin(w*temps+thetaZero);
+
 }
 
 
+}
+
+void assign_to_the_server(std::string name){
+
+}

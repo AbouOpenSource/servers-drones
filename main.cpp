@@ -116,35 +116,46 @@ int main(int argc, char** argv)
     // ce qe Abou a ajouté dans le main
 
     //Drone *drone = new Drone(Vector2D(500,500),Vector2D(10,10),Vector2D(15,15),Vector2D(10,10),1);
-    Drone *drone = new Drone(Vector2D(0,0), Vector2D(15000,15000),1);
-    Drone *drone1 = new Drone(Vector2D(500,400), Vector2D(-150000,-150000),1);
+    Vector2D forces = Vector2D(1000,10) -Vector2D(0,0);
+    forces= forces.unitaire();
+    Drone *drone = new Drone(Vector2D(0,0), forces,10);
+    Drone *drone1 = new Drone(Vector2D(500,0), Vector2D(-1,-1),100);
+    Drone *drone2 = new Drone(Vector2D(0,400), Vector2D(-1,-1),100);
+    Drone *drone3 = new Drone(Vector2D(500,400), Vector2D(-1,-1),100);
+    Drone *drone4 = new Drone(Vector2D(100,100), Vector2D(-1,-1),100);
+
     //Server *server = new Server("Ouaga",Vector2D(0,0), "RED");
+
     DroneDrawable drone_drawable(drone);
     DroneDrawable drone_drawable1(drone1);
+    DroneDrawable drone_drawable2(drone2);
+    DroneDrawable drone_drawable3(drone3);
+    DroneDrawable drone_drawable4(drone4);
+
 
 
     katmandou.connectDrone(drone);
-    katmandou.connectDrone(drone1);
+    //katmandou.connectDrone(drone1);
+    //katmandou.connectDrone(drone2);
+    //katmandou.connectDrone(drone3);
+    //katmandou.connectDrone(drone4);
 
     ServerDrawable server_drawable(&katmandou);
-
-
-  //  DroneDrawable drone_drawable1(drone1);
 
     window.addDrawable(&circumscribe);
     window.addDrawable(&convex_polygon);
 
 
     window.addDrawable(&drone_drawable);
-    window.addDrawable(&drone_drawable1);
+  //  window.addDrawable(&drone_drawable1);
+   // window.addDrawable(&drone_drawable2);
+   // window.addDrawable(&drone_drawable3);
+    //window.addDrawable(&drone_drawable4);
+
+
 
     window.addDrawable(&server_drawable);
 
-    // window.addDrawable(&drone_drawable1);
-/*
-    std::thread my_thread= server_manager.for_start_thread();
-    my_thread.join();
-  */
 window.start();
 
     return 0;

@@ -65,6 +65,13 @@ Vector2D Vector2D::ortho()
     return Vector2D(-y_,x_);
 }
 
+Vector2D Vector2D::unitaire()
+{
+    return Vector2D(x_/norm(),y_/norm());
+}
+
+
+
 Vector2D operator * (float a, const Vector2D &v)
 {
     return Vector2D(a * v.x_, a * v.y_);

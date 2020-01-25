@@ -42,6 +42,8 @@ public :
     friend std::ostream &operator<<(std::ostream &out, const Vector2D &vector);
 
     Vector2D ortho();
+
+    Vector2D unitaire();
 };
 
 
