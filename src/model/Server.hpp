@@ -34,7 +34,7 @@ public:
      * @param the_drone
      */
 
-    Server(std::string& name, Vector2D &current_position, std::string color);
+    Server(std::string& name, Vector2D &current_position, std::string& color);
 //    Server(std::string& name, Vector2D &current_position, Color color_);
 
     Server(const Vector2D &speed, const Vector2D &current_position, const std::vector<Drone*> &the_drone);

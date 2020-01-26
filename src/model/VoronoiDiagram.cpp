@@ -7,22 +7,17 @@
 #include "../core/ServiceContainer.hpp"
 #include <array>
 
-
-// TODO FONCTIONNE get_triangles_from
-// TODO FONCTIONNE left_triangle
-// TODO FONCTIONNE next_edge
-// TODO FONCTIONNE next_vertex
-// TODO FONCTIONNE prev_vertex
-// TODO FONCTIONNE center
-// TODO FONCTIONNE right_orthogonal_vector
-// TODO FONCTIONNE intersection_with_borders
-
-
-VoronoiDiagram::VoronoiDiagram(MyPolygon& mesh): Drawable()
+VoronoiDiagram::VoronoiDiagram(MyPolygon& mesh, std::vector<Server> servers)
+    : Drawable(),
+    servers_(servers),
+    left_top_border_added_(false),
+    right_top_border_added_(false),
+    left_bottom_border_added_(false),
+    right_bottom_border_added_(false)
 {
-    mesh.foreach_vertex([&mesh, this](Vector2D& vertex, unsigned int index)
+    mesh.foreach_vertex([&mesh, &servers, this](Vector2D& vertex, unsigned int index)
     {
-        MyPolygon* polygon = new MyPolygon(100);
+        MyPolygon* polygon = new MyPolygon(100, servers);
 
         // subset of triangles of D that have Qi as vertex
         std::vector<Triangle> triangles = mesh.get_triangles_from(vertex);
@@ -115,6 +110,7 @@ void VoronoiDiagram::remove_triangle(Triangle& triangle, std::vector<Triangle>& 
         it_triangle++;
     }
 }
+
 Triangle* VoronoiDiagram::right_neighbor(MyPolygon& mesh, Triangle& current, Vector2D& a)
 {
     // Get the previous point.
@@ -319,40 +315,66 @@ void VoronoiDiagram::add_corner_points(MyPolygon &polygon)
     float x0(0);
     float y0(0);
 
-    bool left_top_border_added(false);
-    bool right_top_border_added(false);
-    bool left_bottom_border_added(false);
-    bool right_bottom_border_added(false);
-
     polygon.foreach_vertex([&](Vector2D& current_point, unsigned int index) {
         next_point = next_vertex(polygon, current_point);
 
-        if (((current_point.x_ == x0 && next_point->y_ == y0) || (next_point->x_ == x0 && current_point.y_ == y0)) && !left_bottom_border_added)
+        if (((current_point.x_ == x0 && next_point->y_ == y0) || (next_point->x_ == x0 && current_point.y_ == y0)) && !left_bottom_border_added_)
         {
-            left_bottom_border_added = true;
+            left_bottom_border_added_ = true;
             Vector2D left_bottom_border_point(x0, y0);
 
             polygon.add_vertex(left_bottom_border_point);
         }
-        else if (((current_point.x_ == x0  && next_point->y_ == window_height) || (next_point->x_ == x0 && current_point.y_ == window_height)) && !left_top_border_added)
+        else if (((current_point.x_ == x0  && next_point->y_ == window_height) || (next_point->x_ == x0 && current_point.y_ == window_height)) && !left_top_border_added_)
         {
-            left_top_border_added = true;
+            left_top_border_added_ = true;
             Vector2D left_top_border_point(x0, window_height);
 
             polygon.add_vertex(left_top_border_point);
         }
-        else if (((current_point.x_ == window_width && next_point->y_ == y0) || (next_point->x_ == window_width && current_point.y_ == y0)) && !right_bottom_border_added)
+        else if (((current_point.x_ == window_width && next_point->y_ == y0) || (next_point->x_ == window_width && current_point.y_ == y0)) && !right_bottom_border_added_)
         {
-            right_bottom_border_added = true;
+            right_bottom_border_added_ = true;
             Vector2D right_bottom_border_point(window_width, y0);
 
             polygon.add_vertex(right_bottom_border_point);
         }
-        else if (((current_point.x_ == window_width && next_point->y_ == window_height) || (next_point->x_ == window_width && current_point.y_ == window_height)) && !right_top_border_added)
+        else if (((current_point.x_ == window_width && next_point->y_ == window_height) || (next_point->x_ == window_width && current_point.y_ == window_height)) && !right_top_border_added_)
         {
-            right_top_border_added = true;
+            right_top_border_added_ = true;
             Vector2D right_top_border_point(window_width, window_height);
 
+            polygon.add_vertex(right_top_border_point);
+        }
+        else if (!left_bottom_border_added_ && !right_bottom_border_added_ && !left_top_border_added_ && !right_top_border_added_)
+        {
+            std::cout << "OK" << std::endl;
+            return;
+        }
+        else if (((current_point.x_ == x0 && next_point->x_ == window_width) || (next_point->x_ == x0 && current_point.x_ == window_width)) && !left_bottom_border_added_ && !right_bottom_border_added_)
+        {
+            std::cout << std::endl << "ENTERRRRRRRRRRR1" << std::endl;
+
+            left_bottom_border_added_ = true;
+            right_bottom_border_added_ = true;
+
+            Vector2D left_bottom_border_point(x0, y0);
+            Vector2D right_bottom_border_point(window_width, y0);
+
+            polygon.add_vertex(left_bottom_border_point);
+            polygon.add_vertex(right_bottom_border_point);
+        }
+        else if (((current_point.x_ == x0 && next_point->x_ == window_width) || (next_point->x_ == x0 && current_point.x_ == window_width)) && !left_top_border_added_ && !right_top_border_added_)
+        {
+            std::cout << std::endl << "ENTERRRRRRRRRRR2" << std::endl;
+
+            left_top_border_added_ = true;
+            right_top_border_added_ = true;
+
+            Vector2D left_top_border_point(x0, window_height);
+            Vector2D right_top_border_point(window_width, window_height);
+
+            polygon.add_vertex(left_top_border_point);
             polygon.add_vertex(right_top_border_point);
         }
     });

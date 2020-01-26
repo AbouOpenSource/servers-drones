@@ -10,7 +10,7 @@
 class VoronoiDiagram: public Drawable
 {
 public:
-    VoronoiDiagram(MyPolygon& polygon);
+    VoronoiDiagram(MyPolygon& polygon, std::vector<Server> servers);
 
     void start(InputManager* input_manager, TextureLoader texture_loader);
 
@@ -19,7 +19,18 @@ public:
     void quit();
 
 private:
+
+    bool left_top_border_added_;
+
+    bool right_top_border_added_;
+
+    bool left_bottom_border_added_;
+
+    bool right_bottom_border_added_;
+
     std::vector<MyPolygon> voronoi_diagram_;
+
+    std::vector<Server> servers_;
 
     Vector2D* next_vertex(Triangle& triangle, Vector2D& vertex);
 

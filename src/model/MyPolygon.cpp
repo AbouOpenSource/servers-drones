@@ -11,18 +11,16 @@ MyPolygon::MyPolygon()
       current_n_{0},
       points_to_build_polygon_()
 {
-//    points_to_build_polygon_.resize(15);
-
     set_color(YELLOW);
 }
 
-MyPolygon::MyPolygon(int p_max)
+MyPolygon::MyPolygon(int p_max, std::vector<Server>& servers)
         : tab_pts_{new Vector2D[p_max]},
           n_max_{p_max},
           current_n_{0},
-        points_to_build_polygon_()
+          points_to_build_polygon_(),
+          servers_{servers}
 {
-//    points_to_build_polygon_.resize(100);
     set_color(YELLOW);
 }
 
@@ -125,6 +123,7 @@ MyPolygon::MyPolygon(std::vector<Server>& servers): Drawable()
 
     triangulation();
     interior_triangulation();
+    check_delaunay();
     solve_delaunay();
     check_delaunay();
 }
@@ -178,7 +177,7 @@ bool MyPolygon::add_vertex(Vector2D &p)
 {
     if(current_n_ == n_max_)
         return false;
-//
+
     tab_pts_[current_n_++] = p;
     tab_pts_[current_n_] = tab_pts_[0];
 
@@ -191,6 +190,7 @@ bool MyPolygon::add_vertex(Vector2D &p)
 bool MyPolygon::is_inside(const Vector2D& p)
 {
     int i = 0;
+//    while (i < current_n_ && is_on_the_left(p, i))
     while (i < current_n_ && is_on_the_left(p, i))
         i++;
 
@@ -214,18 +214,13 @@ void MyPolygon::set_color(const float t_color[4])
 
 //void MyPolygon::draw()
 //{
-////    if (triangles_.empty())
-////    {
-////        triangulation();
-////        interior_triangulation();
-////        solve_delaunay();
-////        check_delaunay();
-////    }
+//    solve_delaunay();
+//    check_delaunay();
 //
-////    for (auto& triangle: triangles_)
-////    {
-////        triangle.draw();
-////    }
+//    for (auto& triangle: triangles_)
+//    {
+//        triangle.draw();
+//    }
 //
 //    // Draw the number of points.
 //    glLineWidth(1);
@@ -254,52 +249,64 @@ void MyPolygon::set_color(const float t_color[4])
 
 void MyPolygon::draw()
 {
-    // Draw the number of points.
-//    glLineWidth(1);
-//    for (int i = 0; i < points_to_build_polygon_.size(); i++)
-//    {
-////        Vector2D* next_point = next_vertex(points_to_build_polygon_[i]);
-//
-//        glBegin(GL_LINES);
-//        glVertex2f(points_to_build_polygon_[i].x_ - 10, points_to_build_polygon_[i].y_ - 10);
-//        glVertex2f(points_to_build_polygon_[i].x_ + 10, points_to_build_polygon_[i].y_ + 10);
-//        glEnd();
-//
-//        glBegin(GL_LINES);
-//        glVertex2f(points_to_build_polygon_[i].x_ + 10, points_to_build_polygon_[i].y_ - 10);
-//        glVertex2f(points_to_build_polygon_[i].x_ - 10, points_to_build_polygon_[i].y_ + 10);
-//        glEnd();
-//
-//        GlutWindow::drawText(tab_pts_[i].x_ - 10, tab_pts_[i].y_, to_string(i), GlutWindow::ALIGN_RIGHT);
-//    }
+    std::string color;
 
-//    // TODO
+    for (Server& server: servers_)
+    {
+        // TODO is_inside not always working?
+        if (is_inside(server.getCurrentPosition()))
+        {
+            color = server.get_color();
+        }
+    }
+
+//    std::cout << color << std::endl;
+
+    if (color == "RED")
+    {
+        glColor3fv(RED);
+    }
+    else if (color == "BLUE")
+    {
+        glColor3fv(BLUE);
+    }
+    else if (color == "PINK")
+    {
+        glColor3fv(PINK);
+    }
+    else if (color == "YELLOW")
+    {
+        glColor3fv(YELLOW);
+    }
+    else if (color == "GREEN")
+    {
+        glColor3fv(GREEN);
+    }
+    else if (color == "CYAN")
+    {
+        glColor3fv(CYAN);
+    }
+
+    glBegin(GL_POLYGON);
+    for (Vector2D& point: points_to_build_polygon_)
+    {
+        glVertex2f(point.x_, point.y_);
+    }
+    glEnd();
+
+    // TODO Issue when we add more servers.
+    glColor3fv(BLACK);
     for (Vector2D& point: points_to_build_polygon_)
     {
         Vector2D* next_point = next_vertex(point);
 
-        glColor3fv(BLACK);
+        glLineWidth(3);
         glBegin(GL_LINES);
         glVertex2f(point.x_, point.y_);
         glVertex2f(next_point->x_, next_point->y_);
         glEnd();
-
-//        glColor3fv(RED);
-//        GlutWindow::fillEllipse(point.x_, point.y_, 2.5, 2.5);
-
-//        GlutWindow::fillEllipse(point.x_, point.y_, 2.5, 2.5);
     }
 }
-
-//void MyPolygon::draw()
-//{
-//     TODO
-//    for (unsigned int i = 0; i < current_n_; i++)
-//    {
-//        glColor3fv(RED);
-//        GlutWindow::fillEllipse(tab_pts_[i].x_, tab_pts_[i].y_, 2.5, 2.5);
-//    }
-//}
 
 vector<float> MyPolygon::intersect(const Vector2D& a, const Vector2D& u, const Vector2D& p, const Vector2D& q)
 {
@@ -506,7 +513,6 @@ void MyPolygon::triangulation()
         tmp.erase(p + 1); // remove point(p + 1) from tmp.
         n--; // or n = tmp.size().
     }
-//    neighbor_inside(&triangles_[0]);
 }
 
 void MyPolygon::interior_triangulation()

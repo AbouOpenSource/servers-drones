@@ -6,7 +6,7 @@
 #include "Server.hpp"
 #include "Circle.hpp"
 
-Server::Server(std::string& name, Vector2D &current_position, std::string color)
+Server::Server(std::string& name, Vector2D &current_position, std::string& color)
     : name_(name),
     current_position_(current_position),
     color_(color),

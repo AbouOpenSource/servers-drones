@@ -116,10 +116,6 @@ bool Triangle::check_delaunay(const std::vector<Vector2D> &points) {
 
 void Triangle::foreach_point(PointCallback cb)
 {
-//    std::cout << ptr_[0] << std::endl;
-//    std::cout << ptr_[1] << std::endl;
-//    std::cout << ptr_[2] << std::endl;
-
     cb(ptr_[0], 0);
     cb(ptr_[1], 1);
     cb(ptr_[2], 2);
@@ -176,18 +172,6 @@ std::ostream &operator<<(std::ostream &out, Triangle &triangle)
 
 bool Triangle::common_point(Vector2D *point)
 {
-    //FIXME Best to just check if addresses are equal?
-//    std::cout << "next point: " << *point << std::endl;
-//    std::cout << "ptr0: " << *ptr_[0] << std::endl;
-//    std::cout << "ptr1: " << *ptr_[1] << std::endl;
-//    std::cout << "ptr1: " << *ptr_[2] << std::endl;
-//    std::cout << std::endl;
-
-//    if (*point == *ptr_[0])
-//    {
-//        return 0;
-//    }
-
     return *point == *ptr_[0] ||
            *point == *ptr_[1] ||
            *point == *ptr_[2];

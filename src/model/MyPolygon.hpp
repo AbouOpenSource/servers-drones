@@ -30,12 +30,12 @@ public:
 //    std::vector<Vector2D*> tab_pts_;
     std::vector<Triangle> triangles_;
     std::vector<Vector2D> interior_points;
-
+    std::vector<Server> servers_;
 
     /********** Constructor & destructor **********/
     MyPolygon();
 
-    MyPolygon(int p_max);
+    MyPolygon(int p_max, std::vector<Server>& servers);
 
     MyPolygon(std::vector<Server>& servers);
 
