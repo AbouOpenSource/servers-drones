@@ -198,10 +198,9 @@ bool operator==(Triangle& triangle1, Triangle& triangle2)
     return triangle1.common_point(triangle2.ptr_[0]) && triangle1.common_point(triangle2.ptr_[1]) && triangle1.common_point(triangle2.ptr_[2]);
 }
 
-// TODO A REFAIRE ABSOLUMENT, C EST HORRIBLE.
 bool Triangle::is_empty()
 {
-    return ptr_[0] == nullptr;
+    return ptr_[0] == nullptr && ptr_[1] == nullptr && ptr_[2] == nullptr;
 }
 
 Triangle::Triangle(Triangle *toCopy)

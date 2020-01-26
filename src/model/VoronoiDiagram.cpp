@@ -157,16 +157,16 @@ Triangle* VoronoiDiagram::left_triangle(std::vector<Triangle> triangles, Vector2
 
 Vector2D* VoronoiDiagram::next_vertex(Triangle& triangle, Vector2D& vertex)
 {
-    Vector2D* next_vertex(nullptr);
+    Vector2D* next_point(nullptr);
 
-    triangle.foreach_point([&next_vertex, &vertex, &triangle](Vector2D* point, unsigned int index) {
+    triangle.foreach_point([&next_point, &vertex, &triangle](Vector2D* point, unsigned int index) {
         if (*point == vertex)
         {
-            next_vertex = triangle.ptr_[(index + 1) % 3];
+            next_point = triangle.ptr_[(index + 1) % 3];
         }
     });
 
-    return next_vertex;
+    return next_point;
 }
 
 Vector2D* VoronoiDiagram::next_edge(Triangle triangle, Vector2D vertex)
