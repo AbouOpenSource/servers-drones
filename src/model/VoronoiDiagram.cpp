@@ -109,7 +109,7 @@ void VoronoiDiagram::remove_triangle(Triangle& triangle, std::vector<Triangle>& 
 
     while (it_triangle != triangles.end())
     {
-        if (triangle.common_point(it_triangle->ptr_[0]) && triangle.common_point(it_triangle->ptr_[1]) && triangle.common_point(it_triangle->ptr_[2]))
+        if (triangle == *it_triangle)
         {
             triangles.erase(it_triangle);
             return;
@@ -126,7 +126,7 @@ Triangle* VoronoiDiagram::right_neighbor(MyPolygon& mesh, Triangle& current, Vec
     // For each triangle and point of this triangle.
     for (Triangle& triangle: mesh.triangles_)
     {
-        if (triangle.common_point(current.ptr_[0]) && triangle.common_point(current.ptr_[1]) && triangle.common_point(current.ptr_[2]))
+        if (triangle == current)
         {
             continue;
         }

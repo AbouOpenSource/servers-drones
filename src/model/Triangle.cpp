@@ -193,9 +193,9 @@ bool Triangle::common_point(Vector2D *point)
            *point == *ptr_[2];
 }
 
-bool operator==(const Triangle& triangle1, const Triangle& triangle2)
+bool operator==(Triangle& triangle1, Triangle& triangle2)
 {
-    return &triangle1 == &triangle2;
+    return triangle1.common_point(triangle2.ptr_[0]) && triangle1.common_point(triangle2.ptr_[1]) && triangle1.common_point(triangle2.ptr_[2]);
 }
 
 // TODO A REFAIRE ABSOLUMENT, C EST HORRIBLE.

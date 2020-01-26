@@ -67,7 +67,7 @@ public:
     void foreach_point(PointCallback cb);
 
     /********** Operator overloading **********/
-    friend bool operator==(const Triangle& triangle1, const Triangle& triangle2);
+    friend bool operator==(Triangle& triangle1, Triangle& triangle2);
 
     friend std::ostream &operator<<(std::ostream &out, const Triangle &triangle);
 };
