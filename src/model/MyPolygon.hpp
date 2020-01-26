@@ -22,14 +22,14 @@ class MyPolygon: public Drawable
     float color_[4];
 
     std::vector<Vector2D> interior_points;
-    std::vector<Vector2D> points_to_build_polygon_;
 
 private:
     /********** typedef **********/
-    typedef std::function<void(Vector2D point, unsigned int index)> VertexCallback;
+    typedef std::function<void(Vector2D& point, unsigned int index)> VertexCallback;
 
 public:
     Vector2D* tab_pts_;
+    std::vector<Vector2D> points_to_build_polygon_;
 //    std::vector<Vector2D*> tab_pts_;
     std::vector<Triangle> triangles_;
 
@@ -45,7 +45,7 @@ public:
     ~MyPolygon();
 
     /********** Modifier **********/
-    bool add_vertex(const Vector2D &p);
+    bool add_vertex(Vector2D &p);
 
     void draw() override;
 

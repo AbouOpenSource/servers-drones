@@ -102,10 +102,18 @@ int main(int argc, char** argv)
     MyPolygon convex_polygon = MyPolygon(servers);
     VoronoiDiagram voronoi_diagram = VoronoiDiagram(convex_polygon);
 
+//    std::vector<Vector2D> points_to_build_polygon_;
+//    Vector2D test(100, 100);
+//
+//    points_to_build_polygon_.push_back(test);
+//    points_to_build_polygon_.push_back(test);
+//    points_to_build_polygon_.push_back(test);
+//    points_to_build_polygon_.push_back(test);
+
     Circumscribe circumscribe(servers);
 
     window.addDrawable(&circumscribe);
-    window.addDrawable(&convex_polygon);
+//    window.addDrawable(&convex_polygon);
     window.addDrawable(&voronoi_diagram);
     window.start();
 

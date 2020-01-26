@@ -9,7 +9,7 @@ MyPolygon::MyPolygon()
     : tab_pts_{new Vector2D[100]},
       n_max_{100},
       current_n_{0},
-      points_to_build_polygon_{}
+      points_to_build_polygon_()
 {
     set_color(YELLOW);
 }
@@ -17,7 +17,8 @@ MyPolygon::MyPolygon()
 MyPolygon::MyPolygon(int p_max)
         : tab_pts_{new Vector2D[p_max]},
           n_max_{p_max},
-          current_n_{0}
+          current_n_{0},
+          points_to_build_polygon_()
 {
     set_color(YELLOW);
 }
@@ -170,15 +171,18 @@ bool MyPolygon::is_convex()
     return i == current_n_;
 }
 
-bool MyPolygon::add_vertex(const Vector2D &p)
+bool MyPolygon::add_vertex(Vector2D &p)
 {
     if(current_n_ == n_max_)
         return false;
-
+//
     tab_pts_[current_n_++] = p;
     tab_pts_[current_n_] = tab_pts_[0];
 
-    points_to_build_polygon_.push_back(p);
+//    points_to_build_polygon_.resize(50);
+//    points_to_build_polygon_.push_back(p);
+//    VectorUtil::print_1D_vector(points_to_build_polygon_);
+//    std::cout << "ok";
 
     return true;
 }

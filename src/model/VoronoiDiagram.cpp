@@ -31,7 +31,7 @@
 
 VoronoiDiagram::VoronoiDiagram(MyPolygon& mesh): Drawable()
 {
-    mesh.foreach_vertex([&mesh, this](Vector2D vertex, unsigned int index) {
+    mesh.foreach_vertex([&mesh, this](Vector2D& vertex, unsigned int index) {
         MyPolygon* polygon = new MyPolygon(100);
 
         // subset of triangles of D that have Qi as vertex
@@ -93,11 +93,11 @@ VoronoiDiagram::VoronoiDiagram(MyPolygon& mesh): Drawable()
             addCornerPoints(*polygon);
 //        }
 
-        for (unsigned int i = 0; i < sizeof(polygon->tab_pts_); i++)
-        {
-            std::cout << polygon->tab_pts_[i];
-        }
-        std::cout << std::endl;
+//        for (unsigned int i = 0; i < sizeof(polygon->tab_pts_); i++)
+//        {
+//            std::cout << polygon->tab_pts_[i];
+//        }
+//        std::cout << std::endl;
 
         push(*polygon);
     });
@@ -266,7 +266,7 @@ void VoronoiDiagram::addCornerPoints(MyPolygon &polygon)
     float x0(0);
     float y0(0);
 
-    polygon.foreach_vertex([&](Vector2D current_point, unsigned int index) {
+    polygon.foreach_vertex([&](Vector2D& current_point, unsigned int index) {
         if (index == 0)
         {
             return;
