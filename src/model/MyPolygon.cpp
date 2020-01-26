@@ -8,18 +8,18 @@
 MyPolygon::MyPolygon()
     : tab_pts_{new Vector2D[100]},
       n_max_{100},
-      current_n_{0},
-      points_to_build_polygon_()
+      current_n_{0}
 {
+    points_to_build_polygon_.resize(15);
     set_color(YELLOW);
 }
 
 MyPolygon::MyPolygon(int p_max)
         : tab_pts_{new Vector2D[p_max]},
           n_max_{p_max},
-          current_n_{0},
-          points_to_build_polygon_()
+          current_n_{0}
 {
+    points_to_build_polygon_.resize(100);
     set_color(YELLOW);
 }
 
@@ -181,6 +181,7 @@ bool MyPolygon::add_vertex(Vector2D &p)
 
 //    points_to_build_polygon_.resize(50);
 //    points_to_build_polygon_.push_back(p);
+
 //    VectorUtil::print_1D_vector(points_to_build_polygon_);
 //    std::cout << "ok";
 

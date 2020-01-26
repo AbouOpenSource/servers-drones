@@ -18,7 +18,6 @@ class MyPolygon: public Drawable
 {
     int n_max_;
     int current_n_;
-//    std::vector<Triangle> triangles_;
     float color_[4];
 
     std::vector<Vector2D> interior_points;

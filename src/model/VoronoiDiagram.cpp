@@ -6,29 +6,6 @@
 #include "../util/VectorUtil.hpp"
 #include "../core/ServiceContainer.hpp"
 
-// TODO PSEUDO CODE: Voronoi Diagram.
-//
-// Let D be a Delaunay Mesh
-// For each vertex Qi of D
-// Create a polygon Pi
-// T = subset of triangles of D that have Qi as vertex
-//         E = left edge of T
-//         If E exists
-// Pi.add(Intersection points between the perpendicular bisectors
-//         of E and the border)
-// Else E=T.first
-// Einit = E
-// Do
-//         Pi.add(circumCenter of E)
-// Eprev = E
-// E = E.right neighbor
-//         While E exist and E !=Einit
-//         If E exists
-// Pi.add(Intersection points between the perpendicular bisectors of
-// The right edge of Eprev and the border)
-// Else E=T.first
-// Done
-
 VoronoiDiagram::VoronoiDiagram(MyPolygon& mesh): Drawable()
 {
     mesh.foreach_vertex([&mesh, this](Vector2D& vertex, unsigned int index) {
@@ -92,12 +69,6 @@ VoronoiDiagram::VoronoiDiagram(MyPolygon& mesh): Drawable()
             remove_triangle(*triangle, triangles);
             addCornerPoints(*polygon);
 //        }
-
-//        for (unsigned int i = 0; i < sizeof(polygon->tab_pts_); i++)
-//        {
-//            std::cout << polygon->tab_pts_[i];
-//        }
-//        std::cout << std::endl;
 
         push(*polygon);
     });
