@@ -49,8 +49,6 @@ VoronoiDiagram::VoronoiDiagram(MyPolygon& mesh): Drawable()
             Vector2D Q = intersection_with_borders(center, u, 0, 0, GlutWindow::getWindowWidth(), GlutWindow::getWindowHeight());
             std::cout << "Intersection with borders: " << Q << std::endl << std::endl;
 
-            // TODO Be careful, it doesn't add the point to << points_to_build_polygon_ >>
-            // TODO this means that the foreach method will not gives you the added point.
             add_point(Q, *polygon);
         }
         else
@@ -62,9 +60,6 @@ VoronoiDiagram::VoronoiDiagram(MyPolygon& mesh): Drawable()
 
         while (triangles.size() > 1)
         {
-            // TODO Be careful, it doens't add the point to << points_to_build_polygon_ >>
-            // TODO this means that the foreach method will not gives you the added point.
-
             add_point(triangle->circum_center_, *polygon);
             Triangle* previous_triangle = triangle;
 
@@ -73,24 +68,11 @@ VoronoiDiagram::VoronoiDiagram(MyPolygon& mesh): Drawable()
             remove_triangle(*previous_triangle, triangles);
         }
 
-        // TODO Is it useful?
+//         TODO Is it useful?
         add_point(triangle->circum_center_, *polygon);
 
             if (is_opened)
             {
-//                Vector2D* b = prev_vertex(*triangle, vertex);
-////                std::cout << "prev vertex: " << *b << std::endl;
-////
-////                Vector2D E = *b - vertex;
-////                std::cout << "prev edge: " << E << std::endl;
-//////                Vector2D center = Vector2D::center(vertex, *b);
-//////
-//////                Vector2D u = right_orthogonal_vector(E);
-//////                Vector2D Q = intersection_with_borders(center, u, 0, 0, GlutWindow::getWindowWidth(), GlutWindow::getWindowHeight());
-//////
-//////                // TODO Be careful, it doens't add the point to << points_to_build_polygon_ >>
-//////                // TODO this means that the foreach method will not gives you the added point.
-//////                add_point(Q, *polygon);
                 Vector2D* b = prev_vertex(*triangle, vertex);
                 Vector2D E = vertex - *b;
 
@@ -108,8 +90,6 @@ VoronoiDiagram::VoronoiDiagram(MyPolygon& mesh): Drawable()
                 Vector2D Q = intersection_with_borders(center, u, 0, 0, GlutWindow::getWindowWidth(), GlutWindow::getWindowHeight());
                 std::cout << "Intersection with borders: " << Q << std::endl << std::endl;
 
-                // TODO Be careful, it doesn't add the point to << points_to_build_polygon_ >>
-                // TODO this means that the foreach method will not gives you the added point.
                 add_point(Q, *polygon);
             }
 

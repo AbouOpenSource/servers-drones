@@ -212,43 +212,82 @@ void MyPolygon::set_color(const float t_color[4])
     memcpy(color_, t_color, 4 * sizeof(float));
 }
 
+//void MyPolygon::draw()
+//{
+////    if (triangles_.empty())
+////    {
+////        triangulation();
+////        interior_triangulation();
+////        solve_delaunay();
+////        check_delaunay();
+////    }
+//
+////    for (auto& triangle: triangles_)
+////    {
+////        triangle.draw();
+////    }
+//
+//    // Draw the number of points.
+//    glLineWidth(1);
+//    for (int i = 0; i < current_n_; i++)
+//    {
+//        glBegin(GL_LINES);
+//        glVertex2f(tab_pts_[i].x_ - 10, tab_pts_[i].y_ - 10);
+//        glVertex2f(tab_pts_[i].x_ + 10, tab_pts_[i].y_ + 10);
+//        glEnd();
+//
+//        glBegin(GL_LINES);
+//        glVertex2f(tab_pts_[i].x_ + 10, tab_pts_[i].y_ - 10);
+//        glVertex2f(tab_pts_[i].x_ - 10, tab_pts_[i].y_ + 10);
+//        glEnd();
+//
+//        GlutWindow::drawText(tab_pts_[i].x_ - 10, tab_pts_[i].y_, to_string(i), GlutWindow::ALIGN_RIGHT);
+//    }
+//
+//    // TODO
+//    for (Vector2D points: points_to_build_polygon_)
+//    {
+//        glColor3fv(RED);
+//        GlutWindow::fillEllipse(points.x_, points.y_, 2.5, 2.5);
+//    }
+//}
+
 void MyPolygon::draw()
 {
-//    if (triangles_.empty())
+    // Draw the number of points.
+//    glLineWidth(1);
+//    for (int i = 0; i < points_to_build_polygon_.size(); i++)
 //    {
-//        triangulation();
-//        interior_triangulation();
-//        solve_delaunay();
-//        check_delaunay();
+////        Vector2D* next_point = next_vertex(points_to_build_polygon_[i]);
+//
+//        glBegin(GL_LINES);
+//        glVertex2f(points_to_build_polygon_[i].x_ - 10, points_to_build_polygon_[i].y_ - 10);
+//        glVertex2f(points_to_build_polygon_[i].x_ + 10, points_to_build_polygon_[i].y_ + 10);
+//        glEnd();
+//
+//        glBegin(GL_LINES);
+//        glVertex2f(points_to_build_polygon_[i].x_ + 10, points_to_build_polygon_[i].y_ - 10);
+//        glVertex2f(points_to_build_polygon_[i].x_ - 10, points_to_build_polygon_[i].y_ + 10);
+//        glEnd();
+//
+//        GlutWindow::drawText(tab_pts_[i].x_ - 10, tab_pts_[i].y_, to_string(i), GlutWindow::ALIGN_RIGHT);
 //    }
 
-    for (auto& triangle: triangles_)
+//    // TODO
+    for (Vector2D& point: points_to_build_polygon_)
     {
-        triangle.draw();
-    }
+        Vector2D* next_point = next_vertex(point);
 
-    // Draw the number of points.
-    glLineWidth(1);
-    for (int i = 0; i < current_n_; i++)
-    {
+        glColor3fv(BLACK);
         glBegin(GL_LINES);
-        glVertex2f(tab_pts_[i].x_ - 10, tab_pts_[i].y_ - 10);
-        glVertex2f(tab_pts_[i].x_ + 10, tab_pts_[i].y_ + 10);
+        glVertex2f(point.x_, point.y_);
+        glVertex2f(next_point->x_, next_point->y_);
         glEnd();
 
-        glBegin(GL_LINES);
-        glVertex2f(tab_pts_[i].x_ + 10, tab_pts_[i].y_ - 10);
-        glVertex2f(tab_pts_[i].x_ - 10, tab_pts_[i].y_ + 10);
-        glEnd();
+//        glColor3fv(RED);
+//        GlutWindow::fillEllipse(point.x_, point.y_, 2.5, 2.5);
 
-        GlutWindow::drawText(tab_pts_[i].x_ - 10, tab_pts_[i].y_, to_string(i), GlutWindow::ALIGN_RIGHT);
-    }
-
-    // TODO
-    for (Vector2D points: points_to_build_polygon_)
-    {
-        glColor3fv(RED);
-        GlutWindow::fillEllipse(points.x_, points.y_, 2.5, 2.5);
+//        GlutWindow::fillEllipse(point.x_, point.y_, 2.5, 2.5);
     }
 }
 
@@ -565,7 +604,19 @@ std::ostream &operator<<(std::ostream &out, MyPolygon &polygon)
     return out;
 }
 
+Vector2D *MyPolygon::next_vertex(Vector2D &vertex)
+{
+    Vector2D* next_point(nullptr);
 
+    foreach_vertex([&next_point, &vertex, this](Vector2D& point, unsigned int index) {
+        if (point == vertex)
+        {
+            next_point = &tab_pts_[(index + 1) % points_to_build_polygon_.size()];
+        }
+    });
+
+    return next_point;
+}
 
 
 
