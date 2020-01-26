@@ -34,5 +34,5 @@ void DroneView::draw(DrawHelper* draw_helper)
     glPopMatrix();
     glDisable(GL_TEXTURE_2D);
     std::cout<< *drone_<< std::endl;
-    drone_->update_position();
+    drone_->update();
 }

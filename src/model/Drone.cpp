@@ -70,6 +70,7 @@ void Drone::set_acceleration(const Vector2D &acceleration)
 
 void Drone::set_forces(const Vector2D &forces)
 {
+
     forces_ = forces;
 }
 
@@ -87,6 +88,22 @@ void Drone::update_position()
 {
     current_position_ = current_position_ + speed_ / delta_time_;
 }
+void Drone::update_acceleration(){
+    acceleration_ = forces_ / weight_;
+}
+
+void Drone::update_forces(){
+    float dX=target_.x_ - current_position_.x_;
+    float dY=target_.y_ - current_position_.y_;
+    float distance = sqrt(dX*dX+dY*dY);
+    if(distance > 60)
+        forces_=Vector2D(target_.x_-current_position_.x_,target_.y_-current_position_.y_);
+}
+void Drone::update_speed(){
+    speed_ = 0.8*(speed_ + acceleration_);
+}
+
+
 
 void Drone::avoid_collision_with(Drone* drone)
 {
@@ -119,14 +136,14 @@ void Drone::avoid_collision_with(Drone* drone)
 float Drone::distance_from(Drone *item)
 {
     return sqrt(
-            item->current_position_.x_
-            - Drone::current_position_.x_
-            * item->current_position_.x_
-            - Drone::current_position_.x_
-            + item->current_position_.y_
-            - Drone::current_position_.y_
-            * item->current_position_.y_
-            - Drone::current_position_.y_
+            (item->current_position_.x_
+            - Drone::current_position_.x_)
+            * (item->current_position_.x_
+            - Drone::current_position_.x_)
+            + (item->current_position_.y_
+            - Drone::current_position_.y_)
+            * (item->current_position_.y_
+            - Drone::current_position_.y_)
     );
 }
 
@@ -138,7 +155,12 @@ std::ostream &operator<<(std::ostream &os, const Drone &dt)
 
 void Drone::add_target(Vector2D item)
 {
-
+    target_=item;
 }
 
-
+void Drone::update(){
+    this->update_forces() ;
+    this->update_acceleration();
+    this->update_speed();
+    this->update_position();
+}

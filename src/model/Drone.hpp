@@ -64,6 +64,14 @@ public:
 
     friend std::ostream& operator<<(std::ostream& os, const Drone& dt);
 
+    void update();
+
+    void update_acceleration();
+
+    void update_forces();
+
+    void update_speed();
+
 private:
 
     int delta_time_;
@@ -77,6 +85,10 @@ private:
     Vector2D speed_;
     Vector2D acceleration_;
     Vector2D forces_;
+    Vector2D target_;
+
+
+
 };
 
 
