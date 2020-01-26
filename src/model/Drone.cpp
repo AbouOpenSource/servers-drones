@@ -16,6 +16,9 @@ Drone::Drone(const Vector2D &current_position, const Vector2D &forces, float wei
 }
 
 
+
+
+
 Drone::Drone(const Vector2D &current_position, const Vector2D &speed, const Vector2D &acceleration,
              Vector2D forces, float weight, std::string id) : current_position_(
         current_position), speed_(speed), acceleration_(acceleration), forces_(forces), weight_(weight), id_(id)
@@ -69,35 +72,12 @@ void Drone::set_weight(float weight)
     Drone::weight_ = weight;
 }
 
-void Drone::update_position()
-{
-    temps+=0.1;
-
-   // if(temps>10)
-     //   target_is_get=true;
-
-
-    if(!target_is_get)
-
-        current_position_ = current_position_ + speed_ ;
-/**
- * Pour un mouvement circulaire
- */
-if(target_is_get){
-
-    int radius = 100;
-    float w = 1;
-    float thetaZero=0;
-    current_position_.x_ = radius* cos(w*temps+thetaZero);
-    current_position_.y_ = radius* sin(w*temps+thetaZero);
-}
-}
 
 void Drone::avoid_collision_with(Drone *ptrDrone)
 {
+    std::cout<<"Collision"<<std::endl;
+
     //TODO define the force to avoid the collison with the drone passing in args
-
-
     int ForceMAX = 200;
     float dAB = Drone::distance_with_other_drone(*ptrDrone);
     Vector2D BA =  Vector2D(
@@ -109,6 +89,7 @@ void Drone::avoid_collision_with(Drone *ptrDrone)
     if (dAB < 48 ) {
         Vector2D forceBA = ForceMAX * (BA / dAB);
         forces_=forceBA;
+        //update_forces();
         update_acceleration();
         update_speed();
 
@@ -117,6 +98,7 @@ void Drone::avoid_collision_with(Drone *ptrDrone)
         {
             Vector2D forceBA = (ForceMAX * (BA/dAB)) *   ((dAB- 96)/(48-96));
             forces_=forceBA;
+            //update_forces();
             update_acceleration();
             update_speed();
         }
@@ -149,7 +131,8 @@ std::ostream &operator << (std::ostream &os, const Drone &dt)
 
 void Drone::addGoal(const Vector2D& item)
 {
-    speed_= item+ speed_;
+   // speed_= item+ speed_;
+    target= item;
 }
 
 /**
@@ -202,14 +185,6 @@ void Drone::check_border(){
     }
 }
 
-void Drone::update_speed(){
-if(speed_.x_>10)
-    acceleration_.x_=0;
-if(speed_.y_>10)
-    acceleration_.y_=0;
-    speed_ = (speed_ + acceleration_);
-
-}
 
 void Drone::update_acceleration()
 {
@@ -230,6 +205,49 @@ if (target_is_get){
 
 }
 
-void assign_to_the_server(std::string name){
+void Drone::update_speed(){
+
+    speed_ = 0.8*(speed_ + acceleration_);
 
 }
+void Drone::update_position()
+{
+    temps+=0.1;
+
+
+
+    if(!target_is_get)
+
+        current_position_ = current_position_ + speed_ ;
+/**
+ * Pour un mouvement circulaire
+ */
+    if(target_is_get){
+        int radius = 100;
+        float w = 1;
+        float thetaZero=1000;
+        current_position_.x_ = radius* cos(w*temps+thetaZero);
+        current_position_.y_ = radius* sin(w*temps+thetaZero);
+    }
+}
+
+void Drone::update_forces(){
+
+    float dX=target.x_ - current_position_.x_;
+    float dY=target.y_ - current_position_.y_;
+        float distance = sqrt(dX*dX+dY*dY);
+        if(distance > 60)
+        forces_=Vector2D(target.x_-current_position_.x_,target.y_-current_position_.y_);
+}
+
+void Drone::assign_to_the_server(int serverId)
+{
+    this->serverId=serverId;
+}
+
+void Drone::i_get_target(bool value)
+{
+    target_is_get=true;
+}
+
+

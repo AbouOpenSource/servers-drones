@@ -115,28 +115,35 @@ int main(int argc, char** argv)
     Circumscribe circumscribe(servers);
     // ce qe Abou a ajouté dans le main
 
-    //Drone *drone = new Drone(Vector2D(500,500),Vector2D(10,10),Vector2D(15,15),Vector2D(10,10),1);
-    Vector2D forces = Vector2D(1000,10) -Vector2D(0,0);
-    forces= forces.unitaire();
-    Drone *drone = new Drone(Vector2D(0,0), forces,10);
-    Drone *drone1 = new Drone(Vector2D(500,0), Vector2D(-1,-1),100);
-    Drone *drone2 = new Drone(Vector2D(0,400), Vector2D(-1,-1),100);
+   // Drone *drone = new Drone(Vector2D(500,500),Vector2D(10,10),Vector2D(15,15),Vector2D(10,10),1);
+   Vector2D forces = Vector2D(500-0,500-0);
+   forces.normalize();
+   forces=forces*5;
+   Drone *drone = new Drone(Vector2D(0,0), forces,10);
+   drone->addGoal(Vector2D(500,500));
+
+    Drone *drone1 = new Drone(Vector2D(1000,1000), forces,10);
+    drone1->addGoal(Vector2D(500,500));
+
+    //Drone *drone1 = new Drone(Vector2D(500,0), Vector2D(-1,-1),100);
+  /* Drone *drone2 = new Drone(Vector2D(0,400), Vector2D(-1,-1),100);
     Drone *drone3 = new Drone(Vector2D(500,400), Vector2D(-1,-1),100);
     Drone *drone4 = new Drone(Vector2D(100,100), Vector2D(-1,-1),100);
-
+*/
     //Server *server = new Server("Ouaga",Vector2D(0,0), "RED");
 
     DroneDrawable drone_drawable(drone);
     DroneDrawable drone_drawable1(drone1);
-    DroneDrawable drone_drawable2(drone2);
-    DroneDrawable drone_drawable3(drone3);
-    DroneDrawable drone_drawable4(drone4);
+
+   // DroneDrawable drone_drawable2(drone2);
+    //DroneDrawable drone_drawable3(drone3);
+   // DroneDrawable drone_drawable4(drone4);
 
 
 
     katmandou.connectDrone(drone);
-    //katmandou.connectDrone(drone1);
-    //katmandou.connectDrone(drone2);
+    katmandou.connectDrone(drone1);
+   // katmandou.connectDrone(drone2);
     //katmandou.connectDrone(drone3);
     //katmandou.connectDrone(drone4);
 
@@ -147,16 +154,16 @@ int main(int argc, char** argv)
 
 
     window.addDrawable(&drone_drawable);
-  //  window.addDrawable(&drone_drawable1);
-   // window.addDrawable(&drone_drawable2);
+    window.addDrawable(&drone_drawable1);
+    //window.addDrawable(&drone_drawable2);
    // window.addDrawable(&drone_drawable3);
-    //window.addDrawable(&drone_drawable4);
+   // window.addDrawable(&drone_drawable4);
 
 
 
     window.addDrawable(&server_drawable);
 
-window.start();
+   window.start();
 
     return 0;
 }

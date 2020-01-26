@@ -10,21 +10,11 @@ Server::Server(std::string& name, Vector2D &current_position, std::string color)
     : name_(name),
     current_position_(current_position),
     color_(color),
-    raduisDeCollision(48),
+    raduisDeCollision(75),
     desiredNumberOfDrones(0),
-    dMax(96)
+    dMax(150)
 {
 }
-
-//Server::Server(std::string& name, Vector2D &current_position, Color color)
-//        : name_(name),
-//          current_position_(current_position),
-//          color_(color),
-//          raduisDeCollision(0),
-//          desiredNumberOfDrones(0),
-//          dMax(0)
-//{
-//}
 
 Server::Server(
         const Vector2D &speed,
@@ -69,10 +59,8 @@ void Server::detectCollision()
 
     //TODO i want some this thing like constant for the size of windows
         if(!the_drone_.empty()){
-
             for(int i = 0; the_drone_.size() > i; i++){
                 //TODO make more test to check if i get the right values
-
                 Position center = Position(the_drone_.at(i)->get_current_position().x_,
                                            the_drone_.at(i)->get_current_position().y_);
                 Circle zone =Circle(center,Server::getRaduisDeCollision());
@@ -82,24 +70,13 @@ void Server::detectCollision()
                             Position otherCenter =Position(the_drone_.at(j)->get_current_position().x_,
                                                         the_drone_.at(j)->get_current_position().y_);
                             Circle otherZone =Circle(otherCenter,Server::getRaduisDeCollision());
-
-                      /*  std::cout<<"otherCenter x"<<otherCenter.get_x()<<std::endl;
-                        std::cout<<"otherCenter y"<<otherCenter.get_y()<<std::endl;
-
-                        std::cout<<"second otherCenter x"<<center.get_x()<<std::endl;
-                        std::cout<<"second otherCenter y"<<center.get_y()<<std::endl;
-*/
-
-
                         if(zone.touch_with_other(otherZone)){
-                           std::cout<<"The collision"<<std::endl;
+                            std::cout<<"The collision"<<std::endl;
                             the_drone_.at(i)->avoid_collision_with(the_drone_.at(j));
                             }
                         }
                 }
-
-                the_drone_.at(i)->check_border();
-
+                //the_drone_.at(i)->check_border();
             }
         }
 }

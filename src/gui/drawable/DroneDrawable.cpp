@@ -43,8 +43,24 @@ void DroneDrawable::draw()
     glVertex2f(0.0,96.0);
     glEnd();
     glPopMatrix();
+    GlutWindow::drawText(drone_->get_current_position().x_, drone_->get_current_position().y_, "speed : x= " +to_string( drone_->get_speed().x_)+" y= "+to_string(drone_->get_speed().y_), GlutWindow::ALIGN_RIGHT, GLUT_BITMAP_8_BY_13);
     glDisable(GL_TEXTURE_2D);
+    float deltax=(drone_->target.x_ - drone_->get_current_position().x_);
+    float deltay=(drone_->target.y_ - drone_->get_current_position().y_);
+    float distance =sqrt(deltax*deltax+deltay*deltay);
+/*
+    if(distance<20){
+        drone_->set_forces(Vector2D(0,0));
+        drone_->i_get_target(true);
+ }
+    if(distance<10){
+        drone_->i_get_target(true);
+    }
+*/
+
     update_position();
+
+
 }
 
 void DroneDrawable::quit()
@@ -59,6 +75,7 @@ void DroneDrawable::avoid_collision_with_drone(Drone *item)
 
 void DroneDrawable::update_position()
 {
+    drone_->update_forces();
     drone_->update_acceleration();
     drone_->update_speed();
     drone_->update_position();

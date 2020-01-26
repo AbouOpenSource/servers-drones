@@ -52,6 +52,7 @@ public:
 
     Drone(const Vector2D &current_position, const Vector2D &forces, float weight);
 
+    void i_get_target(bool value);
     void addGoal(const Vector2D& item);
 
     void update_speed();
@@ -68,6 +69,8 @@ private:
     Vector2D speed_;
     Vector2D acceleration_;
     Vector2D forces_;
+public:
+    Vector2D target;
     float weight_;
     float temps=int(0);
     int delta_time = int(1);
@@ -75,6 +78,12 @@ private:
     int serverId = 0;
 
     bool target_is_get= bool(false);
+
+    void update_forces();
+
+    void assign_to_the_server(int name);
+
+    void i_get_target();
 };
 
 
