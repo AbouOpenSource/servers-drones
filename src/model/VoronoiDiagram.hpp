@@ -23,6 +23,8 @@ private:
 
     Vector2D* next_vertex(Triangle& triangle, Vector2D& vertex);
 
+    Vector2D* next_vertex(MyPolygon& polygon, Vector2D& vertex);
+
     Vector2D *next_edge(Triangle triangle, Vector2D vertex);
 
     Vector2D *prev_edge(Triangle triangle, Vector2D vertex);
