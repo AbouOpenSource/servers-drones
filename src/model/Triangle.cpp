@@ -168,7 +168,7 @@ void Triangle::draw_circle() {
     }
 }
 
-std::ostream &operator<<(std::ostream &out, const Triangle &triangle)
+std::ostream &operator<<(std::ostream &out, Triangle &triangle)
 {
     out << "Triangle | ptr0: " << *triangle.ptr_[0] << " ptr1: " << *triangle.ptr_[1] <<" ptr2: " << *triangle.ptr_[2] << std::endl;
     return out;

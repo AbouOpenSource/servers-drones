@@ -8,18 +8,21 @@
 MyPolygon::MyPolygon()
     : tab_pts_{new Vector2D[100]},
       n_max_{100},
-      current_n_{0}
+      current_n_{0},
+      points_to_build_polygon_()
 {
-    points_to_build_polygon_.resize(15);
+//    points_to_build_polygon_.resize(15);
+
     set_color(YELLOW);
 }
 
 MyPolygon::MyPolygon(int p_max)
         : tab_pts_{new Vector2D[p_max]},
           n_max_{p_max},
-          current_n_{0}
+          current_n_{0},
+        points_to_build_polygon_()
 {
-    points_to_build_polygon_.resize(100);
+//    points_to_build_polygon_.resize(100);
     set_color(YELLOW);
 }
 
@@ -179,11 +182,7 @@ bool MyPolygon::add_vertex(Vector2D &p)
     tab_pts_[current_n_++] = p;
     tab_pts_[current_n_] = tab_pts_[0];
 
-//    points_to_build_polygon_.resize(50);
-//    points_to_build_polygon_.push_back(p);
-
-//    VectorUtil::print_1D_vector(points_to_build_polygon_);
-//    std::cout << "ok";
+    points_to_build_polygon_.push_back(p);
 
     return true;
 }
@@ -252,6 +251,16 @@ void MyPolygon::draw()
         GlutWindow::fillEllipse(points.x_, points.y_, 2.5, 2.5);
     }
 }
+
+//void MyPolygon::draw()
+//{
+//     TODO
+//    for (unsigned int i = 0; i < current_n_; i++)
+//    {
+//        glColor3fv(RED);
+//        GlutWindow::fillEllipse(tab_pts_[i].x_, tab_pts_[i].y_, 2.5, 2.5);
+//    }
+//}
 
 vector<float> MyPolygon::intersect(const Vector2D& a, const Vector2D& u, const Vector2D& p, const Vector2D& q)
 {
@@ -415,6 +424,9 @@ void MyPolygon::flip(Triangle* current, Triangle* neighbor)
     }
 
     current->ptr_[index_common_points_current[0]] = neighbor->ptr_[index_no_common_points_neighbor];
+
+    current->calculate_circle();
+    neighbor->calculate_circle();
 }
 
 void MyPolygon::triangulation()

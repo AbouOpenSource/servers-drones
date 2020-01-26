@@ -24,6 +24,8 @@ public :
 
     static Vector2D center(const Vector2D& point1, const Vector2D& point2);
 
+    static Vector2D center(Vector2D& vector);
+
     void set(float p_x, float p_y);
 
     void normalize();
@@ -41,7 +43,7 @@ public :
 
     friend Vector2D operator*(float a, const Vector2D &v);
 
-    friend std::ostream &operator<<(std::ostream &out, const Vector2D &vector);
+    friend std::ostream &operator<<(std::ostream &out, Vector2D &vector);
 
     friend bool operator==(const Vector2D& vector1, const Vector2D& vector2);
 

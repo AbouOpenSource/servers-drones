@@ -69,7 +69,7 @@ public:
     /********** Operator overloading **********/
     friend bool operator==(Triangle& triangle1, Triangle& triangle2);
 
-    friend std::ostream &operator<<(std::ostream &out, const Triangle &triangle);
+    friend std::ostream &operator<<(std::ostream &out, Triangle &triangle);
 };
 
 #endif //DRONEPROJECT_TRIANGLE_HPP

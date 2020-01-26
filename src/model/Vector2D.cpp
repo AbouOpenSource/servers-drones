@@ -55,6 +55,11 @@ Vector2D Vector2D::center(const Vector2D &vertex1, const Vector2D &vertex2)
     return (vertex1 + vertex2) / 2;
 }
 
+//Vector2D Vector2D::center(const Vector2D &vector)
+//{
+//    return Vector2D();
+//}
+
 Vector2D Vector2D::operator-(const Vector2D &op2) const
 {
     return Vector2D(x_ - op2.x_, y_ - op2.y_);
@@ -81,7 +86,7 @@ Vector2D operator*(float a, const Vector2D &v)
     return Vector2D(v.x_ / divisor,v.y_ / divisor);
 }
 
-std::ostream &operator<<(std::ostream &out, const Vector2D &vector)
+std::ostream &operator<<(std::ostream &out, Vector2D &vector)
 {
     out << "Vector2D | x: " << vector.x_ << ", y: " << vector.y_;
     return out;

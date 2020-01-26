@@ -33,7 +33,7 @@ private:
 
     Triangle* right_neighbor(MyPolygon& mesh, Triangle& triangle, Vector2D& a);
 
-    Triangle* left_triangle(std::vector<Triangle> triangles, Vector2D& vertex);
+    Triangle* left_triangle(std::vector<Triangle>& triangles, Vector2D& vertex);
 
     void add_point(Vector2D A, MyPolygon& polygon);
 
@@ -41,9 +41,11 @@ private:
 
     void remove_triangle(Triangle &triangle, vector<Triangle> &triangles);
 
-    void addCornerPoints(MyPolygon& polygon);
+    void add_corner_points(MyPolygon& polygon);
 
     void push(MyPolygon& polygon);
+
+    float min(float x0, float y0, float x1, float y1);
 };
 
 

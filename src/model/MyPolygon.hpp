@@ -16,21 +16,21 @@
 
 class MyPolygon: public Drawable
 {
-    int n_max_;
-    int current_n_;
-    float color_[4];
-
-    std::vector<Vector2D> interior_points;
-
 private:
     /********** typedef **********/
     typedef std::function<void(Vector2D& point, unsigned int index)> VertexCallback;
 
 public:
+    int n_max_;
+    int current_n_;
+    float color_[4];
     Vector2D* tab_pts_;
+
     std::vector<Vector2D> points_to_build_polygon_;
 //    std::vector<Vector2D*> tab_pts_;
     std::vector<Triangle> triangles_;
+    std::vector<Vector2D> interior_points;
+
 
     /********** Constructor & destructor **********/
     MyPolygon();

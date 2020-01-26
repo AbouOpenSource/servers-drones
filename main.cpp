@@ -105,7 +105,7 @@ int main(int argc, char** argv)
     Circumscribe circumscribe(servers);
 
     window.addDrawable(&circumscribe);
-//    window.addDrawable(&convex_polygon);
+    window.addDrawable(&convex_polygon);
     window.addDrawable(&voronoi_diagram);
     window.start();
 
