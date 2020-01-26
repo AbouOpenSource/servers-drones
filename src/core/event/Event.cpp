@@ -6,3 +6,8 @@
 
 Event::Event(const std::string &name): name_(name)
 {}
+
+const std::string &Event::get_name() const
+{
+    return name_;
+}

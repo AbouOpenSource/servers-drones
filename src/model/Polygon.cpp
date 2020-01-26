@@ -14,8 +14,8 @@ void Polygon::init(std::vector<Server>& servers)
 {
     std::vector<Vector2D> points;
 
-    for (const Server& server: servers) {
-        points.push_back(server.get_position());
+    for (Server& server: servers) {
+        points.push_back(Vector2D(server.get_position()));
     }
 
 //    std::cout << "\n";

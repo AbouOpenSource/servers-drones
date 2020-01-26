@@ -34,14 +34,13 @@ float Circle::area()
 
 float Circle::distance_from(Circle *item)
 {
-
     return sqrt(
             center_.get_x() - item->center_.get_x() * center_.get_x() - item->center_.get_x() +
             center_.get_y() - item->center_.get_y() * center_.get_y() - item->center_.get_y()
     );
 }
 
-bool Circle::touch_from(Circle *item)
+bool Circle::touch_with(Circle *item)
 {
     return distance_from(item) < item->get_radius() + get_radius();
 }

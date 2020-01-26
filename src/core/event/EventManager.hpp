@@ -10,6 +10,7 @@
 #include <vector>
 #include "Event.hpp"
 #include "../service/ServiceProvider.hpp"
+#include "../../util/TypeUtil.hpp"
 
 class EventManager: public ServiceProvider
 {
@@ -18,7 +19,7 @@ public:
 
     static std::string SERVICE;
 
-    typedef std::function<void(Event*)> Subscription;
+    typedef std::function<void(Event*, TypeUtil::Callback unsubscribe)> Subscription;
 
     EventManager();
 
@@ -28,7 +29,7 @@ public:
 
 private:
 
-    std::vector<Subscription> get_subscriptions_for(const std::string& event_type);
+    std::vector<Subscription>& get_subscriptions_for(const std::string& event_type);
 
     std::map<std::string, std::vector<Subscription>> subscriptions_;
 

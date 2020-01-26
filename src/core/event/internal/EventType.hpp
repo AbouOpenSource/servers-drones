@@ -10,6 +10,9 @@
 
 class EventType
 {
+
+public:
+
     static std::string CHANGE_SERVER_COLOR;
     static std::string CLEAR_SELECTION;
     static std::string DELETE_SELECTED_SERVER;
@@ -17,6 +20,7 @@ class EventType
     static std::string ADD_SERVER_TO_POSITION;
     static std::string ADD_SERVER_TO_BEGIN;
     static std::string SAVE_CONFIG_STATE;
+    static std::string FRAME_UPDATE;
 };
 
 

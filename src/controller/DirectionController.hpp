@@ -6,27 +6,65 @@
 #define DRONEPROJECT_DIRECTIONCONTROLLER_HPP
 
 
-#include "CollisionController.hpp"
 #include "../model/Drone.hpp"
+#include "../core/service/ServiceContainer.hpp"
+#include "../core/event/internal/EventType.hpp"
 
-class DirectionController
+#define MAX_FORCE 200
+
+class DirectionController: public ServiceProvider
 {
 
 public:
 
-    struct MoveOptions {
-        const Position& target = {0, 0};
-        const Vector2D& forces = {150000,150000};
-        const Vector2D& speed = {};
-        const Vector2D& acceleration = {};
-        float weight{10};
+    static std::string SERVICE;
+
+    struct MoveData {
+        int delta_time = 1;
+        int radius = 100;
+        float weight = 10;
+        float temps = 0;
+        float w = 1;
+        float theta_zero = 1000;
+        float dx = 0;
+        float dy = 0;
+        float distance = 0;
+        bool target_reached = false;
+        bool circular_mode = false;
+        Vector2D forces = {150000,150000};
+        Vector2D acceleration = forces / weight;
+        Vector2D speed = acceleration / (float) delta_time;
+        Vector2D target = {0, 0};
+    };
+
+    struct DroneData {
+        MoveData data;
+        TypeUtil::Callback callback;
     };
 
     DirectionController();
 
-    void move_drone(Drone* drone, MoveOptions move_options);
+    void set_drone_target(Drone* drone, const Vector2D& target);
+
+    void prevent_collision_between_drones(Drone* d1, Drone* d2);
+
+    float get_distance_between_drones(Drone* d1, Drone* d2) const;
+
+    MoveData* get_instant_movement_for_drone(Drone* drone);
 
 private:
+
+    void ensure_map_contains(Drone* drone);
+
+    void update_acceleration_of_drone(Drone* drone);
+
+    void update_forces_of_drone(Drone* drone);
+
+    void update_position_of_drone(Drone* drone);
+
+    void update_speed_of_drone(Drone* drone);
+
+    std::map<Drone*, DroneData> drone_data_;
 
 };
 

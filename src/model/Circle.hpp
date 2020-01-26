@@ -27,7 +27,7 @@ public:
 
     float distance_from(Circle* item);
 
-    bool touch_from(Circle* item);
+    bool touch_with(Circle* item);
 
 private:
 

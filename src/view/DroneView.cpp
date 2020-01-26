@@ -3,7 +3,6 @@
 //
 
 #include "DroneView.hpp"
-#include <iostream>
 
 DroneView::DroneView(Drone *drone): TextureView("drone"), drone_(drone)
 {}
@@ -20,7 +19,7 @@ void DroneView::draw(DrawHelper* draw_helper)
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, texture_id_);
     glPushMatrix();
-    glTranslatef(drone_->get_current_position().x_,drone_->get_current_position().y_,1.0);
+    glTranslatef(drone_->get_position().x_, drone_->get_position().y_, 1.0);
     glBegin(GL_QUADS);
     glTexCoord2f(0.0,0.0);
     glVertex2f(0.0,0.0);
@@ -33,6 +32,4 @@ void DroneView::draw(DrawHelper* draw_helper)
     glEnd();
     glPopMatrix();
     glDisable(GL_TEXTURE_2D);
-    std::cout<< *drone_<< std::endl;
-    drone_->update_position();
 }

@@ -15,6 +15,9 @@ protected:
 
     Event(const std::string& name);
 
+public:
+    const std::string &get_name() const;
+
 private:
 
     std::string name_;

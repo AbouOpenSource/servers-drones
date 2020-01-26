@@ -8,6 +8,7 @@
 #include "../core/io/reader/FileStream.hpp"
 #include "../util/StringUtil.hpp"
 #include "../util/VectorUtil.hpp"
+#include "../model/Circle.hpp"
 
 std::string ServerController::SERVICE = "ServerService";
 
@@ -17,14 +18,13 @@ ServerController::ServerController()
     server_view_({}),
     drone_view_({}),
     server_drone_count_({}),
-    drone_id_incrementer_(0),
-    collision_controller_({}),
-    direction_controller_({})
+    drone_id_incrementer_(0)
 {
     ServiceContainer* container = ServiceContainer::get_instance();
 
     event_manager_ = (EventManager *) container->get_service(EventManager::SERVICE);
     window_ = (Window *) container->get_service(Window::SERVICE);
+    direction_controller_ = (DirectionController*) ServiceContainer::get_instance()->get_service(DirectionController::SERVICE);
     auto* input_manager = (InputManager *) container->get_service(InputManager::SERVICE);
 
     input_manager->register_key_press_listener(on_key_pressed());
@@ -42,8 +42,26 @@ Server* ServerController::find_server_by_name(const std::string& server_name)
     return nullptr;
 }
 
+Drone* ServerController::find_drone_by_id(const int drone_id)
+{
+    for (Drone& drone: drones_) {
+        if (drone.get_id() == drone_id) {
+            return &drone;
+        }
+    }
+    return nullptr;
+}
+
 Server * ServerController::get_server_at(Position position)
 {
+    Circle zone(position, 100);
+    for (Server& server: servers_) {
+        Position server_position(server.get_position().x_, server.get_position().y_);
+        Circle server_zone(server_position, 100);
+        if (zone.touch_with(&server_zone)) {
+            return &server;
+        }
+    }
     return nullptr;
 }
 
@@ -116,16 +134,17 @@ void ServerController::attach_drone_to_server(Drone *drone, Server *server)
     }
     drone->set_server_name(server->get_name());
     server_drone_count_[server]++;
+    direction_controller_->set_drone_target(drone, server->get_position());
 }
 
 void ServerController::detach_drone_from_server(Drone *drone)
 {
-    if (drone->get_server_name() == "") {
+    if (drone->get_server_name().empty()) {
         return;
     }
     auto* server = find_server_by_name(drone->get_server_name());
     server_drone_count_[server]--;
-    drone->set_server_name(nullptr);
+    drone->set_server_name("");
 }
 
 void ServerController::delete_server(Server *server)
@@ -186,12 +205,8 @@ void ServerController::load_last_state(const TypeUtil::Callback& on_loaded)
                 Server server(name, area_color);
 
                 string x_string = StringUtil::trim(position[0]);
-
-                // TODO change the namespace of the string_cast_to method. Put it in StringUtil instead of VectorUtil.
-                auto x = VectorUtil::string_cast_to<float>(x_string);
-                auto y = VectorUtil::string_cast_to<float>(position[1]);
-                Vector2D server_pos(x, y);
-                server.set_current_position(server_pos);
+                server.get_position().x_ = VectorUtil::string_cast_to<float>(x_string);
+                server.get_position().y_ = VectorUtil::string_cast_to<float>(position[1]);
 
                 add_server(server);
             }

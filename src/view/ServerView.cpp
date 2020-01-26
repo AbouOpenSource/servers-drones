@@ -4,7 +4,7 @@
 
 #include "ServerView.hpp"
 
-ServerView::ServerView(Server *server): TextureView("drone"), server_(server)
+ServerView::ServerView(Server *server): TextureView("earth"), server_(server)
 {}
 
 void ServerView::start()

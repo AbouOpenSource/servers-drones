@@ -22,7 +22,7 @@ public:
 
 private:
 
-    Server* server_{};
+    Server* server_;
 };
 
 

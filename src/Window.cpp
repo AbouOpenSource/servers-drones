@@ -5,6 +5,8 @@
 #include "Window.hpp"
 #include "core/service/ServiceContainer.hpp"
 #include "util/VectorUtil.hpp"
+#include "core/event/internal/EventType.hpp"
+#include "core/event/internal/FrameUpdateEvent.hpp"
 
 std::string Window::SERVICE = "WindowService";
 
@@ -29,6 +31,8 @@ void Window::onStart()
 
 void Window::onDraw()
 {
+    FrameUpdateEvent event(this);
+    event_manager_->publish(EventType::FRAME_UPDATE, &event);
     for (auto & view : views_) {
         view->draw(&draw_helper_);
     }

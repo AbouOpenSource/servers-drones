@@ -18,7 +18,6 @@
 #include "../view/DroneView.hpp"
 #include "../view/ServerView.hpp"
 #include "../Window.hpp"
-#include "CollisionController.hpp"
 #include "DirectionController.hpp"
 
 class ServerController: public ServiceProvider
@@ -31,6 +30,8 @@ public:
     ServerController();
 
     Server* find_server_by_name(const std::string& server_name);
+
+    Drone* find_drone_by_id(int drone_id);
 
     Server* get_server_at(Position position);
 
@@ -80,9 +81,7 @@ private:
 
     EventManager* event_manager_;
 
-    CollisionController collision_controller_;
-
-    DirectionController direction_controller_;
+    DirectionController* direction_controller_;
 
     std::vector<Server> servers_;
 
