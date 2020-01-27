@@ -78,7 +78,7 @@ Vector2D operator * (float a, const Vector2D &v)
 
  Vector2D operator/ ( const Vector2D &v,float divisor)
 {
-    return Vector2D(v.x_/divisor,v.x_/divisor);
+    return Vector2D(v.x_/divisor,v.y_/divisor);
 }
 
 std::ostream &operator<<(std::ostream &out, const Vector2D &vector)
