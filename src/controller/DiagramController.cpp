@@ -28,3 +28,8 @@ DiagramController::DiagramController(): ServiceProvider(DiagramController::SERVI
 
     event_manager->subscribe(EventType::SERVER_READY, server_ready);
 }
+
+map<Polygon *, Server *> &DiagramController::get_polygon_server()
+{
+    return polygon_server_;
+}

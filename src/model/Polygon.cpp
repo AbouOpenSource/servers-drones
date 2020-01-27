@@ -7,6 +7,7 @@
 #include "../util/VectorUtil.hpp"
 #include "../core/service/ServiceContainer.hpp"
 #include "../controller/ServerController.hpp"
+#include "../controller/DiagramController.hpp"
 
 Polygon::Polygon()
         : tab_pts_{new Vector2D[100]},
@@ -299,10 +300,17 @@ bool Polygon::add_vertex(Vector2D &p)
 // Complexity is N because for each edge and there is N edges.
 bool Polygon::is_inside(const Vector2D& p)
 {
+
+    return is_inside_left(p) || is_in_side_right(p);
+}
+
+
+
+bool Polygon::is_inside_left(const Vector2D &p) {
     int i = 0;
-//    while (i < current_n_ && is_on_the_left(p, i))
-    while (i < current_n_ && is_on_the_left(p, i))
+    while (i < current_n_ && is_on_the_left(p, i)) {
         i++;
+    }
 
     return i == current_n_;
 }
@@ -639,30 +647,27 @@ Vector2D *Polygon::next_vertex(Vector2D &vertex)
 
 void Polygon::draw(View::DrawHelper* draw_helper)
 {
-    std::string color;
+    // Fetch server of the polygon.
+    ServiceContainer *service_container = ServiceContainer::get_instance();
+    auto *diagram_controller = (DiagramController *) service_container->get_service(DiagramController::SERVICE);
 
-    glDisable(GL_TEXTURE_2D);
-    for (Server* server: servers_)
-    {
-        // TODO is_inside not always working?
-        if (is_inside(server->get_position())) {
-            color = server->get_color();
-        }
-    }
-    glColor3fv(draw_helper->get_color(color));
+    map<Polygon *, Server *> polygon_server = diagram_controller->get_polygon_server();
+    Server *server = polygon_server[this];
+    std::cout << "SERVER: " << server->get_name() << std::endl;
+
+    glColor3fv(draw_helper->get_color(server->get_color()));
 
     glBegin(GL_POLYGON);
-    for (Vector2D& point: get_points_to_build_polygon())
-    {
+    for (Vector2D &point: get_points_to_build_polygon()) {
         glVertex2f(point.x_, point.y_);
     }
     glEnd();
 
     // TODO Issue when we add more servers.
     glColor3fv(BLACK);
-    for (Vector2D& point: points_to_build_polygon_)
+    for (Vector2D &point: points_to_build_polygon_)
     {
-        Vector2D* next_point = next_vertex(point);
+        Vector2D *next_point = next_vertex(point);
 
         glLineWidth(3);
         glBegin(GL_LINES);
@@ -731,3 +736,17 @@ vector<Vector2D> &Polygon::get_points_to_build_polygon()
 //        t++;
 //    }
 //}
+
+bool Polygon::is_on_the_right(const Vector2D &p, int i) {
+    Vector2D u = tab_pts_[i + 1] - tab_pts_[i],
+            v = p - tab_pts_[i];
+    return cross_product(u, v) <= 0;
+}
+
+bool Polygon::is_in_side_right(const Vector2D &p) {
+    int i = 0;
+    while (i < current_n_ && is_on_the_right(p, i)) {
+        i++;
+    }
+    return i == current_n_;
+}

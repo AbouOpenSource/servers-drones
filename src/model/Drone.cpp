@@ -35,7 +35,7 @@ Drone::MoveData &Drone::get_move_data()
 
 std::ostream &operator<<(std::ostream &os, const Drone &dt)
 {
-    os << "Drone(" << dt.id_ << ") :" << dt.position_.x_ << '/' << dt.position_.y_ << '/';
+//    os << "Drone(" << dt.id_ << ") :" << dt.position_.x_ << '/' << dt.position_.y_ << '/';
     return os;
 }
 

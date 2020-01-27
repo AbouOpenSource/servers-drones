@@ -60,7 +60,7 @@ private:
 
     void add_corner_points(Polygon& polygon);
 
-    void push(Polygon& polygon);
+    void push(Polygon* polygon);
 
     float min(float x0, float y0, float x1, float y1);
 };
