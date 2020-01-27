@@ -7,20 +7,44 @@
 
 #include "Vector2D.hpp"
 #include "determinant.hpp"
+#include "../util/TypeUtil.hpp"
+#include "../view/View.hpp"
 
-class Triangle {
+class Triangle
+{
 
 public:
 
+    Vector2D *ptr_[3];
+
+    typedef std::function<void(Vector2D* point, unsigned int index)> PointCallback;
+
+    /********** Constructor & destructor **********/
+    Triangle();
+
+    Triangle(Triangle* toCopy);
+
     Triangle(Vector2D *ptr1, Vector2D *ptr2, Vector2D *ptr3);
 
-    //bool is_equilateral() {
-    //  return true;
-    //}
+    /********** Capacity **********/
+    bool is_empty();
 
-    void update_vertices(Vector2D *ptr1, Vector2D *ptr2, Vector2D *ptr3);
+    /********** Getter **********/
+    float get_circum_radius() const;
 
+    bool is_highlighted() const;
+
+    bool is_delaunay() const;
+
+    const Vector2D &get_circum_center() const;
+
+    /********** Modifiers **********/
     void calculate_circle();
+
+    bool check_delaunay(const std::vector<Vector2D> &points);
+
+    /********** Others **********/
+    void update_vertices(Vector2D *ptr1, Vector2D *ptr2, Vector2D *ptr3);
 
     void on_mouse_move(const Vector2D& pos);
 
@@ -32,30 +56,27 @@ public:
 
     bool is_inside_circle(const Vector2D &p);
 
-    bool check_delaunay(const std::vector<Vector2D> &points);
-
     void draw();
 
     void draw_circle();
 
-    float get_circum_radius() const;
+    bool common_point(Vector2D* point);
 
-    bool is_highlighted() const;
+    void foreach_point(PointCallback cb);
 
-    bool is_delaunay() const;
+    /********** Operator overloading **********/
+    friend bool operator==(Triangle& triangle1, Triangle& triangle2);
 
-    const Vector2D &get_circum_center() const;
-
-    Vector2D *ptr_[3];
+    friend std::ostream &operator<<(std::ostream &out, Triangle &triangle);
 
 private:
+    bool is_highlighted_;
+
+    Vector2D circum_center_;
 
     float circum_radius_;
 
-    bool is_highlighted_;
     bool is_delaunay_;
-    Vector2D circum_center_;
 };
 
 #endif //DRONEPROJECT_TRIANGLE_HPP
-

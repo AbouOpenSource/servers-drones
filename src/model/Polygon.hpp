@@ -1,32 +1,47 @@
-#ifndef POINTS_AND_CONVEX_POLYGONS_MYPOLYGON_HPP
-#define POINTS_AND_CONVEX_POLYGONS_MYPOLYGON_HPP
+#ifndef POINTS_AND_CONVEX_POLYGONS_Polygon_HPP
+#define POINTS_AND_CONVEX_POLYGONS_Polygon_HPP
 
 #include <glutWindow.h>
 
-#include <vector>
 #include "Vector2D.hpp"
 #include "Triangle.hpp"
 #include "Server.hpp"
-#include "../view/View.hpp"
 
 class Polygon
 {
 
-public:
-    /********** Constructor & destructor **********/
+private:
+    /********** typedef **********/
+    typedef std::function<void(Vector2D& point, unsigned int index)> VertexCallback;
 
+public:
+    int n_max_;
+    int current_n_;
+    float color_[4];
+    Vector2D* tab_pts_;
+
+    std::vector<Vector2D> points_to_build_polygon_;
+    std::vector<Triangle> triangles_;
+    std::vector<Vector2D> interior_points;
+
+    std::vector<Server> servers_;
+
+    /********** Constructor & destructor **********/
     Polygon();
 
-    Polygon(int p_max);
+    Polygon(int p_max, std::vector<Server>& servers);
 
-//    Polygon(std::vector<Vector2D> &vertices);
+    Polygon(std::vector<Server*>& servers);
 
     ~Polygon();
 
-    /********** Modifier **********/
-    bool add_vertex(const Vector2D &p);
+    /********** Getter **********/
+    vector<Vector2D> &get_points_to_build_polygon();
 
-    void init(std::vector<Server>& servers);
+    /********** Modifier **********/
+    bool add_vertex(Vector2D &p);
+
+    void init();
 
     /**
      * @brief Check if the vertex p is inside the polygon.
@@ -49,6 +64,8 @@ public:
     */
     bool is_convex();
 
+    void draw();
+
     void triangulation();
 
     static bool polar_comparison(Vector2D p1, Vector2D p2);
@@ -61,40 +78,33 @@ public:
 
     float cross_product(const Vector2D& u, const Vector2D& v);
 
-    int get_n_max() const;
-
-    int get_current_n() const;
-
-    const std::string get_color() const;
-
-    Vector2D *get_tab_pts() const;
-
-    const vector<Triangle> &get_triangles() const;
-
-    const vector<Vector2D> &get_interior_points() const;
-
-    const vector<Vector2D> &get_build_points() const;
-
     bool is_inside_triangle(const Vector2D& p);
 
-    void set_color(const std::string& color);
+    void set_color(const float t_color[4]);
 
-    void delaunay_triangulation(std::vector<Vector2D>& relative_points);
+    void interior_triangulation();
 
-    void delaunay_check();
+    Triangle* neighbor_inside(Triangle* current);
 
-private:
+    void flip(Triangle* current, Triangle* neighbor);
 
-    int n_max_;
-    int current_n_;
+    void solve_delaunay();
 
-    std::string color_;
+    void delaunay_triangulation(std::vector<Vector2D>& points_relative);
 
-    Vector2D* tab_pts_;
+    void check_delaunay();
 
-    std::vector<Triangle> triangles_;
-    std::vector<Vector2D> interior_points;
-    std::vector<Vector2D> build_points;
+    void onMouseMove(const Vector2D& pos);
+
+    void foreach_vertex(VertexCallback cb);
+
+    // Return the subset of triangles of the mesh that have v1 as vertex.
+    std::vector<Triangle> get_triangles_from(Vector2D v1);
+
+    /********** Operator overloading **********/
+    friend std::ostream &operator<<(std::ostream &out, Polygon &polygon);
+
+    Vector2D* next_vertex(Vector2D& vertex);
 };
 
-#endif //POINTS_AND_CONVEX_POLYGONS_MYPOLYGON_HPP
+#endif //POINTS_AND_CONVEX_POLYGONS_Polygon_HPP

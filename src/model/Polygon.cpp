@@ -1,28 +1,48 @@
+
 #include <stack>
 #include <algorithm>
 #include <cstring>
+#include <list>
 #include "Polygon.hpp"
 #include "../util/VectorUtil.hpp"
+#include "../core/service/ServiceContainer.hpp"
+#include "../controller/ServerController.hpp"
+#include "../controller/DiagramController.hpp"
 
-Polygon::Polygon(): tab_pts_(new Vector2D[0]), n_max_(0), current_n_(0)
-{}
-
-Polygon::Polygon(int p_max): tab_pts_{new Vector2D[p_max]}, n_max_{p_max}, current_n_{0}
-{}
-
-void Polygon::init(std::vector<Server>& servers)
+Polygon::Polygon()
+        : tab_pts_{new Vector2D[100]},
+          n_max_{100},
+          current_n_{0},
+          points_to_build_polygon_()
 {
+    set_color(YELLOW);
+}
+
+Polygon::Polygon(int p_max, std::vector<Server>& servers)
+        : tab_pts_{new Vector2D[p_max]},
+          n_max_{p_max},
+          current_n_{0},
+          points_to_build_polygon_(),
+          servers_{servers}
+{
+    set_color(YELLOW);
+}
+
+void Polygon::init()
+{
+    ServiceContainer* service_container = ServiceContainer::get_instance();
+    auto* server_controller = (ServerController*) service_container->get_service(ServerController::SERVICE);
+
     std::vector<Vector2D> points;
 
-    for (Server& server: servers) {
-        points.push_back(Vector2D(server.get_position()));
+    for (Server &server: server_controller->servers()) {
+        points.push_back(server.get_position());
     }
 
-//    std::cout << "\n";
-//    VectorUtil::print_1D_vector(points);
+    set_color(YELLOW);
 
 //    assert(points.size() > 3);
-    build_points = points;
+    points_to_build_polygon_ = points;
 
     auto p = points.begin();
     auto pymin = points.begin();
@@ -38,18 +58,16 @@ void Polygon::init(std::vector<Server>& servers)
     }
 
     // Swap
-    if (pymin != points.begin()) {
+    if (pymin != points.begin())
         iter_swap(points.begin(), pymin);
-    }
 
     Vector2D origin{points.begin()->x_, points.begin()->y_};
 
     // Copy points in a set of points relative to points[0]
     vector<Vector2D> pointsRelative;
 
-    for (auto pOrig: points) {
+    for (auto pOrig: points)
         pointsRelative.push_back(Vector2D{pOrig.x_ - origin.x_, pOrig.y_ - origin.y_});
-    }
 
     // Sorting point with angular criteria.
     sort(pointsRelative.begin() + 1, pointsRelative.end(), polar_comparison);
@@ -94,56 +112,136 @@ void Polygon::init(std::vector<Server>& servers)
     n_max_ = current_n_;
     tab_pts_ = new Vector2D[n_max_ + 1];
 
+    std::vector<Vector2D*> test;
+    test.resize(n_max_ + 1);
+
     int i = current_n_ - 1;
 
     while (!CHstack.empty())
     {
+
+//        test[i--] = *(CHstack.top()) + origin);
         tab_pts_[i--] = *(CHstack.top()) + origin; // Place the popped point in the global referential.
         CHstack.pop();
     }
 
     tab_pts_[current_n_] = tab_pts_[0];
     // TODO END DELAUNAY TRIANGULATION
+
+    triangulation();
+    interior_triangulation();
+    check_delaunay();
+    solve_delaunay();
+    check_delaunay();
+}
+
+Polygon::Polygon(std::vector<Server*>& servers)
+{
+    std::vector<Vector2D> points;
+
+    for (Server* server: servers) {
+        points.push_back(server->get_position());
+    }
+
+    set_color(YELLOW);
+
+//    assert(points.size() > 3);
+    points_to_build_polygon_ = points;
+
+    auto p = points.begin();
+    auto pymin = points.begin();
+
+    // find point with minimal y and swap with first point
+    while (p != points.end())
+    {
+        if (p->y_ < pymin->y_)
+        {
+            pymin = p;
+        }
+        p++;
+    }
+
+    // Swap
+    if (pymin != points.begin())
+        iter_swap(points.begin(), pymin);
+
+    Vector2D origin{points.begin()->x_, points.begin()->y_};
+
+    // Copy points in a set of points relative to points[0]
+    vector<Vector2D> pointsRelative;
+
+    for (auto pOrig: points)
+        pointsRelative.push_back(Vector2D{pOrig.x_ - origin.x_, pOrig.y_ - origin.y_});
+
+    // Sorting point with angular criteria.
+    sort(pointsRelative.begin() + 1, pointsRelative.end(), polar_comparison);
+
+    std::stack<Vector2D*> CHstack;
+    Vector2D *top_1, *top;
+    CHstack.push(&pointsRelative[0]);
+    CHstack.push(&pointsRelative[1]);
+    CHstack.push(&pointsRelative[2]);
+
+    // TODO START DELAUNAY TRIANGULATION.
+    vector<Vector2D>::iterator pi = pointsRelative.begin() + 3;
+
+    while (pi != pointsRelative.end())
+    {
+        // Extract top and top_1.
+        top = CHstack.top();
+        CHstack.pop();
+        top_1 = CHstack.top();
+        CHstack.push(top);
+
+        while (!is_on_the_left(&(*pi), top_1, top))
+        {
+            // Add interior point
+            const Vector2D interior_point(top->x_ + origin.x_, top->y_ + origin.y_);
+            interior_points.push_back(interior_point);
+
+            CHstack.pop();
+            // Update values of top and top_1.
+            top = CHstack.top();
+            CHstack.pop();
+            top_1 = CHstack.top();
+            CHstack.push(top);
+        }
+
+        CHstack.push(&(*pi));
+        pi++;
+    }
+
+    // Get stack points to create current polygon.
+    current_n_ = CHstack.size();
+    n_max_ = current_n_;
+    tab_pts_ = new Vector2D[n_max_ + 1];
+
+    std::vector<Vector2D*> test;
+    test.resize(n_max_ + 1);
+
+    int i = current_n_ - 1;
+
+    while (!CHstack.empty())
+    {
+
+//        test[i--] = *(CHstack.top()) + origin);
+        tab_pts_[i--] = *(CHstack.top()) + origin; // Place the popped point in the global referential.
+        CHstack.pop();
+    }
+
+    tab_pts_[current_n_] = tab_pts_[0];
+    // TODO END DELAUNAY TRIANGULATION
+
+    triangulation();
+    interior_triangulation();
+    check_delaunay();
+    solve_delaunay();
+    check_delaunay();
 }
 
 Polygon::~Polygon()
 {
-    delete [] tab_pts_;
-}
-
-int Polygon::get_n_max() const
-{
-    return n_max_;
-}
-
-int Polygon::get_current_n() const
-{
-    return current_n_;
-}
-
-const std::string Polygon::get_color() const
-{
-    return color_;
-}
-
-Vector2D *Polygon::get_tab_pts() const
-{
-    return tab_pts_;
-}
-
-const vector<Triangle> &Polygon::get_triangles() const
-{
-    return triangles_;
-}
-
-const vector<Vector2D> &Polygon::get_interior_points() const
-{
-    return interior_points;
-}
-
-const vector<Vector2D> &Polygon::get_build_points() const
-{
-    return build_points;
+//    delete [] tab_pts_;
 }
 
 bool Polygon::polar_comparison(Vector2D p1, Vector2D p2)
@@ -186,16 +284,15 @@ bool Polygon::is_convex()
     return i == current_n_;
 }
 
-bool Polygon::add_vertex(const Vector2D &p)
+bool Polygon::add_vertex(Vector2D &p)
 {
-//    if (n_max_ == current_n_ - 2)
-//        return false;
-
     if(current_n_ == n_max_)
         return false;
 
     tab_pts_[current_n_++] = p;
     tab_pts_[current_n_] = tab_pts_[0];
+
+    points_to_build_polygon_.push_back(p);
 
     return true;
 }
@@ -204,6 +301,7 @@ bool Polygon::add_vertex(const Vector2D &p)
 bool Polygon::is_inside(const Vector2D& p)
 {
     int i = 0;
+//    while (i < current_n_ && is_on_the_left(p, i))
     while (i < current_n_ && is_on_the_left(p, i))
         i++;
 
@@ -220,9 +318,9 @@ bool Polygon::is_inside_triangle(const Vector2D& p)
     return triangle != triangles_.end();
 }
 
-void Polygon::set_color(const std::string& color)
+void Polygon::set_color(const float t_color[4])
 {
-    color_ = color;
+    memcpy(color_, t_color, 4 * sizeof(float));
 }
 
 vector<float> Polygon::intersect(const Vector2D& a, const Vector2D& u, const Vector2D& p, const Vector2D& q)
@@ -274,6 +372,124 @@ std::vector<float> Polygon::intersections(const Vector2D& a, const Vector2D& u)
     return kres;
 }
 
+void Polygon::solve_delaunay()
+{
+    std::list<Triangle*> processList;
+    auto t = triangles_.begin(); // copy tabTriangles in a list
+
+    while (t != triangles_.end())
+    {
+        processList.push_back(&(*t));
+        t++;
+    }
+
+    while (processList.size() > 1)
+    {
+        // while a triangle is in the list
+        Triangle *current = processList.front(); // pop current
+        processList.pop_front();
+
+        if (!current->is_delaunay())
+        {
+            // TODO Solve the bug of the infinite loop when we add more servers.
+
+            // if current is not Delaunay.
+            Triangle *Tneighbor = neighbor_inside(current);
+
+            if (Tneighbor!=nullptr)
+            {
+                // and if a neighbor is available
+                flip(current, Tneighbor); // flip the common edge
+
+                // remove Tneighbor form the list
+                auto tr=processList.begin();
+                while (tr!=processList.end() && (*tr)!=Tneighbor) tr++;
+                if (tr!=processList.end()) processList.erase(tr);
+            }
+            else
+                processList.push_back(current); // postpone the treatment
+        }
+    }
+}
+
+Triangle* Polygon::neighbor_inside(Triangle* current)
+{
+    // For each triangle.
+    for (Triangle &triangle: triangles_)
+    {
+        // If the triangle is the one passed in parameter.
+        if (&triangle == current)
+            continue;
+
+        int common_points(0);
+        bool point_inside_circle(false);
+
+        // For each point of the triangle.
+        for (Vector2D* point: triangle.ptr_)
+        {
+            // If the point is inside the circumscribe circle of the current triangle.
+            if (current->is_inside_circle(*point))
+                point_inside_circle = true;
+
+            // If the point is a common point with the triangle passed in parameter.
+            if (current->common_point(point))
+                common_points++;
+        }
+
+        // Found a triangle.
+        if (common_points == 2 && point_inside_circle)
+            return &triangle;
+    }
+
+    // No triangle found.
+    return nullptr;
+}
+
+void Polygon::flip(Triangle* current, Triangle* neighbor)
+{
+    std::vector<unsigned int> index_common_points_current;
+    unsigned int index_no_common_points_current;
+
+    current->foreach_point([&](Vector2D* point, unsigned int index) {
+        if (neighbor->common_point(point))
+        {
+            index_common_points_current.push_back(index);
+        }
+        else
+        {
+            index_no_common_points_current = index;
+        }
+    });
+
+    std::vector<unsigned int> index_common_points_neighbor;
+    unsigned int index_no_common_points_neighbor;
+
+    neighbor->foreach_point([&](Vector2D* point, unsigned int index) {
+        if (current->common_point(point))
+        {
+            index_common_points_neighbor.push_back(index);
+        }
+        else
+        {
+            index_no_common_points_neighbor = index;
+        }
+    });
+
+    if (current->ptr_[index_common_points_current[0]] == neighbor->ptr_[index_common_points_neighbor[0]])
+    {
+        neighbor->ptr_[index_common_points_neighbor[1]] = current->ptr_[index_no_common_points_current];
+    }
+    else
+    {
+        neighbor->ptr_[index_common_points_neighbor[0]] = current->ptr_[index_no_common_points_current];
+    }
+
+    current->ptr_[index_common_points_current[0]] = neighbor->ptr_[index_no_common_points_neighbor];
+
+    current->calculate_circle();
+    neighbor->calculate_circle();
+}
+
 void Polygon::triangulation()
 {
     std::vector<Vector2D*> tmp;
@@ -312,39 +528,39 @@ void Polygon::triangulation()
         tmp.erase(p + 1); // remove point(p + 1) from tmp.
         n--; // or n = tmp.size().
     }
+}
 
-    /********** Interior point triangles **********/
+void Polygon::interior_triangulation()
+{
     for (Vector2D interior_point: interior_points)
     {
-//        std::cout << interior_point << "\n";
-
         auto it_triangle = triangles_.begin();
 
         while (it_triangle != triangles_.end())
         {
             if (it_triangle->is_inside(interior_point))
             {
-                const Triangle triangle = *it_triangle;
-                Vector2D p1_triangle = *(triangle.ptr_[0]);
-                Vector2D p2_triangle = *(triangle.ptr_[1]);
-                Vector2D p3_triangle = *(triangle.ptr_[2]);
+                Vector2D* p1_triangle = it_triangle->ptr_[0];
+                Vector2D* p2_triangle = it_triangle->ptr_[1];
+                Vector2D* p3_triangle = it_triangle->ptr_[2];
+                Vector2D *interior = new Vector2D(interior_point.x_, interior_point.y_);
 
-//                std::cout << "before erase: " << triangles_.size() << "\n";
-//                it_triangle = triangles_.erase(it_triangle);
-//                std::cout << "after erase: " << triangles_.size() << "\n";
+                Triangle triangle1 = Triangle(p1_triangle, p2_triangle, interior);
+                Triangle triangle2 = Triangle(p2_triangle, p3_triangle, interior);
+                Triangle triangle3 = Triangle(p3_triangle, p1_triangle, interior);
 
-                Triangle triangle1 = Triangle(&p1_triangle, &p2_triangle, &interior_point);
-                Triangle triangle2 = Triangle(&p2_triangle, &p3_triangle, &interior_point);
-                Triangle triangle3 = Triangle(&p3_triangle, &p1_triangle, &interior_point);
+                it_triangle = triangles_.erase(it_triangle);
 
-//                triangles_.push_back(triangle1);
-//                triangles_.push_back(triangle2);
-//                triangles_.push_back(triangle3);
+                triangles_.push_back(triangle1);
+                triangles_.push_back(triangle2);
+                triangles_.push_back(triangle3);
+
+                break;
             }
-//            else
-//            {
+            else
+            {
                 ++it_triangle;
-//            }
+            }
         }
     }
 }
@@ -354,17 +570,159 @@ float Polygon::cross_product(const Vector2D& u, const Vector2D& v)
     return (u.x_ * v.y_ - u.y_ * v.x_);
 }
 
-void Polygon::delaunay_triangulation(std::vector<Vector2D> &relative_points)
+void Polygon::onMouseMove(const Vector2D& pos)
 {
-
+    for (Triangle& triangle: triangles_)
+    {
+        triangle.on_mouse_move(pos);
+    }
 }
 
-void Polygon::delaunay_check()
+void Polygon::foreach_vertex(VertexCallback cb)
 {
-
+    for (unsigned int i = 0; i < points_to_build_polygon_.size(); i++)
+    {
+        cb(points_to_build_polygon_[i], i);
+    }
 }
 
-//void Polygon::delaunay_triangulation(std::vector<Vector2D>& pointsRelative)
+std::vector<Triangle> Polygon::get_triangles_from(Vector2D v1)
+{
+    std::vector<Triangle> triangles;
+
+    for (Triangle& triangle: triangles_)
+    {
+        triangle.foreach_point([&](Vector2D* vertex, unsigned int index) {
+            if (*vertex == v1)
+            {
+                triangles.push_back(triangle);
+            }
+        });
+    }
+
+    return triangles;
+}
+
+void Polygon::check_delaunay()
+{
+    auto t = triangles_.begin();
+
+    while (t != triangles_.end())
+    {
+        t->check_delaunay(points_to_build_polygon_);
+        t++;
+    }
+}
+
+std::ostream &operator<<(std::ostream &out, Polygon &polygon)
+{
+    out << "Polygon | ";
+
+    polygon.foreach_vertex([&out](Vector2D vertex, unsigned int index) {
+        out << vertex << std::endl;
+    });
+
+    return out;
+}
+
+Vector2D *Polygon::next_vertex(Vector2D &vertex)
+{
+    Vector2D* next_point(nullptr);
+
+    foreach_vertex([&next_point, &vertex, this](Vector2D& point, unsigned int index) {
+        if (point == vertex)
+        {
+            next_point = &tab_pts_[(index + 1) % points_to_build_polygon_.size()];
+        }
+    });
+
+    return next_point;
+}
+
+void Polygon::draw()
+{
+    std::string color;
+
+    for (Server& server: servers_)
+    {
+        // TODO is_inside not always working?
+        if (is_inside(server.get_position())) {
+            color = server.get_color();
+        }
+    }
+    // glColor3fv(draw_helper->get_color(area_color_));
+
+    if (color == "RED")
+    {
+        glColor3fv(RED);
+    }
+    else if (color == "BLUE")
+    {
+        glColor3fv(BLUE);
+    }
+    else if (color == "PINK")
+    {
+        glColor3fv(PINK);
+    }
+    else if (color == "YELLOW")
+    {
+        glColor3fv(YELLOW);
+    }
+    else if (color == "GREEN")
+    {
+        glColor3fv(GREEN);
+    }
+    else if (color == "CYAN")
+    {
+        glColor3fv(CYAN);
+    }
+
+    glBegin(GL_POLYGON);
+    for (Vector2D& point: get_points_to_build_polygon())
+    {
+        glVertex2f(point.x_, point.y_);
+    }
+    glEnd();
+
+    // TODO Issue when we add more servers.
+    glColor3fv(BLACK);
+    for (Vector2D& point: points_to_build_polygon_)
+    {
+        Vector2D* next_point = next_vertex(point);
+
+        glLineWidth(3);
+        glBegin(GL_LINES);
+        glVertex2f(point.x_, point.y_);
+        glVertex2f(next_point->x_, next_point->y_);
+        glEnd();
+    }
+}
+
+vector<Vector2D> &Polygon::get_points_to_build_polygon()
+{
+    return points_to_build_polygon_;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//void Polygon::delaunay_triangulation(std::vector<Vector2D>& delaunay_triangulation)
 //{
 //    vector<Vector2D>::iterator pi = pointsRelative.begin() + 3;
 //

@@ -29,6 +29,8 @@ public :
 
     friend Vector2D operator / ( const Vector2D &v,float divisor);
 
+    static Vector2D center(const Vector2D& point1, const Vector2D& point2);
+
     void set(float p_x,float p_y);
 
     void normalize();
@@ -37,6 +39,8 @@ public :
 
     /********** Operator overload **********/
     friend std::ostream &operator<<(std::ostream &out, const Vector2D &vector);
+
+    friend bool operator==(const Vector2D& vector1, const Vector2D& vector2);
 
     Vector2D ortho();
 };

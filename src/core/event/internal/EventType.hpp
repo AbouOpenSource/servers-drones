@@ -21,6 +21,7 @@ public:
     static std::string ADD_SERVER_TO_BEGIN;
     static std::string SAVE_CONFIG_STATE;
     static std::string FRAME_UPDATE;
+    static std::string SERVER_READY;
 };
 
 
