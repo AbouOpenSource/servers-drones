@@ -299,10 +299,17 @@ bool Polygon::add_vertex(Vector2D &p)
 // Complexity is N because for each edge and there is N edges.
 bool Polygon::is_inside(const Vector2D& p)
 {
+
+    return is_inside_left(p) || is_in_side_right(p);
+}
+
+
+
+bool Polygon::is_inside_left(const Vector2D &p) {
     int i = 0;
-//    while (i < current_n_ && is_on_the_left(p, i))
-    while (i < current_n_ && is_on_the_left(p, i))
+    while (i < current_n_ && is_on_the_left(p, i)) {
         i++;
+    }
 
     return i == current_n_;
 }
@@ -730,3 +737,17 @@ vector<Vector2D> &Polygon::get_points_to_build_polygon()
 //        t++;
 //    }
 //}
+
+bool Polygon::is_on_the_right(const Vector2D &p, int i) {
+    Vector2D u = tab_pts_[i + 1] - tab_pts_[i],
+            v = p - tab_pts_[i];
+    return cross_product(u, v) <= 0;
+}
+
+bool Polygon::is_in_side_right(const Vector2D &p) {
+    int i = 0;
+    while (i < current_n_ && is_on_the_right(p, i)) {
+        i++;
+    }
+    return i == current_n_;
+}

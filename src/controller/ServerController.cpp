@@ -268,7 +268,7 @@ InputManager::MouseClickListener ServerController::on_mouse_click()
 
     };
 }
-
+/*
 Server *ServerController::where_send_drone()
 {
     for(Server *server : servers_){
@@ -276,3 +276,4 @@ Server *ServerController::where_send_drone()
     }
 
 }
+*/
