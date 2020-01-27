@@ -31,21 +31,23 @@ void DirectionController::set_drone_target(Drone *drone, const Vector2D &target)
     Vector2D& drone_position = drone->get_position();
 
     callbacks_[drone] = [this, drone, &move, &drone_position] () {
+        std::cout<<"Position x : "<<drone_position.x_<<std::endl;
+        std::cout<<"Position y : "<<drone_position.x_<<std::endl;
 
         move.dx = (move.target.x_ - drone_position.x_);
         move.dy = (move.target.y_ - drone_position.y_);
         move.distance = sqrt(move.dx * move.dx + move.dy * move.dy);
         move.dx/=move.distance;
         move.dy/=move.distance;
-        move.dx*=1.5;
-        move.dy*=1.5;
+        move.dx*=20;
+        move.dy*=20;
 
-        // move.target_reached = abs(move.dx) < 6 && abs(move.dy) > 75;
+         //move.target_reached = move.distance > 60;
 
-       /* if (!move.circular_mode && move.target_reached) {
+        if (!move.circular_mode && move.target_reached) {
             move.circular_mode = true;
         }
-*/
+
         update_forces_of_drone(drone);
         update_acceleration_of_drone(drone);
         update_speed_of_drone(drone);
@@ -94,15 +96,16 @@ float DirectionController::get_distance_between_drones(Drone *d1, Drone *d2) con
 void DirectionController::update_acceleration_of_drone(Drone *drone)
 {
     auto& move = drone->get_move_data();
-    /* if (move.target_reached) {
+     if (move.target_reached) {
          // Acceleration for circular movement
-            move.theta_zero = 0;
-         //move.acceleration.x_ = (-move.radius) * (move.w * move.w) * cos(move.w * move.temps + move.theta_zero);
-         //move.acceleration.y_ = (-move.radius) * (move.w * move.w) * sin(move.w * move.temps + move.theta_zero);
+         move.theta_zero = 0;
+         move.radius = 100;
+         move.acceleration.x_ = (-move.radius) * (move.w * move.w) * cos(move.w * move.temps + move.theta_zero);
+         move.acceleration.y_ = (-move.radius) * (move.w * move.w) * sin(move.w * move.temps + move.theta_zero);
      } else if (!move.circular_mode){
          move.acceleration = move.forces / move.weight;
-     }*/
-    move.acceleration = move.forces / move.weight;
+     }
+   // move.acceleration = move.forces / move.weight;
 
 }
 
@@ -121,16 +124,16 @@ void DirectionController::update_position_of_drone(Drone *drone)
     auto& drone_position = drone->get_position();
 
     move.temps += 0.1;
-/*
+
     if (move.target_reached){
         // Positioning for circular movement
        // move.theta_zero = 1000;
-       // drone_position.x_ = move.radius * cos(move.w * move.temps + move.theta_zero);
-        //drone_position.y_ = move.radius * sin(move.w * move.temps + move.theta_zero);
+        drone_position.x_ = move.radius * cos(move.w * move.temps + move.theta_zero);
+        drone_position.y_ = move.radius * sin(move.w * move.temps + move.theta_zero);
     } else if (!move.circular_mode) {
         drone_position = drone_position + move.speed;
-    }*/
-                 drone_position = drone_position + move.speed;
+    }
+     //            drone_position = drone_position + move.speed;
 
 }
 

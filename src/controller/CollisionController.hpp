@@ -32,7 +32,7 @@ public:
 
 private:
 
-    Circle get_zone_for_drone(Drone * drone) const;
+    Circle get_zone_for_drone(Drone * drone);
 
     DirectionController* direction_controller_;
 

@@ -29,8 +29,12 @@ void CollisionController::prevent_collision_for_drone(Drone *drone)
 {
     Circle zone = get_zone_for_drone(drone);
     for(auto& drone_bis : get_drones()) {
+        std::cout<<"Drone( "<<drone_bis.get_id()<<" ) : "<<drone_bis.get_position()<<std::endl;
         Circle zone_bis = get_zone_for_drone(&drone_bis);
+        std::cout<< zone_bis;
+
         if (zone.touch_with(&zone_bis)) {
+            std::cout<<"Collision"<<std::endl;
             direction_controller_->prevent_collision_between_drones(drone, &drone_bis);
         }
     }
@@ -66,9 +70,11 @@ void CollisionController::monitor_trajectory_of_drone(Drone *drone)
     }
 }
 
-Circle CollisionController::get_zone_for_drone(Drone* drone) const
+Circle CollisionController::get_zone_for_drone(Drone* drone)
 {
-    Position center = Position(drone->get_position().x_, drone->get_position().y_);
+    auto& drone_position = drone->get_position();
+   // std::cout<< "Drone("<<drone->get_id() <<") : "<<drone_position<<std::endl;
+    Position center = Position(drone_position.x_, drone_position.y_);
     return {center, COLLISION_RADIUS};
 }
 

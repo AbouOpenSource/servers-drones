@@ -34,6 +34,9 @@ private:
     Position center_;
 
     float radius;
+
+    friend std::ostream &operator<<(std::ostream &out, const Circle &circle);
+
 };
 
 
