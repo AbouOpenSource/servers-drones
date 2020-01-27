@@ -51,36 +51,7 @@ int main(int argc, char** argv)
     service_container->register_service(&diagram_controller_);
 
     // Init from last state
-    server_controller.load_last_state([&window, &server_controller, &service_container] () {
-
-        Drone* drone_paris = server_controller.create_drone();
-        Server* paris = server_controller.find_server_by_name("Paris");
-        server_controller.attach_drone_to_server(drone_paris, paris);
-
-        Drone* drone_beijing = server_controller.create_drone();
-        Server* beijing = server_controller.find_server_by_name("Beijing");
-        server_controller.attach_drone_to_server(drone_beijing, beijing);
-
-        Drone* drone_san_francisco = server_controller.create_drone();
-        Server* san_francisco = server_controller.find_server_by_name("San Francisco");
-        server_controller.attach_drone_to_server(drone_san_francisco, san_francisco);
-
-        Drone* drone_rome = server_controller.create_drone();
-        Server* rome = server_controller.find_server_by_name("Rome");
-        server_controller.attach_drone_to_server(drone_rome, rome);
-
-        Drone* drone_rome1 = server_controller.create_drone();
-        server_controller.attach_drone_to_server(drone_rome1, rome);
-
-
-        Drone* drone_london = server_controller.create_drone();
-        Server* london = server_controller.find_server_by_name("London");
-        server_controller.attach_drone_to_server(drone_london, london);
-
-        Drone* drone_berlin = server_controller.create_drone();
-        Server* berlin = server_controller.find_server_by_name("Berlin");
-        server_controller.attach_drone_to_server(drone_berlin, berlin);
-    });
+    server_controller.load_last_state([&window, &server_controller, &service_container] () {});
 
     window.start();
 

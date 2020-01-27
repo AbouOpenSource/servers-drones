@@ -653,7 +653,8 @@ void Polygon::draw(View::DrawHelper* draw_helper)
 
     map<Polygon *, Server *> polygon_server = diagram_controller->get_polygon_server();
     Server *server = polygon_server[this];
-    std::cout << "SERVER: " << server->get_name() << std::endl;
+
+    glDisable(GL_TEXTURE_2D);
 
     glColor3fv(draw_helper->get_color(server->get_color()));
 
@@ -749,4 +750,25 @@ bool Polygon::is_in_side_right(const Vector2D &p) {
         i++;
     }
     return i == current_n_;
+}
+
+Vector2D *Polygon::previous_vertex(Vector2D &vertex)
+{
+    Vector2D* previous_point(nullptr);
+
+    foreach_vertex([&previous_point, &vertex, this](Vector2D& point, unsigned int index) {
+        if (point == vertex)
+        {
+            if (index == 0)
+            {
+                previous_point = &points_to_build_polygon_[points_to_build_polygon_.size()-1];
+            }
+            else
+            {
+                previous_point =&points_to_build_polygon_[(index - 1)];
+            }
+        }
+    });
+
+    return previous_point;
 }

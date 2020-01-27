@@ -258,7 +258,7 @@ InputManager::KeyPressListener ServerController::on_key_pressed()
     return [this] (InputManager::Key key, InputManager::MousePosition position) {
         switch (key) {
             case InputManager::ENTER:
-                create_drone(find_server_by_name("Beijing"));
+                create_drone(where_send_drone());
                 break;
             case InputManager::F1:
                 set_servers_color(get_selected_servers(), "RED");
@@ -325,21 +325,6 @@ EventManager::Subscription ServerController::on_background_ready()
 
 Server *ServerController::where_send_drone()
 {
-
- /*   // Fetch server of the polygon.
-    ServiceContainer *service_container = ServiceContainer::get_instance();
-    auto *diagram_controller = (DiagramController *) service_container->get_service(ServerController::SERVICE);
-
-    map<Polygon *, Server *> polygon_server = diagram_controller->get_polygon_server();
-    Server *server = polygon_server[this];
-    std::cout << "SERVER: " << server->get_name() << std::endl;
-*/
-
-
-
-    /* for(Server *server : servers_){
-
-    }*/
     int choix = rand() % servers_.size();
     return servers_[choix];
 }
