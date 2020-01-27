@@ -20,11 +20,11 @@ public:
 
 public:
 
-    vector<Polygon> &get_polygons();
+    vector<Polygon*> &get_polygons();
 
 private:
 
-    std::vector<Polygon> polygons_;
+    std::vector<Polygon*> polygons_;
 
     // std::vector<Server> servers_;
 

@@ -20,8 +20,8 @@ void VoronoiDiagramView::start()
 
 void VoronoiDiagramView::draw(View::DrawHelper *draw_helper)
 {
-    for (Polygon &polygon: voroinoi_diagram_->get_polygons()) {
-        polygon.draw(draw_helper);
+    for (Polygon* polygon: voroinoi_diagram_->get_polygons()) {
+        polygon->draw(draw_helper);
     }
 }
 

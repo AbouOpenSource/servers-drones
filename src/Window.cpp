@@ -31,11 +31,13 @@ void Window::onStart()
 
 void Window::onDraw()
 {
+    FrameUpdateEvent event(this);
+    event_manager_->publish(EventType::FRAME_UPDATE, &event);
+    glEnable(GL_TEXTURE_2D);
     for (auto & view : views_) {
         view->draw(&draw_helper_);
     }
-    FrameUpdateEvent event(this);
-    event_manager_->publish(EventType::FRAME_UPDATE, &event);
+    glDisable(GL_TEXTURE_2D);
 }
 
 void Window::onQuit()
@@ -45,9 +47,13 @@ void Window::onQuit()
     }
 }
 
-void Window::addView(View* view)
+void Window::addView(View* view, bool front)
 {
-    views_.push_back(view);
+    if (front) {
+        views_.insert(views_.begin(), view);
+    } else {
+        views_.push_back(view);
+    }
     view->init(
             input_manager_,
             event_manager_,

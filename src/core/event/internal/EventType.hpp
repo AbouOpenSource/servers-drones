@@ -22,6 +22,7 @@ public:
     static std::string SAVE_CONFIG_STATE;
     static std::string FRAME_UPDATE;
     static std::string SERVER_READY;
+    static std::string BACKGROUND_READY;
 };
 
 

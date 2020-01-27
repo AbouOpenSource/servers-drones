@@ -25,7 +25,7 @@ public:
 
     void publish(const std::string& event_type, Event* event);
 
-    void subscribe(const std::string& event_type, Subscription&);
+    void subscribe(const std::string& event_type, const Subscription&);
 
 private:
 

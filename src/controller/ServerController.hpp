@@ -75,6 +75,8 @@ private:
 
     InputManager::MouseClickListener on_mouse_click();
 
+    EventManager::Subscription on_background_ready();
+
     int drone_id_incrementer_;
 
     Window* window_;

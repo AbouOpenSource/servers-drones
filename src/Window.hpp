@@ -32,7 +32,7 @@ public:
 
     void onDraw() override;
 
-    void addView(View* view);
+    void addView(View* view, bool front = false);
 
     void removeView(View* view);
 
