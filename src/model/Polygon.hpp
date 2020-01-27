@@ -106,6 +106,14 @@ public:
     friend std::ostream &operator<<(std::ostream &out, Polygon &polygon);
 
     Vector2D* next_vertex(Vector2D& vertex);
+
+    bool isOnTheRight(const Vector2D &p, int i);
+
+    bool is_in_side_right(const Vector2D &p);
+
+    bool is_inside_left(const Vector2D &p);
+
+    bool is_on_the_right(const Vector2D &p, int i);
 };
 
 #endif //POINTS_AND_CONVEX_POLYGONS_Polygon_HPP
