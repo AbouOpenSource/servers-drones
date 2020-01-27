@@ -10,6 +10,7 @@
 #include "../util/VectorUtil.hpp"
 #include "../model/Circle.hpp"
 #include "../core/event/internal/ServerReadyEvent.hpp"
+#include "DiagramController.hpp"
 
 std::string ServerController::SERVICE = "ServerService";
 
@@ -268,12 +269,24 @@ InputManager::MouseClickListener ServerController::on_mouse_click()
 
     };
 }
-/*
+
 Server *ServerController::where_send_drone()
 {
-    for(Server *server : servers_){
 
-    }
+ /*   // Fetch server of the polygon.
+    ServiceContainer *service_container = ServiceContainer::get_instance();
+    auto *diagram_controller = (DiagramController *) service_container->get_service(ServerController::SERVICE);
 
-}
+    map<Polygon *, Server *> polygon_server = diagram_controller->get_polygon_server();
+    Server *server = polygon_server[this];
+    std::cout << "SERVER: " << server->get_name() << std::endl;
 */
+
+
+
+    /* for(Server *server : servers_){
+
+    }*/
+    int choix = rand() % servers_.size();
+    return servers_[choix];
+}
