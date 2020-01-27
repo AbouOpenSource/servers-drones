@@ -9,6 +9,7 @@
 #include "../util/StringUtil.hpp"
 #include "../util/VectorUtil.hpp"
 #include "../model/Circle.hpp"
+#include "../core/event/internal/ServerReadyEvent.hpp"
 
 std::string ServerController::SERVICE = "ServerService";
 
@@ -34,9 +35,9 @@ ServerController::ServerController()
 
 Server* ServerController::find_server_by_name(const std::string& server_name)
 {
-    for (Server& server: servers_) {
-        if (server.get_name() == server_name) {
-            return &server;
+    for (Server* server: servers_) {
+        if (server->get_name() == server_name) {
+            return server;
         }
     }
     return nullptr;
@@ -44,9 +45,9 @@ Server* ServerController::find_server_by_name(const std::string& server_name)
 
 Drone* ServerController::find_drone_by_id(const int drone_id)
 {
-    for (Drone& drone: drones_) {
-        if (drone.get_id() == drone_id) {
-            return &drone;
+    for (Drone* drone: drones_) {
+        if (drone->get_id() == drone_id) {
+            return drone;
         }
     }
     return nullptr;
@@ -55,11 +56,11 @@ Drone* ServerController::find_drone_by_id(const int drone_id)
 Server * ServerController::get_server_at(Position position)
 {
     Circle zone(position, 100);
-    for (Server& server: servers_) {
-        Position server_position(server.get_position().x_, server.get_position().y_);
+    for (Server* server: servers_) {
+        Position server_position(server->get_position().x_, server->get_position().y_);
         Circle server_zone(server_position, 100);
         if (zone.touch_with(&server_zone)) {
-            return &server;
+            return server;
         }
     }
     return nullptr;
@@ -68,9 +69,9 @@ Server * ServerController::get_server_at(Position position)
 std::vector<Server *> ServerController::get_selected_servers()
 {
     std::vector<Server*> selection = {};
-    for (Server& server: servers_) {
-        if (server.is_selected()) {
-            selection.push_back(&server);
+    for (Server* server: servers_) {
+        if (server->is_selected()) {
+            selection.push_back(server);
         }
     }
     return selection;
@@ -78,18 +79,18 @@ std::vector<Server *> ServerController::get_selected_servers()
 
 void ServerController::delete_selected_servers()
 {
-    for (Server& server: servers_) {
-        if (server.is_selected()) {
-            server.set_selected(false);
+    for (Server* server: servers_) {
+        if (server->is_selected()) {
+            server->set_selected(false);
         }
     }
 }
 
 void ServerController::clear_selection()
 {
-    for (Server& server: servers_) {
-        if (server.is_selected()) {
-            server.set_selected(false);
+    for (Server* server: servers_) {
+        if (server->is_selected()) {
+            server->set_selected(false);
         }
     }
 }
@@ -101,12 +102,12 @@ void ServerController::set_servers_color(const std::vector<Server *>& servers, c
     }
 }
 
-void ServerController::add_server(Server& server)
+void ServerController::add_server(Server* server)
 {
-    auto* server_view = new ServerView(&server);
+    auto* server_view = new ServerView(server);
     servers_.push_back(server);
-    server_view_[&server] = server_view;
-    server_drone_count_[&server] = 0;
+    server_view_[server] = server_view;
+    server_drone_count_[server] = 0;
     window_->addView(server_view);
 }
 
@@ -116,7 +117,7 @@ Drone* ServerController::create_drone(Server* server)
     auto* drone_view = new DroneView(drone);
 
     drone_id_incrementer_++;
-    drones_.push_back(*drone);
+    drones_.push_back(drone);
     drone_view_[drone] = drone_view;
     window_->addView(drone_view);
 
@@ -202,16 +203,20 @@ void ServerController::load_last_state(const TypeUtil::Callback& on_loaded)
                 std::string name = values[0];
                 std::string area_color = values[2];
 
-                Server server(name, area_color);
+                Server *server = new Server(name, area_color);
 
                 string x_string = StringUtil::trim(position[0]);
-                server.get_position().x_ = VectorUtil::string_cast_to<float>(x_string);
-                server.get_position().y_ = VectorUtil::string_cast_to<float>(position[1]);
+                server->get_position().x_ = VectorUtil::string_cast_to<float>(x_string);
+                server->get_position().y_ = VectorUtil::string_cast_to<float>(position[1]);
 
                 add_server(server);
             }
         }
-    }, on_loaded);
+    }, [this, &on_loaded] () {
+        ServerReadyEvent server_ready_event(servers_);
+        event_manager_->publish(EventType::SERVER_READY, &server_ready_event);
+        on_loaded();
+    });
 }
 
 void ServerController::save_current_state(const TypeUtil::Callback& on_finish)
@@ -222,23 +227,23 @@ void ServerController::save_current_state(const TypeUtil::Callback& on_finish)
     auto writer = out_stream.writer();
 
     int i(0);
-    for (Server& server: servers_) {
-        std::string pos = "(" + std::to_string(server.get_position().x_) + "," + std::to_string(server.get_position().y_) + ")";
-        writer.write(i, 0, server.get_name());
+    for (Server* server: servers_) {
+        std::string pos = "(" + std::to_string(server->get_position().x_) + "," + std::to_string(server->get_position().y_) + ")";
+        writer.write(i, 0, server->get_name());
         writer.write(i, 1, pos);
-        writer.write(i, 2, server.get_color());
+        writer.write(i, 2, server->get_color());
         i++;
     }
 
     writer.persist(on_finish);
 }
 
-std::vector<Server>& ServerController::servers()
+std::vector<Server *>& ServerController::servers()
 {
     return servers_;
 }
 
-std::vector<Drone>& ServerController::drones()
+std::vector<Drone*>& ServerController::drones()
 {
     return drones_;
 }

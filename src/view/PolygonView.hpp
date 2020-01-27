@@ -27,6 +27,7 @@ public:
 private:
 
     Polygon* polygon_;
+    std::string area_color_;
 };
 
 

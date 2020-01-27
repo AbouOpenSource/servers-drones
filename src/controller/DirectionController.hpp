@@ -19,29 +19,6 @@ public:
 
     static std::string SERVICE;
 
-    struct MoveData {
-        int delta_time = 1;
-        int radius = 100;
-        float weight = 10;
-        float temps = 0;
-        float w = 1;
-        float theta_zero = 1000;
-        float dx = 0;
-        float dy = 0;
-        float distance = 0;
-        bool target_reached = false;
-        bool circular_mode = false;
-        Vector2D forces = {150000,150000};
-        Vector2D acceleration = forces / weight;
-        Vector2D speed = acceleration / (float) delta_time;
-        Vector2D target = {0, 0};
-    };
-
-    struct DroneData {
-        MoveData data;
-        TypeUtil::Callback callback;
-    };
-
     DirectionController();
 
     void set_drone_target(Drone* drone, const Vector2D& target);
@@ -50,11 +27,7 @@ public:
 
     float get_distance_between_drones(Drone* d1, Drone* d2) const;
 
-    MoveData* get_instant_movement_for_drone(Drone* drone);
-
 private:
-
-    void ensure_map_contains(Drone* drone);
 
     void update_acceleration_of_drone(Drone* drone);
 
@@ -64,7 +37,7 @@ private:
 
     void update_speed_of_drone(Drone* drone);
 
-    std::map<Drone*, DroneData> drone_data_;
+    std::map<Drone*, TypeUtil::Callback> callbacks_;
 
 };
 
