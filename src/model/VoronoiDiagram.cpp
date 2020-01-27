@@ -17,7 +17,7 @@ VoronoiDiagram::VoronoiDiagram(Polygon &mesh)
     ServiceContainer* service_container = ServiceContainer::get_instance();
     auto* server_controller = (ServerController*) service_container->get_service(ServerController::SERVICE);
 
-    std::vector<Server> servers = server_controller->servers();
+    std::vector<Server*> servers = server_controller->servers();
 
     mesh.foreach_vertex([&mesh, &servers, this](Vector2D &vertex, unsigned int index)
     {

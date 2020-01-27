@@ -7,7 +7,6 @@
 #include "../util/VectorUtil.hpp"
 #include "../core/service/ServiceContainer.hpp"
 #include "../controller/ServerController.hpp"
-#include "../controller/DiagramController.hpp"
 
 Polygon::Polygon()
         : tab_pts_{new Vector2D[100]},
@@ -18,7 +17,7 @@ Polygon::Polygon()
     set_color(YELLOW);
 }
 
-Polygon::Polygon(int p_max, std::vector<Server>& servers)
+Polygon::Polygon(int p_max, std::vector<Server*>& servers)
         : tab_pts_{new Vector2D[p_max]},
           n_max_{p_max},
           current_n_{0},
@@ -35,8 +34,8 @@ void Polygon::init()
 
     std::vector<Vector2D> points;
 
-    for (Server &server: server_controller->servers()) {
-        points.push_back(server.get_position());
+    for (Server* server: server_controller->servers()) {
+        points.push_back(server->get_position());
     }
 
     set_color(YELLOW);
@@ -639,43 +638,18 @@ Vector2D *Polygon::next_vertex(Vector2D &vertex)
     return next_point;
 }
 
-void Polygon::draw()
+void Polygon::draw(View::DrawHelper* draw_helper)
 {
     std::string color;
 
-    for (Server& server: servers_)
+    for (Server* server: servers_)
     {
         // TODO is_inside not always working?
-        if (is_inside(server.get_position())) {
-            color = server.get_color();
+        if (is_inside(server->get_position())) {
+            color = server->get_color();
         }
     }
-    // glColor3fv(draw_helper->get_color(area_color_));
-
-    if (color == "RED")
-    {
-        glColor3fv(RED);
-    }
-    else if (color == "BLUE")
-    {
-        glColor3fv(BLUE);
-    }
-    else if (color == "PINK")
-    {
-        glColor3fv(PINK);
-    }
-    else if (color == "YELLOW")
-    {
-        glColor3fv(YELLOW);
-    }
-    else if (color == "GREEN")
-    {
-        glColor3fv(GREEN);
-    }
-    else if (color == "CYAN")
-    {
-        glColor3fv(CYAN);
-    }
+    glColor3fv(draw_helper->get_color(color));
 
     glBegin(GL_POLYGON);
     for (Vector2D& point: get_points_to_build_polygon())
@@ -702,25 +676,6 @@ vector<Vector2D> &Polygon::get_points_to_build_polygon()
 {
     return points_to_build_polygon_;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 //void Polygon::delaunay_triangulation(std::vector<Vector2D>& delaunay_triangulation)
 //{

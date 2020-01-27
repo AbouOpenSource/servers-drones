@@ -6,6 +6,7 @@
 #include "Vector2D.hpp"
 #include "Triangle.hpp"
 #include "Server.hpp"
+#include "../view/View.hpp"
 
 class Polygon
 {
@@ -24,12 +25,12 @@ public:
     std::vector<Triangle> triangles_;
     std::vector<Vector2D> interior_points;
 
-    std::vector<Server> servers_;
+    std::vector<Server*> servers_;
 
     /********** Constructor & destructor **********/
     Polygon();
 
-    Polygon(int p_max, std::vector<Server>& servers);
+    Polygon(int p_max, std::vector<Server*>& servers);
 
     Polygon(std::vector<Server*>& servers);
 
@@ -64,7 +65,7 @@ public:
     */
     bool is_convex();
 
-    void draw();
+    void draw(View::DrawHelper* draw_helper);
 
     void triangulation();
 

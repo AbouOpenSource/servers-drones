@@ -14,7 +14,7 @@ class VoronoiDiagramView: public View
 
 public:
 
-    explicit VoronoiDiagramView(VoronoiDiagram *voroinoi_diagram);
+    explicit VoronoiDiagramView(VoronoiDiagram *voronoi_diagram);
 
     void init(InputManager *input_manager, EventManager *event_manager, const TextureLoader &texture_loader) override;
 

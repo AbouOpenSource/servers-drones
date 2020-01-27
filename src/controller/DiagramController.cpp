@@ -22,30 +22,8 @@ DiagramController::DiagramController(): ServiceProvider(DiagramController::SERVI
         voronoi_diagram_ = new VoronoiDiagram(polygon);
         voronoi_diagram_view_ = new VoronoiDiagramView(voronoi_diagram_);
         window_->addView(voronoi_diagram_view_);
-
-        EventManager::Subscription frame_update = [this, &polygon] (Event* e, const TypeUtil::Callback& unsubscribe) {
-            fetch_server_to_polygon(&polygon);
-        };
-
-        event_manager->subscribe(EventType::FRAME_UPDATE, frame_update);
     };
 
     event_manager->subscribe(EventType::SERVER_READY, server_ready);
 }
-
-Server* DiagramController::fetch_server_to_polygon(Polygon* polygon)
-{
-    /*for (Server& server: server_controller_->servers())
-    {
-        // TODO is_inside not always working?
-        if (polygon->is_inside(server.get_position()))
-        {
-            return &server;
-            // area_color_ = server.get_color();
-        }
-    }*/
-
-    return nullptr;
-}
-
 

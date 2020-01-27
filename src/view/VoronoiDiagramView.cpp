@@ -4,7 +4,7 @@
 
 #include "VoronoiDiagramView.hpp"
 
-VoronoiDiagramView::VoronoiDiagramView(VoronoiDiagram *voroinoi_diagram): voroinoi_diagram_(voroinoi_diagram)
+VoronoiDiagramView::VoronoiDiagramView(VoronoiDiagram *voronoi_diagram): voroinoi_diagram_(voronoi_diagram)
 {}
 
 void VoronoiDiagramView::init(InputManager *input_manager, EventManager *event_manager,
@@ -21,7 +21,7 @@ void VoronoiDiagramView::start()
 void VoronoiDiagramView::draw(View::DrawHelper *draw_helper)
 {
     for (Polygon &polygon: voroinoi_diagram_->get_polygons()) {
-        polygon.draw();
+        polygon.draw(draw_helper);
     }
 }
 

@@ -213,8 +213,8 @@ void ServerController::load_last_state(const TypeUtil::Callback& on_loaded)
             }
         }
     }, [this, &on_loaded] () {
-        /*ServerReadyEvent server_ready_event();
-        event_manager_->publish(EventType::SERVER_READY, )*/
+        ServerReadyEvent server_ready_event(servers_);
+        event_manager_->publish(EventType::SERVER_READY, &server_ready_event);
         on_loaded();
     });
 }
