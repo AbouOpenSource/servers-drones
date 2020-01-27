@@ -31,8 +31,8 @@ void DirectionController::set_drone_target(Drone *drone, const Vector2D &target)
     Vector2D& drone_position = drone->get_position();
 
     callbacks_[drone] = [this, drone, &move, &drone_position] () {
-        std::cout<<"Position x : "<<drone_position.x_<<std::endl;
-        std::cout<<"Position y : "<<drone_position.x_<<std::endl;
+//        std::cout<<"Position x : "<<drone_position.x_<<std::endl;
+//        std::cout<<"Position y : "<<drone_position.x_<<std::endl;
 
         move.dx = (move.target.x_ - drone_position.x_);
         move.dy = (move.target.y_ - drone_position.y_);

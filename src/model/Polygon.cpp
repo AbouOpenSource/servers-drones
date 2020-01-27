@@ -654,7 +654,6 @@ void Polygon::draw(View::DrawHelper* draw_helper)
 
     map<Polygon *, Server *> polygon_server = diagram_controller->get_polygon_server();
     Server *server = polygon_server[this];
-    std::cout << "SERVER: " << server->get_name() << std::endl;
 
     glColor3fv(draw_helper->get_color(server->get_color()));
 

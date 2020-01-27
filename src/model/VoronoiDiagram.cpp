@@ -19,7 +19,6 @@ VoronoiDiagram::VoronoiDiagram(Polygon &mesh)
     auto* server_controller = (ServerController*) service_container->get_service(ServerController::SERVICE);
 
     std::vector<Server*> servers = server_controller->servers();
-//    std::cout << "first server: " << servers[0]->get_name() << std::endl;
 
     mesh.foreach_vertex([&mesh, &servers, this](Vector2D &vertex, unsigned int index)
     {
@@ -35,28 +34,28 @@ VoronoiDiagram::VoronoiDiagram(Polygon &mesh)
             Vector2D *b = next_vertex(*triangle, vertex);
             Vector2D E = *b - vertex;
 
-            std::cout << "current vertex: " << vertex << std::endl;
-            std::cout << "triangle: " << *triangle;
-            std::cout << "next vertex: " << *b << std::endl;
-            std::cout << "next edge: " << E << std::endl;
+//            std::cout << "current vertex: " << vertex << std::endl;
+//            std::cout << "triangle: " << *triangle;
+//            std::cout << "next vertex: " << *b << std::endl;
+//            std::cout << "next edge: " << E << std::endl;
 
             Vector2D center = Vector2D::center(vertex, *b);
-            std::cout << "center: " << center << std::endl;
+//            std::cout << "center: " << center << std::endl;
 
             Vector2D u = right_orthogonal_vector(E);
-            std::cout << "right orthogonal vector: " << u << std::endl;
+//            std::cout << "right orthogonal vector: " << u << std::endl;
 
             Vector2D Q = intersection_with_borders(center, u, 0, 0, GlutWindow::getWindowWidth(),
                                                    GlutWindow::getWindowHeight());
-            std::cout << "Intersection with borders: " << Q << std::endl << std::endl;
+//            std::cout << "Intersection with borders: " << Q << std::endl << std::endl;
 
             add_point(Q, *polygon);
         }
         else
         {
             triangle = &triangles[0];
-            std::cout << "no left triangle, adding the first triangle of the subset of triangles: "
-                    << *triangle << std::endl;
+//            std::cout << "no left triangle, adding the first triangle of the subset of triangles: "
+//                    << *triangle << std::endl;
         }
 
         while (triangles.size() > 1) {
@@ -68,27 +67,26 @@ VoronoiDiagram::VoronoiDiagram(Polygon &mesh)
             remove_triangle(*previous_triangle, triangles);
         }
 
-        // TODO Is it useful?
         add_point(triangle->get_circum_center(), *polygon);
 
         if (is_opened) {
             Vector2D *b = prev_vertex(*triangle, vertex);
             Vector2D E = vertex - *b;
 
-            std::cout << "current vertex: " << vertex << std::endl;
-            std::cout << "triangle: " << *triangle;
-            std::cout << "prev vertex: " << *b << std::endl;
-            std::cout << "prev edge: " << E << std::endl;
+//            std::cout << "current vertex: " << vertex << std::endl;
+//            std::cout << "triangle: " << *triangle;
+//            std::cout << "prev vertex: " << *b << std::endl;
+//            std::cout << "prev edge: " << E << std::endl;
 
             Vector2D center = Vector2D::center(vertex, *b);
-            std::cout << "center: " << center << std::endl;
+//            std::cout << "center: " << center << std::endl;
 
             Vector2D u = right_orthogonal_vector(E);
-            std::cout << "right orthogonal vector: " << u << std::endl;
+//            std::cout << "right orthogonal vector: " << u << std::endl;
 
             Vector2D Q = intersection_with_borders(center, u, 0, 0, GlutWindow::getWindowWidth(),
                                                    GlutWindow::getWindowHeight());
-            std::cout << "Intersection with borders: " << Q << std::endl << std::endl;
+//            std::cout << "Intersection with borders: " << Q << std::endl << std::endl;
 
             add_point(Q, *polygon);
         }
