@@ -114,6 +114,8 @@ public:
     bool is_inside_left(const Vector2D &p);
 
     bool is_on_the_right(const Vector2D &p, int i);
+
+    Vector2D* previous_vertex(Vector2D &vertex);
 };
 
 #endif //POINTS_AND_CONVEX_POLYGONS_Polygon_HPP

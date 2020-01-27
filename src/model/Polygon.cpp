@@ -737,6 +737,27 @@ vector<Vector2D> &Polygon::get_points_to_build_polygon()
 //    }
 //}
 
+Vector2D *Polygon::previous_vertex(Vector2D &vertex)
+{
+    Vector2D* previous_point(nullptr);
+
+    foreach_vertex([&previous_point, &vertex, this](Vector2D& point, unsigned int index) {
+        if (point == vertex)
+        {
+            if (index == 0)
+            {
+                previous_point = &points_to_build_polygon_[points_to_build_polygon_.size()-1];
+            }
+            else
+            {
+                previous_point =&points_to_build_polygon_[(index - 1)];
+            }
+        }
+    });
+
+    return previous_point;
+}
+
 bool Polygon::is_on_the_right(const Vector2D &p, int i) {
     Vector2D u = tab_pts_[i + 1] - tab_pts_[i],
             v = p - tab_pts_[i];
