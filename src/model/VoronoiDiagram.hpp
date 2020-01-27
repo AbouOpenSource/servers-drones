@@ -20,11 +20,11 @@ public:
 
 public:
 
-    vector<Polygon> &get_polygons();
+    vector<Polygon*> &get_polygons();
 
 private:
 
-    std::vector<Polygon> polygons_;
+    std::vector<Polygon*> polygons_;
 
     // std::vector<Server> servers_;
 
@@ -60,7 +60,7 @@ private:
 
     void add_corner_points(Polygon& polygon);
 
-    void push(Polygon& polygon);
+    void push(Polygon* polygon);
 
     float min(float x0, float y0, float x1, float y1);
 };

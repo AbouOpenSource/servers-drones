@@ -7,6 +7,7 @@
 #include "../util/VectorUtil.hpp"
 #include "../core/service/ServiceContainer.hpp"
 #include "../controller/ServerController.hpp"
+#include "../controller/DiagramController.hpp"
 
 Polygon::Polygon()
         : tab_pts_{new Vector2D[100]},
@@ -640,29 +641,27 @@ Vector2D *Polygon::next_vertex(Vector2D &vertex)
 
 void Polygon::draw(View::DrawHelper* draw_helper)
 {
-    std::string color;
+    // Fetch server of the polygon.
+    ServiceContainer *service_container = ServiceContainer::get_instance();
+    auto *diagram_controller = (DiagramController *) service_container->get_service(DiagramController::SERVICE);
 
-    for (Server* server: servers_)
-    {
-        // TODO is_inside not always working?
-        if (is_inside(server->get_position())) {
-            color = server->get_color();
-        }
-    }
-    glColor3fv(draw_helper->get_color(color));
+    map<Polygon *, Server *> polygon_server = diagram_controller->get_polygon_server();
+    Server *server = polygon_server[this];
+    std::cout << "SERVER: " << server->get_name() << std::endl;
+
+    glColor3fv(draw_helper->get_color(server->get_color()));
 
     glBegin(GL_POLYGON);
-    for (Vector2D& point: get_points_to_build_polygon())
-    {
+    for (Vector2D &point: get_points_to_build_polygon()) {
         glVertex2f(point.x_, point.y_);
     }
     glEnd();
 
     // TODO Issue when we add more servers.
     glColor3fv(BLACK);
-    for (Vector2D& point: points_to_build_polygon_)
+    for (Vector2D &point: points_to_build_polygon_)
     {
-        Vector2D* next_point = next_vertex(point);
+        Vector2D *next_point = next_vertex(point);
 
         glLineWidth(3);
         glBegin(GL_LINES);

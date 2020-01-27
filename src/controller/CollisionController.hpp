@@ -15,7 +15,8 @@
 
 #define COLLISION_RADIUS 48
 
-class CollisionController: public ServiceProvider
+class
+CollisionController: public ServiceProvider
 {
 
 public:

@@ -25,7 +25,7 @@ void Drone::set_server_name(const string &server_name)
 
 Vector2D& Drone::get_position()
 {
-    std::cout<< "Drone("<<get_id() <<") : "<<position_<<std::endl;
+//    std::cout<< "Drone("<<get_id() <<") : "<<position_<<std::endl;
 
     return position_;
 }
@@ -37,7 +37,7 @@ Drone::MoveData &Drone::get_move_data()
 
 std::ostream &operator<<(std::ostream &os, const Drone &dt)
 {
-    os << "Drone(" << dt.id_ << ") :" << dt.position_.x_ << '/' << dt.position_.y_ << '/';
+//    os << "Drone(" << dt.id_ << ") :" << dt.position_.x_ << '/' << dt.position_.y_ << '/';
     return os;
 }
 

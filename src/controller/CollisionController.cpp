@@ -28,12 +28,12 @@ CollisionController::CollisionController()
 void CollisionController::prevent_collision_for_drone(Drone *drone)
 {
     Circle zone = get_zone_for_drone(drone);
-    std::cout<<"Drone  selected"<<*drone<<std::endl<<std::endl;
+//    std::cout<<"Drone  selected"<<*drone<<std::endl<<std::endl;
     for(auto& drone_bis : get_drones()) {
         Circle zone_bis = get_zone_for_drone(drone_bis);
         if(drone !=drone_bis){
             if (zone.touch_with(&zone_bis)) {
-                std::cout<<"Collision "<< *drone<<" et "<< *drone_bis<<std::endl;
+//                std::cout<<"Collision "<< *drone<<" et "<< *drone_bis<<std::endl;
                 direction_controller_->prevent_collision_between_drones(drone, drone_bis);
             }
         }

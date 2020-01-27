@@ -7,6 +7,7 @@
 #include <array>
 #include "../core/service/ServiceContainer.hpp"
 #include "../controller/ServerController.hpp"
+#include "../controller/DiagramController.hpp"
 
 VoronoiDiagram::VoronoiDiagram(Polygon &mesh)
     : left_top_border_added_(false),
@@ -18,6 +19,7 @@ VoronoiDiagram::VoronoiDiagram(Polygon &mesh)
     auto* server_controller = (ServerController*) service_container->get_service(ServerController::SERVICE);
 
     std::vector<Server*> servers = server_controller->servers();
+//    std::cout << "first server: " << servers[0]->get_name() << std::endl;
 
     mesh.foreach_vertex([&mesh, &servers, this](Vector2D &vertex, unsigned int index)
     {
@@ -94,7 +96,20 @@ VoronoiDiagram::VoronoiDiagram(Polygon &mesh)
         remove_triangle(*triangle, triangles);
         add_corner_points(*polygon);
 
-        push(*polygon);
+        // Associates each polygon with its corresponding server.
+        ServiceContainer* service_container = ServiceContainer::get_instance();
+        auto* diagram_controller = (DiagramController*) service_container->get_service(DiagramController::SERVICE);
+
+        for (Server* server: servers)
+        {
+            // TODO is_inside not always working?
+            if (polygon->is_inside(server->get_position()))
+            {
+                diagram_controller->get_polygon_server()[polygon] = server;
+            }
+        }
+
+        push(polygon);
     });
 }
 
@@ -357,12 +372,12 @@ void VoronoiDiagram::add_corner_points(Polygon &polygon)
     });
 }
 
-void VoronoiDiagram::push(Polygon &polygon)
+void VoronoiDiagram::push(Polygon *polygon)
 {
     polygons_.push_back(polygon);
 }
 
-vector<Polygon> &VoronoiDiagram::get_polygons()
+vector<Polygon*> &VoronoiDiagram::get_polygons()
 {
     return polygons_;
 }

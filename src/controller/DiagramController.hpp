@@ -33,7 +33,11 @@ private:
     Window* window_;
 
     std::map<Polygon*, PolygonView*> polygon_view_;
+
+public:
+
     std::map<Polygon*, Server*> polygon_server_;
+    map<Polygon *, Server *> &get_polygon_server();
 };
 
 

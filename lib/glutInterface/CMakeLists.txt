@@ -79,9 +79,5 @@ ENDIF(APPLE)
 
 add_definitions(${FREEGLUT_DEFINITIONS} ${OPENGL_DEFINITIONS})
 
-<<<<<<< Updated upstream
-add_executable(Test main.cpp)
-=======
 #add_executable(glutInterface main.cpp glutWindow.cpp glutWindow.h)
->>>>>>> Stashed changes
 target_link_libraries(glutInterface ${FREEGLUT_LIBRARIES} ${GLUT_LIBRARIES} ${OPENGL_LIBRARIES})
