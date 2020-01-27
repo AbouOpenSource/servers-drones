@@ -20,7 +20,7 @@ void DroneView::draw(DrawHelper* draw_helper)
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, texture_id_);
     glPushMatrix();
-    glTranslatef(drone_->get_position().x_, drone_->get_position().y_, 1.0);
+    glTranslatef(drone_->get_position().x_-48, drone_->get_position().y_-48, 1.0);
     glBegin(GL_QUADS);
     glTexCoord2f(0.0,0.0);
     glVertex2f(0.0,0.0);
