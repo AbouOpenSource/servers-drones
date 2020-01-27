@@ -30,7 +30,8 @@ public:
         F9 = 57,
         S = 115,
         D = 100,
-        DEL = 127
+        DEL = 127,
+        ENTER = 13
     };
 
     enum MouseClick {

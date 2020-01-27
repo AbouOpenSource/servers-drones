@@ -2,7 +2,6 @@
 // Created by Maanrifa Bacar Ali on 21/01/2020.
 //
 
-#include <iostream>
 #include "EventManager.hpp"
 
 std::string EventManager::SERVICE = "EventService";
@@ -25,7 +24,7 @@ void EventManager::publish(const std::string &event_type, Event *event)
     }
 }
 
-void EventManager::subscribe(const std::string &event_type, Subscription& subscription)
+void EventManager::subscribe(const std::string &event_type, const Subscription& subscription)
 {
     auto& subscriptions = get_subscriptions_for(event_type);
     subscriptions.push_back(subscription);

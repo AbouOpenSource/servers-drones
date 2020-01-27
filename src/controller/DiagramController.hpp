@@ -23,12 +23,9 @@ public:
 
     DiagramController();
 
-    Server* fetch_server_to_polygon(Polygon* polygon);
-
 private:
 
     VoronoiDiagram* voronoi_diagram_;
-    VoronoiDiagramView* voronoi_diagram_view_;
 
     Window* window_;
 

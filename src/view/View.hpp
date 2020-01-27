@@ -9,15 +9,15 @@
 #include "../core/event/EventManager.hpp"
 #include <glutWindow.h>
 
-const float BLACK[4] = {0.0, 0.0, 0.0, 1.0f};
-const float GREY[4] = {0.75f, 0.75f, 0.75f, 1.0f};
-const float RED[4] = {1.0f, 0.0, 0.0, 1.0f};
-const float ORANGE[4] = {1.0f, 0.27f, 0.0, 1.0f};
-const float YELLOW[4] = {1.0f, 1.0f, 0.0, 1.0f};
-const float GREEN[4] = {0.0, 1.0f, 0.0, 1.0f};
-const float BLUE[4] = {0.0, 0.0, 1.0f, 1.0f};
-const float PINK[4] = {0.9569f, 0.7529f, 0.7961f, 1.0f};
-const float CYAN[4] = {0.0, 1.0f, 1.0f, 1.0f};
+const float BLACK[4] = {0.0, 0.0, 0.0, 0.1f};
+const float GREY[4] = {0.75f, 0.75f, 0.75f, 0.1f};
+const float RED[4] = {1.0f, 0.0, 0.0, 0.1f};
+const float ORANGE[4] = {1.0f, 0.27f, 0.0, 0.1f};
+const float YELLOW[4] = {1.0f, 1.0f, 0.0, 0.1f};
+const float GREEN[4] = {0.0, 1.0f, 0.0, 0.1f};
+const float BLUE[4] = {0.0, 0.0, 1.0f, 0.1f};
+const float PINK[4] = {0.9569f, 0.7529f, 0.7961f, 0.1f};
+const float CYAN[4] = {0.0, 1.0f, 1.0f, 0.1f};
 
 class View
 {
@@ -40,7 +40,6 @@ public:
         const float* grey();
         const float* pink();
         const float* cyan();
-
     };
 
     typedef std::function<int(const std::string& path, int& x, int& y)> TextureLoader;

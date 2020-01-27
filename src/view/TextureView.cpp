@@ -28,5 +28,5 @@ void TextureView::start()
 
 void TextureView::quit()
 {
-    glDeleteTextures(1, reinterpret_cast<const GLuint *>(&texture_id_));
+    //glDeleteTextures(1, reinterpret_cast<const GLuint *>(&texture_id_));
 }

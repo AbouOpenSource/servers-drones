@@ -11,6 +11,8 @@
 #include "../model/Circle.hpp"
 #include "../core/event/internal/ServerReadyEvent.hpp"
 #include "DiagramController.hpp"
+#include "../core/event/internal/BackgroundReadyEvent.hpp"
+#include "../view/VoronoiDiagramView.hpp"
 
 std::string ServerController::SERVICE = "ServerService";
 
@@ -32,6 +34,8 @@ ServerController::ServerController()
     input_manager->register_key_press_listener(on_key_pressed());
     input_manager->register_mouse_move_listener(on_mouse_move());
     input_manager->register_mouse_click_listener(on_mouse_click());
+
+    event_manager_->subscribe(EventType::BACKGROUND_READY, on_background_ready());
 }
 
 Server* ServerController::find_server_by_name(const std::string& server_name)
@@ -109,7 +113,7 @@ void ServerController::add_server(Server* server)
     servers_.push_back(server);
     server_view_[server] = server_view;
     server_drone_count_[server] = 0;
-    window_->addView(server_view);
+    //window_->addView(server_view);
 }
 
 Drone* ServerController::create_drone(Server* server)
@@ -252,21 +256,70 @@ std::vector<Drone*>& ServerController::drones()
 InputManager::KeyPressListener ServerController::on_key_pressed()
 {
     return [this] (InputManager::Key key, InputManager::MousePosition position) {
-
+        switch (key) {
+            case InputManager::ENTER:
+                create_drone(find_server_by_name("Beijing"));
+                break;
+            case InputManager::F1:
+                set_servers_color(get_selected_servers(), "RED");
+                break;
+            case InputManager::F2:
+                set_servers_color(get_selected_servers(), "BLACK");
+                break;
+            case InputManager::F3:
+                set_servers_color(get_selected_servers(), "CYAN");
+                break;
+            case InputManager::F4:
+                set_servers_color(get_selected_servers(), "YELLOW");
+                break;
+            case InputManager::F5:
+                set_servers_color(get_selected_servers(), "GREY");
+                break;
+            case InputManager::F6:
+                set_servers_color(get_selected_servers(), "BLUE");
+                break;
+            case InputManager::F7:
+                set_servers_color(get_selected_servers(), "ORANGE");
+                break;
+            case InputManager::F8:
+                set_servers_color(get_selected_servers(), "PINK");
+                break;
+            case InputManager::F9:
+                set_servers_color(get_selected_servers(), "GREEN");
+                break;
+            case InputManager::S:
+                save_current_state();
+                break;
+            case InputManager::D:
+                break;
+            case InputManager::DEL:
+                delete_selected_servers();
+                break;
+        }
     };
 }
 
 InputManager::MouseMoveListener ServerController::on_mouse_move()
 {
     return [this] (InputManager::MousePosition position) {
-
     };
 }
 
 InputManager::MouseClickListener ServerController::on_mouse_click()
 {
     return [this] (InputManager::MouseClick click, InputManager::MousePosition position) {
+    };
+}
 
+EventManager::Subscription ServerController::on_background_ready()
+{
+    return [this] (Event* e, const TypeUtil::Callback& unsubscribe) {
+        BackgroundReadyEvent* background_ready_event = (BackgroundReadyEvent*)e;
+        VoronoiDiagramView* voronoi_diagram_view = new VoronoiDiagramView(background_ready_event->get_voronoi_diagram());
+        window_->addView(voronoi_diagram_view, true);
+        for (auto& server_view: server_view_) {
+            window_->addView(server_view.second);
+        }
     };
 }
 

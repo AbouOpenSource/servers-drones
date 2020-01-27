@@ -16,8 +16,7 @@ void DroneView::start()
 
 void DroneView::draw(DrawHelper* draw_helper)
 {
-    auto &data = drone_->get_move_data();
-    glEnable(GL_TEXTURE_2D);
+    //auto &data = drone_->get_move_data();
     glBindTexture(GL_TEXTURE_2D, texture_id_);
     glPushMatrix();
     glTranslatef(drone_->get_position().x_-48, drone_->get_position().y_-48, 1.0);

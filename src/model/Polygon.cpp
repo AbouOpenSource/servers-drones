@@ -356,7 +356,6 @@ std::vector<float> Polygon::intersections(const Vector2D& a, const Vector2D& u)
     for (int i = 0; i < current_n_; ++i)
     {
         k1k2 = intersect(a, u, tab_pts_[i], tab_pts_[i + 1]);
-        std::cout << "Intersection " << i << ":" << k1k2[0] << ";" << k1k2[1] << std::endl;
 
         if (k1k2.size() == 2 && k1k2[1] >= 0.0 && k1k2[1] <= 1.0)
         {
@@ -676,6 +675,7 @@ void Polygon::draw(View::DrawHelper* draw_helper)
         glVertex2f(next_point->x_, next_point->y_);
         glEnd();
     }
+    glEnable(GL_TEXTURE_2D);
 }
 
 vector<Vector2D> &Polygon::get_points_to_build_polygon()
