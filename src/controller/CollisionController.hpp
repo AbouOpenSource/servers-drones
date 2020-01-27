@@ -13,7 +13,7 @@
 #include "DirectionController.hpp"
 #include "ServerController.hpp"
 
-#define COLLISION_RADIUS 75
+#define COLLISION_RADIUS 48
 
 class CollisionController: public ServiceProvider
 {
@@ -28,7 +28,7 @@ public:
 
     void monitor_trajectory_of_drone(Drone* drone);
 
-    std::vector<Drone>& get_drones();
+    vector<Drone *> & get_drones();
 
 private:
 

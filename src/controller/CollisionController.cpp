@@ -17,8 +17,8 @@ CollisionController::CollisionController()
     server_controller_ = (ServerController *) service_container->get_service(ServerController::SERVICE);
     EventManager::Subscription subscription = [this] (Event* e, const TypeUtil::Callback& unsubscribe) {
         for(auto & drone : get_drones()) {
-            prevent_collision_for_drone(&drone);
-            monitor_trajectory_of_drone(&drone);
+            prevent_collision_for_drone(drone);
+            monitor_trajectory_of_drone(drone);
         }
     };
     auto* event_manager = (EventManager *) service_container->get_service(EventManager::SERVICE);
@@ -28,15 +28,16 @@ CollisionController::CollisionController()
 void CollisionController::prevent_collision_for_drone(Drone *drone)
 {
     Circle zone = get_zone_for_drone(drone);
+    std::cout<<"Drone  selected"<<*drone<<std::endl<<std::endl;
     for(auto& drone_bis : get_drones()) {
-        std::cout<<"Drone( "<<drone_bis.get_id()<<" ) : "<<drone_bis.get_position()<<std::endl;
-        Circle zone_bis = get_zone_for_drone(&drone_bis);
-        std::cout<< zone_bis;
-
-        if (zone.touch_with(&zone_bis)) {
-            std::cout<<"Collision"<<std::endl;
-            direction_controller_->prevent_collision_between_drones(drone, &drone_bis);
+        Circle zone_bis = get_zone_for_drone(drone_bis);
+        if(drone !=drone_bis){
+            if (zone.touch_with(&zone_bis)) {
+                std::cout<<"Collision "<< *drone<<" et "<< *drone_bis<<std::endl;
+                direction_controller_->prevent_collision_between_drones(drone, drone_bis);
+            }
         }
+
     }
 }
 
@@ -73,12 +74,11 @@ void CollisionController::monitor_trajectory_of_drone(Drone *drone)
 Circle CollisionController::get_zone_for_drone(Drone* drone)
 {
     auto& drone_position = drone->get_position();
-   // std::cout<< "Drone("<<drone->get_id() <<") : "<<drone_position<<std::endl;
     Position center = Position(drone_position.x_, drone_position.y_);
     return {center, COLLISION_RADIUS};
 }
 
-std::vector<Drone> &CollisionController::get_drones()
+std::vector<Drone*> &CollisionController::get_drones()
 {
     return server_controller_->drones();
 }

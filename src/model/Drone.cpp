@@ -25,6 +25,8 @@ void Drone::set_server_name(const string &server_name)
 
 Vector2D& Drone::get_position()
 {
+    std::cout<< "Drone("<<get_id() <<") : "<<position_<<std::endl;
+
     return position_;
 }
 

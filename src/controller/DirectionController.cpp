@@ -59,8 +59,12 @@ void DirectionController::set_drone_target(Drone *drone, const Vector2D &target)
 void DirectionController::prevent_collision_between_drones(Drone *d1, Drone *d2)
 {
     auto& move = d1->get_move_data();
+
     auto& d1_pos = d1->get_position();
     auto& d2_pos = d2->get_position();
+   std::cout<<"D1 " << d1_pos<<std::endl;
+    std::cout<<"D2 " << d2_pos<<std::endl;
+
     //TODO define the force to avoid the collison with the drone passing in args
     float distance = get_distance_between_drones(d1, d2);
 
@@ -135,6 +139,7 @@ void DirectionController::update_position_of_drone(Drone *drone)
     }
      //            drone_position = drone_position + move.speed;
 
+    std::cout<<*drone<<std::endl;
 }
 
 void DirectionController::update_speed_of_drone(Drone *drone)

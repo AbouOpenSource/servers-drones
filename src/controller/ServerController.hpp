@@ -43,7 +43,7 @@ public:
 
     void set_servers_color(const std::vector<Server*>& servers, const std::string& color);
 
-    void add_server(Server& server);
+    void add_server(Server* server);
 
     void attach_drone_to_server(Drone* drone, Server* server);
 
@@ -61,9 +61,9 @@ public:
 
     int get_server_attached_drone_count(Server* server);
 
-    std::vector<Server>& servers();
+    vector<Server *> & servers();
 
-    std::vector<Drone>& drones();
+    vector<Drone *> & drones();
 
 private:
 
@@ -83,9 +83,9 @@ private:
 
     DirectionController* direction_controller_;
 
-    std::vector<Server> servers_;
+    std::vector<Server *> servers_;
 
-    std::vector<Drone> drones_;
+    std::vector<Drone*> drones_;
 
     std::map<Server*, ServerView*> server_view_;
 
