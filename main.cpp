@@ -68,9 +68,9 @@ int main(int argc, char** argv)
         Server* rome = server_controller.find_server_by_name("Rome");
         server_controller.attach_drone_to_server(drone_rome, rome);
 
-      /*  Drone* drone_rome1 = server_controller.create_drone();
+        Drone* drone_rome1 = server_controller.create_drone();
         server_controller.attach_drone_to_server(drone_rome1, rome);
-*/
+
 
         Drone* drone_london = server_controller.create_drone();
         Server* london = server_controller.find_server_by_name("London");

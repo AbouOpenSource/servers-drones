@@ -62,7 +62,7 @@ void DirectionController::prevent_collision_between_drones(Drone *d1, Drone *d2)
 
     auto& d1_pos = d1->get_position();
     auto& d2_pos = d2->get_position();
-   std::cout<<"D1 " << d1_pos<<std::endl;
+    std::cout<<"D1 " << d1_pos<<std::endl;
     std::cout<<"D2 " << d2_pos<<std::endl;
 
     //TODO define the force to avoid the collison with the drone passing in args

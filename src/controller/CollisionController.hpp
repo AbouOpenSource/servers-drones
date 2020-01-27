@@ -28,7 +28,7 @@ public:
 
     void monitor_trajectory_of_drone(Drone* drone);
 
-    vector<Drone *> & get_drones();
+    vector<Drone*> & get_drones();
 
 private:
 

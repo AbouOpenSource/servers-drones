@@ -4,7 +4,7 @@
 
 #include "ServerView.hpp"
 
-ServerView::ServerView(Server *server): TextureView("earth"), server_(server)
+ServerView::ServerView(Server *server): TextureView("master"), server_(server)
 {}
 
 void ServerView::start()
@@ -27,13 +27,10 @@ void ServerView::draw(DrawHelper* draw_helper)
     glBegin(GL_QUADS);
     glTexCoord2f(0.0,0.0);
     glVertex2f(0.0,0.0);
-
     glTexCoord2f(1.0,0.0);
     glVertex2f(96.0,0.0);
-
     glTexCoord2f(1.0,1.0);
     glVertex2f(96.0,96.0);
-
     glTexCoord2f(0.0,1.0);
     glVertex2f(0.0,96.0);
     glEnd();
