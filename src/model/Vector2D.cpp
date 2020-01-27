@@ -55,6 +55,11 @@ void Vector2D::normalize()
     y_ /= norm;
 }
 
+Vector2D Vector2D::center(const Vector2D &vertex1, const Vector2D &vertex2)
+{
+    return (vertex1 + vertex2) / 2;
+}
+
 double Vector2D::norm()
 {
     return std::sqrt(x_ * x_ + y_ * y_);
@@ -81,5 +86,11 @@ std::ostream &operator<<(std::ostream &out, const Vector2D &vector)
     out << "Vector2D | x: " << vector.x_ << ", y: " << vector.y_;
     return out;
 }
+
+bool operator==(const Vector2D &vector1, const Vector2D &vector2)
+{
+    return vector1.x_ == vector2.x_ && vector1.y_ == vector2.y_;
+}
+
 
 #pragma clang diagnostic pop

@@ -45,6 +45,12 @@ const float * View::DrawHelper::get_color(const std::string &color_name)
 	if (color_name == "BLUE") {
         return BLUE;
     }
+	if (color_name == "PINK") {
+        return PINK;
+    }
+	if (color_name == "CYAN") {
+        return CYAN;
+    }
 
     return YELLOW;
 }
@@ -82,4 +88,14 @@ const float *View::DrawHelper::orange()
 const float *View::DrawHelper::grey()
 {
     return get_color("GREY");
+}
+
+const float *View::DrawHelper::pink()
+{
+    return get_color("PINK");
+}
+
+const float *View::DrawHelper::cyan()
+{
+    return get_color("CYAN");
 }

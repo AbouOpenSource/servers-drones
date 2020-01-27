@@ -4,8 +4,10 @@
 #include "src/controller/ServerController.hpp"
 #include "src/Window.hpp"
 #include "src/core/service/ServiceContainer.hpp"
-#include "src/view/PolygonView.hpp"
 #include "src/controller/CollisionController.hpp"
+#include "src/model/VoronoiDiagram.hpp"
+#include "src/view/VoronoiDiagramView.hpp"
+#include "src/controller/DiagramController.hpp"
 
 using namespace std;
 
@@ -44,13 +46,12 @@ int main(int argc, char** argv)
     CollisionController collision_controller_;
     service_container->register_service(&collision_controller_);
 
-    Polygon convex_polygon = Polygon();
-    PolygonView polygon_view(&convex_polygon);
+    // Diagram Controller Service
+    DiagramController diagram_controller_;
+    service_container->register_service(&diagram_controller_);
 
     // Init from last state
-    server_controller.load_last_state([&window, &convex_polygon, &polygon_view, &server_controller] () {
-      //  convex_polygon.init(server_controller.servers());
-       // window.addView(&polygon_view);
+    server_controller.load_last_state([&window, &server_controller, &service_container] () {
 
         Drone* drone_paris = server_controller.create_drone();
         Server* paris = server_controller.find_server_by_name("Paris");

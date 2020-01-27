@@ -12,3 +12,4 @@ std::string EventType::ADD_SERVER_TO_POSITION = "ADD_SERVER_TO_POSITION";
 std::string EventType::ADD_SERVER_TO_BEGIN = "ADD_SERVER_TO_BEGIN";
 std::string EventType::SAVE_CONFIG_STATE = "SAVE_CONFIG_STATE";
 std::string EventType::FRAME_UPDATE = "FRAME_UPDATE";
+std::string EventType::SERVER_READY = "SERVER_READY";

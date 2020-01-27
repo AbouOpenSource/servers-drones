@@ -16,6 +16,8 @@ const float ORANGE[4] = {1.0f, 0.27f, 0.0, 1.0f};
 const float YELLOW[4] = {1.0f, 1.0f, 0.0, 1.0f};
 const float GREEN[4] = {0.0, 1.0f, 0.0, 1.0f};
 const float BLUE[4] = {0.0, 0.0, 1.0f, 1.0f};
+const float PINK[4] = {0.9569f, 0.7529f, 0.7961f, 1.0f};
+const float CYAN[4] = {0.0, 1.0f, 1.0f, 1.0f};
 
 class View
 {
@@ -36,6 +38,8 @@ public:
         const float* black();
         const float* orange();
         const float* grey();
+        const float* pink();
+        const float* cyan();
 
     };
 

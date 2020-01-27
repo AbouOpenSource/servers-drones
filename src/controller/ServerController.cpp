@@ -9,6 +9,7 @@
 #include "../util/StringUtil.hpp"
 #include "../util/VectorUtil.hpp"
 #include "../model/Circle.hpp"
+#include "../core/event/internal/ServerReadyEvent.hpp"
 
 std::string ServerController::SERVICE = "ServerService";
 
@@ -211,7 +212,11 @@ void ServerController::load_last_state(const TypeUtil::Callback& on_loaded)
                 add_server(server);
             }
         }
-    }, on_loaded);
+    }, [this, &on_loaded] () {
+        /*ServerReadyEvent server_ready_event();
+        event_manager_->publish(EventType::SERVER_READY, )*/
+        on_loaded();
+    });
 }
 
 void ServerController::save_current_state(const TypeUtil::Callback& on_finish)
