@@ -17,8 +17,8 @@ CollisionController::CollisionController()
     server_controller_ = (ServerController *) service_container->get_service(ServerController::SERVICE);
     EventManager::Subscription subscription = [this] (Event* e, const TypeUtil::Callback& unsubscribe) {
         for(auto & drone : get_drones()) {
-            //prevent_collision_for_drone(&drone);
-            //monitor_trajectory_of_drone(&drone);
+            prevent_collision_for_drone(&drone);
+            monitor_trajectory_of_drone(&drone);
         }
     };
     auto* event_manager = (EventManager *) service_container->get_service(EventManager::SERVICE);
@@ -38,31 +38,31 @@ void CollisionController::prevent_collision_for_drone(Drone *drone)
 
 void CollisionController::monitor_trajectory_of_drone(Drone *drone)
 {
-    auto* drone_move = direction_controller_->get_instant_movement_for_drone(drone);
+    auto& move = drone->get_move_data();
     auto& drone_position = drone->get_position();
 
-    if(abs(drone_position.y_ - window_->getWindowHeight()) < 100 && drone_move->speed.y_ > 0){
-        drone_move->acceleration.y_ = -drone_move->acceleration.y_;
-        drone_move->acceleration.x_ = -drone_move->acceleration.x_;
-        drone_move->speed.y_ = -drone_move->speed.y_;
+    if(abs(drone_position.y_ - window_->getWindowHeight()) < 100 && move.speed.y_ > 0){
+        move.acceleration.y_ = -move.acceleration.y_;
+        move.acceleration.x_ = -move.acceleration.x_;
+        move.speed.y_ = -move.speed.y_;
     }
 
-    if(drone_position.y_ < 10 && drone_move->speed.y_ < 0){
-        drone_move->acceleration.y_ = -drone_move->acceleration.y_;
-        drone_move->acceleration.x_ = -drone_move->acceleration.x_;
-        drone_move->speed.y_ = -drone_move->speed.y_;
+    if(drone_position.y_ < 10 && move.speed.y_ < 0){
+        move.acceleration.y_ = -move.acceleration.y_;
+        move.acceleration.x_ = -move.acceleration.x_;
+        move.speed.y_ = -move.speed.y_;
     }
     
-    if(drone_position.x_ < 10 && drone_move->speed.x_ < 0){
-        drone_move->acceleration.y_ = -drone_move->acceleration.y_;
-        drone_move->acceleration.x_ = -drone_move->acceleration.x_;
-        drone_move->speed.x_ = -drone_move->speed.x_;
+    if(drone_position.x_ < 10 && move.speed.x_ < 0){
+        move.acceleration.y_ = -move.acceleration.y_;
+        move.acceleration.x_ = -move.acceleration.x_;
+        move.speed.x_ = -move.speed.x_;
     }
     
-    if(abs(drone_position.x_ - window_->getWindowWidth()) < 100 && drone_move->speed.x_ > 0){
-        drone_move->acceleration.y_ = -drone_move->acceleration.y_;
-        drone_move->acceleration.x_ = -drone_move->acceleration.x_;
-        drone_move->speed.x_ = -drone_move->speed.x_;
+    if(abs(drone_position.x_ - window_->getWindowWidth()) < 100 && move.speed.x_ > 0){
+        move.acceleration.y_ = -move.acceleration.y_;
+        move.acceleration.x_ = -move.acceleration.x_;
+        move.speed.x_ = -move.speed.x_;
     }
 }
 
