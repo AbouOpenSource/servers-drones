@@ -6,6 +6,7 @@
 #define DRONEPROJECT_FRAMEUPDATEEVENT_HPP
 
 
+#include <ostream>
 #include "../Event.hpp"
 #include "../../../Window.hpp"
 
@@ -16,9 +17,11 @@ public:
 
     FrameUpdateEvent(Window* window);
 
+    friend std::ostream &operator<<(std::ostream &os, const FrameUpdateEvent &event);
+
 private:
 
-    Window* window;
+    Window* window_;
 
 };
 

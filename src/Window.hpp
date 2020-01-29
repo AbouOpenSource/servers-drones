@@ -9,7 +9,6 @@
 #define TEXTURE_DIR "../data/assets/texture/"
 
 #include <glutWindow.h>
-#include "core/event/input/InputManager.hpp"
 #include "core/event/EventManager.hpp"
 #include "core/service/ServiceProvider.hpp"
 #include "view/View.hpp"
@@ -21,10 +20,40 @@ class Window: public GlutWindow, public ServiceProvider
 
 public:
 
+    enum Key {
+        F1 = 49,
+        F2 = 50,
+        F3 = 51,
+        F4 = 52,
+        F5 = 53,
+        F6 = 54,
+        F7 = 55,
+        F8 = 56,
+        F9 = 57,
+        S = 115,
+        D = 100,
+        DEL = 127,
+        ENTER = 13
+    };
+
+    enum MouseClick {
+        LEFT,
+        RIGHT
+    };
+
+    struct MousePosition {
+        int X;
+        int Y;
+    };
+
     static std::string SERVICE;
 
     /********** Constructor **********/
     Window(int argc, char **argv);
+
+    /********** Getter **********/
+
+    MousePosition get_current_mouse_position() const;
 
     /********** Event **********/
 
@@ -46,9 +75,11 @@ public:
 
 private:
 
-    InputManager* input_manager_;
+    void publishInputEvent(const char* event_type, Event* event);
 
     EventManager* event_manager_;
+
+    MousePosition current_mouse_position_;
 
     View::DrawHelper draw_helper_;
 

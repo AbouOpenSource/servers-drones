@@ -3,16 +3,13 @@
 //
 
 #include "PolygonView.hpp"
-#include "../core/service/ServiceContainer.hpp"
-#include "../controller/ServerController.hpp"
 
-PolygonView::PolygonView(Polygon *polygon): View(), polygon_(polygon)
+PolygonView::PolygonView(Polygon *polygon, Server* server): View(), polygon_(polygon), server_(server)
 {}
 
-void PolygonView::init(InputManager *input_manager, EventManager *event_manager,
-                       const View::TextureLoader &texture_loader)
+void PolygonView::init(DrawHelper* draw_helper, EventManager* event_manager)
 {
-    View::init(input_manager, event_manager, texture_loader);
+    View::init(draw_helper, event_manager);
 }
 
 void PolygonView::start()
@@ -22,37 +19,29 @@ void PolygonView::start()
 
 void PolygonView::draw(View::DrawHelper *draw_helper)
 {
-    polygon_->solve_delaunay();
-    polygon_->check_delaunay();
+    glDisable(GL_TEXTURE_2D);
 
-    for (auto& triangle: polygon_->triangles_)
-    {
-        triangle.draw();
+    glColor3fv(draw_helper->get_color(server_->get_color()));
+
+    glBegin(GL_POLYGON);
+    for (auto &point: polygon_->get_build_points()) {
+        glVertex2f(point.x_, point.y_);
     }
+    glEnd();
 
-    // Draw the number of points.
-    glLineWidth(1);
-    for (int i = 0; i < polygon_->current_n_; i++)
+    glColor3fv(BLACK);
+    for (auto &point: polygon_->get_build_points())
     {
+        Vector2D *next_point = polygon_->next_vertex(point);
+
+        glLineWidth(3);
         glBegin(GL_LINES);
-        glVertex2f(polygon_->tab_pts_[i].x_ - 10, polygon_->tab_pts_[i].y_ - 10);
-        glVertex2f(polygon_->tab_pts_[i].x_ + 10, polygon_->tab_pts_[i].y_ + 10);
+        glVertex2f(point.x_, point.y_);
+        glVertex2f(next_point->x_, next_point->y_);
         glEnd();
-
-        glBegin(GL_LINES);
-        glVertex2f(polygon_->tab_pts_[i].x_ + 10, polygon_->tab_pts_[i].y_ - 10);
-        glVertex2f(polygon_->tab_pts_[i].x_ - 10, polygon_->tab_pts_[i].y_ + 10);
-        glEnd();
-
-        GlutWindow::drawText(polygon_->tab_pts_[i].x_ - 10, polygon_->tab_pts_[i].y_, to_string(i), GlutWindow::ALIGN_RIGHT);
     }
 
-    // TODO
-    for (Vector2D points: polygon_->get_points_to_build_polygon())
-    {
-        glColor3fv(RED);
-        GlutWindow::fillEllipse(points.x_, points.y_, 2.5, 2.5);
-    }
+    glEnable(GL_TEXTURE_2D);
 }
 
 void PolygonView::quit()

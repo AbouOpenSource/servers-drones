@@ -4,10 +4,12 @@
 
 #include "View.hpp"
 
-View::View()
-{}
+std::vector<std::string> View::DrawHelper::COLORS = {"GREEN", "PINK", "ORANGE", "BLUE", "GREY", "YELLOW", "CYAN", "BLACK", "RED"};
 
-void View::init(InputManager* input_manager, EventManager* event_manager, const TextureLoader& texture_loader)
+View::View()
+= default;
+
+void View::init(DrawHelper *draw_helper, EventManager *event_manager)
 {}
 
 void View::start()
@@ -21,6 +23,11 @@ void View::quit()
 
 View::DrawHelper::DrawHelper()
 {}
+
+void View::DrawHelper::init(View::TextureLoader* texture_loader)
+{
+    texture_loader_ = texture_loader;
+}
 
 const float * View::DrawHelper::get_color(const std::string &color_name)
 {
@@ -98,4 +105,9 @@ const float *View::DrawHelper::pink()
 const float *View::DrawHelper::cyan()
 {
     return get_color("CYAN");
+}
+
+int View::DrawHelper::load_texture(const std::string &file_name, int &width, int &height)
+{
+    return (*texture_loader_)(file_name, width, height);
 }

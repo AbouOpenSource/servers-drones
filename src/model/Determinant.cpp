@@ -1,4 +1,4 @@
-#include "determinant.hpp"
+#include "Determinant.hpp"
 
 void Matrix22::get2x2From3x3(const Matrix33 &mat33,int shadowLin, int shadowCol)
 {

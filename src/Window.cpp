@@ -7,23 +7,28 @@
 #include "util/VectorUtil.hpp"
 #include "core/event/internal/EventType.hpp"
 #include "core/event/internal/FrameUpdateEvent.hpp"
+#include "core/event/internal/MouseMoveEvent.hpp"
+#include "core/event/internal/KeyPressEvent.hpp"
+#include "core/event/internal/MouseClickEvent.hpp"
 
 std::string Window::SERVICE = "WindowService";
 
 Window::Window(int argc, char **argv)
     : GlutWindow(argc, argv, TITLE, 1000, 800, FIXED),
     ServiceProvider(Window::SERVICE),
-    input_manager_((InputManager *) ServiceContainer::get_instance()->get_service(InputManager::SERVICE)),
+    views_({}),
+    current_mouse_position_({0, 0}),
     event_manager_((EventManager *) ServiceContainer::get_instance()->get_service(EventManager::SERVICE)),
-    views_(std::vector<View*>())
+    draw_helper_()
 {
-    draw_helper_ = View::DrawHelper();
+    draw_helper_.init(new View::TextureLoader ([](const std::string &file_name, int &x, int &y) {
+        return loadTGATexture(TEXTURE_DIR + file_name + ".tga", x, y);
+    }));
 }
 
 void Window::onStart()
 {
     glClearColor(1.0,1.0,1.0,1.0); // background color
-
     for (auto & view : views_) {
         view->start();
     }
@@ -32,12 +37,10 @@ void Window::onStart()
 void Window::onDraw()
 {
     FrameUpdateEvent event(this);
-    event_manager_->publish(EventType::FRAME_UPDATE, &event);
-    glEnable(GL_TEXTURE_2D);
+    event_manager_->publish(EventType::FRAME_UPDATED, &event);
     for (auto & view : views_) {
         view->draw(&draw_helper_);
     }
-    glDisable(GL_TEXTURE_2D);
 }
 
 void Window::onQuit()
@@ -54,12 +57,7 @@ void Window::addView(View* view, bool front)
     } else {
         views_.push_back(view);
     }
-    view->init(
-            input_manager_,
-            event_manager_,
-            [] (const std::string &file_name, int &x, int &y) {
-        return loadTGATexture(TEXTURE_DIR + file_name + ".tga", x, y);
-    });
+    view->init(&draw_helper_, event_manager_);
 }
 
 void Window::removeView(View *view)
@@ -69,15 +67,35 @@ void Window::removeView(View *view)
 
 void Window::onMouseMove(double cx, double cy)
 {
-    input_manager_->on_mouse_move(cx, cy);
+    current_mouse_position_.X = (int)cx;
+    current_mouse_position_.Y = (int)cy;
+
+    MousePosition mouse_position{(int)cx, (int)cy};
+    publishInputEvent(EventType::MOUSE_MOVED, new MouseMoveEvent(mouse_position));
 }
 
 void Window::onMouseDown(int button, double cx, double cy)
 {
-    input_manager_->on_mouse_down(button, cx, cy);
+    MousePosition mouse_position{(int)cx, (int)cy};
+    MouseClick mouse_click = button == 0 ? LEFT : RIGHT;
+
+    publishInputEvent(EventType::MOUSE_CLICKED, new MouseClickEvent(mouse_click, mouse_position));
 }
 
 void Window::onKeyPressed(unsigned char c, double cx, double cy)
 {
-    input_manager_->on_key_pressed(c, cx, cy);
+    MousePosition mouse_position{(int)cx, (int)cy};
+
+    publishInputEvent(EventType::KEY_PRESSED, new KeyPressEvent(static_cast<Key>(c), mouse_position));
+}
+
+Window::MousePosition Window::get_current_mouse_position() const
+{
+    return current_mouse_position_;
+}
+
+void Window::publishInputEvent(const char *event_type, Event* event)
+{
+    event_manager_->publish(event_type, event);
+    event_manager_->publish(EventType::INPUT, event);
 }

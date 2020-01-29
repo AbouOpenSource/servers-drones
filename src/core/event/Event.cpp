@@ -4,10 +4,10 @@
 
 #include "Event.hpp"
 
-Event::Event(const std::string &name): name_(name)
+Event::Event()
 {}
 
-const std::string &Event::get_name() const
+std::ostream &operator<<(std::ostream &os, const Event &e)
 {
-    return name_;
+    return os;
 }

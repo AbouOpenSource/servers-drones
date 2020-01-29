@@ -4,13 +4,26 @@
 
 #include "EventType.hpp"
 
-std::string EventType::CHANGE_SERVER_COLOR = "CHANGE_SERVER_COLOR";
-std::string EventType::CLEAR_SELECTION = "CLEAR_SELECTION";
-std::string EventType::DELETE_SELECTED_SERVER = "DELETE_SELECTED_SERVER";
-std::string EventType::CHANGE_SELECTED_SERVERS_COLOR = "CHANGE_SELECTED_SERVERS_COLOR";
-std::string EventType::ADD_SERVER_TO_POSITION = "ADD_SERVER_TO_POSITION";
-std::string EventType::ADD_SERVER_TO_BEGIN = "ADD_SERVER_TO_BEGIN";
-std::string EventType::SAVE_CONFIG_STATE = "SAVE_CONFIG_STATE";
-std::string EventType::FRAME_UPDATE = "FRAME_UPDATE";
-std::string EventType::SERVER_READY = "SERVER_READY";
-std::string EventType::BACKGROUND_READY = "BACKGROUND_READY";
+const char* EventType::SELECTION_CLEARED = "SELECTION_CLEARED";
+const char* EventType::SELECTION_DELETED = "SELECTION_DELETED";
+const char* EventType::SELECTION_COLOR_CHANGED = "SELECTION_COLOR_CHANGED";
+
+const char* EventType::DRONE_ADDED = "DRONE_ADDED";
+const char* EventType::SERVER_ADDED = "SERVER_ADDED";
+
+const char* EventType::CONFIG_SAVED = "CONFIG_SAVED";
+const char* EventType::CONFIG_LOADED = "CONFIG_LOADED";
+
+const char* EventType::SERVER_CONFIG_CHANGED = "SERVER_CONFIG_CHANGED";
+const char* EventType::DRONE_CONFIG_CHANGED = "DRONE_CONFIG_CHANGED";
+
+const char* EventType::COLLISION_DETECTED = "COLLISION_DETECTED";
+
+const char* EventType::FRAME_UPDATED = "FRAME_UPDATED";
+const char* EventType::DIAGRAM_CHANGED = "DIAGRAM_CHANGED";
+
+const char* EventType::MOUSE_MOVED = "MOUSE_MOVED";
+const char* EventType::MOUSE_CLICKED = "MOUSE_CLICKED";
+const char* EventType::KEY_PRESSED = "KEY_PRESSED";
+const char* EventType::INPUT = "INPUT";
+

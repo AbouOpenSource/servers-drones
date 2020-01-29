@@ -38,9 +38,9 @@ public:
 
     int get_id() const;
 
-    const string &get_server_name() const;
+    const std::string &get_server_name() const;
 
-    void set_server_name(const string &server_name);
+    void set_server_name(const std::string &server_name);
 
     Vector2D& get_position();
 

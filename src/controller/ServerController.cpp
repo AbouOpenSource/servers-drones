@@ -9,33 +9,58 @@
 #include "../util/StringUtil.hpp"
 #include "../util/VectorUtil.hpp"
 #include "../model/Circle.hpp"
-#include "../core/event/internal/ServerReadyEvent.hpp"
-#include "DiagramController.hpp"
-#include "../core/event/internal/BackgroundReadyEvent.hpp"
-#include "../view/VoronoiDiagramView.hpp"
+#include "../core/event/internal/ServerConfigChangeEvent.hpp"
+#include "../core/event/internal/ConfigSaveEvent.hpp"
+#include "../core/event/internal/SelectionDeleteEvent.hpp"
+#include "../core/event/internal/SelectionClearEvent.hpp"
+#include "../core/event/internal/SelectionColorChangeEvent.hpp"
+#include "../core/event/internal/AddServerEvent.hpp"
+#include "../core/event/internal/AddDroneEvent.hpp"
+#include "../core/event/internal/KeyPressEvent.hpp"
+#include "../core/event/internal/MouseClickEvent.hpp"
+#include "../core/event/internal/DroneConfigChangeEvent.hpp"
+#include "../core/event/internal/EventType.hpp"
 
 std::string ServerController::SERVICE = "ServerService";
 
 ServerController::ServerController()
-    : ServiceProvider(ServerController::SERVICE),
+    : Controller(ServerController::SERVICE),
     servers_({}),
     server_view_({}),
     drone_view_({}),
     server_drone_count_({}),
-    drone_id_incrementer_(0)
+    drone_id_incrementer_(0),
+    window_((Window *) get_service(Window::SERVICE))
 {
-    ServiceContainer* container = ServiceContainer::get_instance();
+    event_manager_->subscribe(
+            {EventType::KEY_PRESSED, EventType::MOUSE_CLICKED, EventType::MOUSE_MOVED},
+            [this] (Event* e, const EventManager::EventDetail& detail) {
+                on_input(detail.type, e);
+            }
+    );
 
-    event_manager_ = (EventManager *) container->get_service(EventManager::SERVICE);
-    window_ = (Window *) container->get_service(Window::SERVICE);
-    direction_controller_ = (DirectionController*) ServiceContainer::get_instance()->get_service(DirectionController::SERVICE);
-    auto* input_manager = (InputManager *) container->get_service(InputManager::SERVICE);
+    event_manager_->subscribe(EventType::DIAGRAM_CHANGED, [this] (Event* e, const EventManager::EventDetail& detail) {
+        for (auto& server_view: server_view_) {
+            window_->addView(server_view.second);
+        }
+    });
+}
 
-    input_manager->register_key_press_listener(on_key_pressed());
-    input_manager->register_mouse_move_listener(on_mouse_move());
-    input_manager->register_mouse_click_listener(on_mouse_click());
+Server* ServerController::create_server(const std::string& name, const std::string& color, int x, int y)
+{
+    auto* server = new Server(name, color);
+    auto* server_view = new ServerView(server);
 
-    event_manager_->subscribe(EventType::BACKGROUND_READY, on_background_ready());
+    server->get_position().x_ = x;
+    server->get_position().y_ = y;
+
+    servers_.push_back(server);
+    server_view_[server] = server_view;
+    server_drone_count_[server] = 0;
+
+    event_manager_->publish(EventType::SERVER_ADDED, new AddServerEvent(server));
+
+    return server;
 }
 
 Server* ServerController::find_server_by_name(const std::string& server_name)
@@ -45,112 +70,23 @@ Server* ServerController::find_server_by_name(const std::string& server_name)
             return server;
         }
     }
+
     return nullptr;
 }
 
-Drone* ServerController::find_drone_by_id(const int drone_id)
+Server *ServerController::get_server_at(Position position)
 {
-    for (Drone* drone: drones_) {
-        if (drone->get_id() == drone_id) {
-            return drone;
-        }
-    }
-    return nullptr;
-}
+    Circle zone(position, 20);
 
-Server * ServerController::get_server_at(Position position)
-{
-    Circle zone(position, 100);
     for (Server* server: servers_) {
         Position server_position(server->get_position().x_, server->get_position().y_);
-        Circle server_zone(server_position, 100);
+        Circle server_zone(server_position, 20);
         if (zone.touch_with(&server_zone)) {
             return server;
         }
     }
+
     return nullptr;
-}
-
-std::vector<Server *> ServerController::get_selected_servers()
-{
-    std::vector<Server*> selection = {};
-    for (Server* server: servers_) {
-        if (server->is_selected()) {
-            selection.push_back(server);
-        }
-    }
-    return selection;
-}
-
-void ServerController::delete_selected_servers()
-{
-    for (Server* server: servers_) {
-        if (server->is_selected()) {
-            server->set_selected(false);
-        }
-    }
-}
-
-void ServerController::clear_selection()
-{
-    for (Server* server: servers_) {
-        if (server->is_selected()) {
-            server->set_selected(false);
-        }
-    }
-}
-
-void ServerController::set_servers_color(const std::vector<Server *>& servers, const std::string& color)
-{
-    for (Server* server: servers) {
-        server->set_color(color);
-    }
-}
-
-void ServerController::add_server(Server* server)
-{
-    auto* server_view = new ServerView(server);
-    servers_.push_back(server);
-    server_view_[server] = server_view;
-    server_drone_count_[server] = 0;
-    //window_->addView(server_view);
-}
-
-Drone* ServerController::create_drone(Server* server)
-{
-    auto* drone = new Drone(drone_id_incrementer_);
-    auto* drone_view = new DroneView(drone);
-
-    drone_id_incrementer_++;
-    drones_.push_back(drone);
-    drone_view_[drone] = drone_view;
-    window_->addView(drone_view);
-
-    if (server) {
-        attach_drone_to_server(drone, server);
-    }
-
-    return drone;
-}
-
-void ServerController::attach_drone_to_server(Drone *drone, Server *server)
-{
-    if (drone->get_server_name() == server->get_name()) {
-        return;
-    }
-    drone->set_server_name(server->get_name());
-    server_drone_count_[server]++;
-    direction_controller_->set_drone_target(drone, server->get_position());
-}
-
-void ServerController::detach_drone_from_server(Drone *drone)
-{
-    if (drone->get_server_name().empty()) {
-        return;
-    }
-    auto* server = find_server_by_name(drone->get_server_name());
-    server_drone_count_[server]--;
-    drone->set_server_name("");
 }
 
 void ServerController::delete_server(Server *server)
@@ -163,6 +99,48 @@ void ServerController::delete_server(Server *server)
     VectorUtil::delete_object(servers_, server);
 }
 
+Drone* ServerController::create_drone()
+{
+    auto* drone = new Drone(drone_id_incrementer_);
+    auto* drone_view = new DroneView(drone);
+
+    drone_id_incrementer_++;
+    drones_.push_back(drone);
+    drone_view_[drone] = drone_view;
+
+    window_->addView(drone_view);
+
+    event_manager_->publish(EventType::DRONE_ADDED, new AddDroneEvent(drone));
+
+    return drone;
+}
+
+Drone* ServerController::find_drone_by_id(const int drone_id)
+{
+    for (Drone* drone: drones_) {
+        if (drone->get_id() == drone_id) {
+            return drone;
+        }
+    }
+
+    return nullptr;
+}
+
+Drone * ServerController::get_drone_at(Position position)
+{
+    Circle zone(position, 20);
+    
+    for (Drone* drone: drones_) {
+        Position drone_position(drone->get_position().x_, drone->get_position().y_);
+        Circle drone_zone(drone_position, 20);
+        if (zone.touch_with(&drone_zone)) {
+            return drone;
+        }
+    }
+
+    return nullptr;
+}
+
 void ServerController::delete_drone(Drone *drone)
 {
     window_->removeView(drone_view_[drone]);
@@ -172,6 +150,72 @@ void ServerController::delete_drone(Drone *drone)
     }
     detach_drone_from_server(drone);
     VectorUtil::delete_object(drones_, drone);
+    event_manager_->publish(EventType::DRONE_CONFIG_CHANGED, new DroneConfigChangeEvent(drones()));
+}
+
+std::vector<Server *> ServerController::get_selection()
+{
+    std::vector<Server*> selection = {};
+
+    for (Server* server: servers_) {
+        if (server->is_selected()) {
+            selection.push_back(server);
+        }
+    }
+
+    return selection;
+}
+
+void ServerController::delete_selection()
+{
+    auto selection = get_selection();
+
+    for (Server* server: selection) {
+        delete_server(server);
+    }
+
+    event_manager_->publish(EventType::SELECTION_DELETED, new SelectionDeleteEvent(selection));
+}
+
+void ServerController::color_selection(const std::string& color)
+{
+    auto selection = get_selection();
+
+    for (Server* server: selection) {
+        server->set_color(color);
+    }
+
+    event_manager_->publish(EventType::SELECTION_COLOR_CHANGED, new SelectionColorChangeEvent(selection, color));
+}
+
+void ServerController::clear_selection()
+{
+    auto selection = get_selection();
+
+    for (Server* server: selection) {
+        server->set_selected(false);
+    }
+
+    event_manager_->publish(EventType::SELECTION_CLEARED, new SelectionClearEvent(selection));
+}
+
+void ServerController::attach_drone_to_server(Drone *drone, Server *server)
+{
+    if (drone->get_server_name() == server->get_name()) {
+        return;
+    }
+    server_drone_count_[server]++;
+    drone->set_server_name(server->get_name());
+}
+
+void ServerController::detach_drone_from_server(Drone *drone)
+{
+    if (drone->get_server_name().empty()) {
+        return;
+    }
+    auto* server = find_server_by_name(drone->get_server_name());
+    server_drone_count_[server]--;
+    drone->set_server_name("");
 }
 
 int ServerController::get_server_attached_drone_count(Server *server)
@@ -206,21 +250,20 @@ void ServerController::load_last_state(const TypeUtil::Callback& on_loaded)
                 std::vector<std::string> position = StringUtil::split(values[1], ',');
 
                 std::string name = values[0];
-                std::string area_color = values[2];
-
-                Server *server = new Server(name, area_color);
+                std::string color = values[2];
 
                 string x_string = StringUtil::trim(position[0]);
-                server->get_position().x_ = VectorUtil::string_cast_to<float>(x_string);
-                server->get_position().y_ = VectorUtil::string_cast_to<float>(position[1]);
+                auto x = VectorUtil::string_cast_to<float>(x_string);
+                auto y = VectorUtil::string_cast_to<float>(position[1]);
 
-                add_server(server);
+                create_server(name, color, x, y);
             }
         }
     }, [this, &on_loaded] () {
-        ServerReadyEvent server_ready_event(servers_);
-        event_manager_->publish(EventType::SERVER_READY, &server_ready_event);
-        on_loaded();
+        event_manager_->publish(EventType::CONFIG_LOADED, new ServerConfigChangeEvent(servers_));
+        if (on_loaded) {
+            on_loaded();
+        }
     });
 }
 
@@ -233,14 +276,17 @@ void ServerController::save_current_state(const TypeUtil::Callback& on_finish)
 
     int i(0);
     for (Server* server: servers_) {
-        std::string pos = "(" + std::to_string(server->get_position().x_) + "," + std::to_string(server->get_position().y_) + ")";
+        std::string pos = "(" + to_string(server->get_position().x_) + "," + to_string(server->get_position().y_) + ")";
         writer.write(i, 0, server->get_name());
         writer.write(i, 1, pos);
         writer.write(i, 2, server->get_color());
         i++;
     }
 
-    writer.persist(on_finish);
+    writer.persist([this, &on_finish] () {
+        event_manager_->publish(EventType::CONFIG_SAVED, new ConfigSaveEvent());
+        on_finish();
+    });
 }
 
 std::vector<Server *>& ServerController::servers()
@@ -253,78 +299,107 @@ std::vector<Drone*>& ServerController::drones()
     return drones_;
 }
 
-InputManager::KeyPressListener ServerController::on_key_pressed()
+std::string ServerController::get_next_color()
 {
-    return [this] (InputManager::Key key, InputManager::MousePosition position) {
-        switch (key) {
-            case InputManager::ENTER:
-                create_drone(where_send_drone());
+    std::vector<std::string> all_colors = View::DrawHelper::COLORS;
+    std::vector<std::string> used_colors;
+    std::vector<std::string> available_colors;
+
+    for (Server* server: servers_) {
+        used_colors.push_back(server->get_color());
+    }
+
+    bool found;
+    for (auto& c1: all_colors) {
+        found = false;
+        for (auto& c2: used_colors) {
+            if (c1 == c2) {
+                found = true;
                 break;
-            case InputManager::F1:
-                set_servers_color(get_selected_servers(), "RED");
+            }
+        }
+        if (!found) {
+            available_colors.push_back(c1);
+        }
+    }
+
+    if (available_colors.empty()) {
+        available_colors = all_colors;
+    }
+
+    return available_colors[std::rand() % available_colors.size()];
+}
+
+void ServerController::on_input(const char* type, Event *event)
+{
+    if (type == EventType::KEY_PRESSED) {
+
+        auto* e = (KeyPressEvent*)event;
+
+        switch (e->get_key()) {
+            case Window::ENTER:
+            case Window::D:
+                create_drone();
+                event_manager_->publish(EventType::DRONE_CONFIG_CHANGED, new DroneConfigChangeEvent(drones()));
                 break;
-            case InputManager::F2:
-                set_servers_color(get_selected_servers(), "BLACK");
+            case Window::F1:
+                color_selection("RED");
                 break;
-            case InputManager::F3:
-                set_servers_color(get_selected_servers(), "CYAN");
+            case Window::F2:
+                color_selection("BLACK");
                 break;
-            case InputManager::F4:
-                set_servers_color(get_selected_servers(), "YELLOW");
+            case Window::F3:
+                color_selection("CYAN");
                 break;
-            case InputManager::F5:
-                set_servers_color(get_selected_servers(), "GREY");
+            case Window::F4:
+                color_selection("YELLOW");
                 break;
-            case InputManager::F6:
-                set_servers_color(get_selected_servers(), "BLUE");
+            case Window::F5:
+                color_selection("GREY");
                 break;
-            case InputManager::F7:
-                set_servers_color(get_selected_servers(), "ORANGE");
+            case Window::F6:
+                color_selection("BLUE");
                 break;
-            case InputManager::F8:
-                set_servers_color(get_selected_servers(), "PINK");
+            case Window::F7:
+                color_selection("ORANGE");
                 break;
-            case InputManager::F9:
-                set_servers_color(get_selected_servers(), "GREEN");
+            case Window::F8:
+                color_selection("PINK");
                 break;
-            case InputManager::S:
+            case Window::F9:
+                color_selection("GREEN");
+                break;
+            case Window::S:
                 save_current_state();
                 break;
-            case InputManager::D:
-                break;
-            case InputManager::DEL:
-                delete_selected_servers();
+            case Window::DEL:
+                delete_selection();
                 break;
         }
-    };
-}
+    } else if (type == EventType::MOUSE_CLICKED) {
 
-InputManager::MouseMoveListener ServerController::on_mouse_move()
-{
-    return [this] (InputManager::MousePosition position) {
-    };
-}
+        auto* e = (MouseClickEvent*)event;
 
-InputManager::MouseClickListener ServerController::on_mouse_click()
-{
-    return [this] (InputManager::MouseClick click, InputManager::MousePosition position) {
-    };
-}
+        const auto& click = e->get_mouse_click();
+        auto& position = e->get_mouse_position();
 
-EventManager::Subscription ServerController::on_background_ready()
-{
-    return [this] (Event* e, const TypeUtil::Callback& unsubscribe) {
-        BackgroundReadyEvent* background_ready_event = (BackgroundReadyEvent*)e;
-        VoronoiDiagramView* voronoi_diagram_view = new VoronoiDiagramView(background_ready_event->get_voronoi_diagram());
-        window_->addView(voronoi_diagram_view, true);
-        for (auto& server_view: server_view_) {
-            window_->addView(server_view.second);
+        if (click == Window::LEFT) {
+            if (Server* server = get_server_at({position.X, position.Y})) {
+                server->set_selected(!server->is_selected());
+            } else if (Drone* drone = get_drone_at({position.X, position.Y})) {
+                // TODO : What on left click on a drone ?
+            } else {
+                clear_selection();
+            }
+        } else if (click == Window::RIGHT) {
+            if (Server* server = get_server_at({position.X, position.Y})) {
+                server->set_color(get_next_color());
+            } else if (Drone* drone = get_drone_at({position.X, position.Y})) {
+                delete_drone(drone);
+            } else {
+                create_server("Test", get_next_color(), position.X, position.Y);
+                event_manager_->publish(EventType::SERVER_CONFIG_CHANGED, new ServerConfigChangeEvent(servers()));
+            }
         }
-    };
-}
-
-Server *ServerController::where_send_drone()
-{
-    int choix = rand() % servers_.size();
-    return servers_[choix];
+    }
 }

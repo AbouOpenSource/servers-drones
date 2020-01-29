@@ -5,7 +5,7 @@
 #include <algorithm>
 #include "Server.hpp"
 
-Server::Server(std::string &name, std::string& color)
+Server::Server(const std::string &name, const std::string& color)
     : name_(name),
       position_({}),
       color_(color),
@@ -27,17 +27,24 @@ Vector2D& Server::get_position()
     return position_;
 }
 
-const string &Server::get_name() const
+const std::string &Server::get_name() const
 {
     return name_;
 }
 
-const string &Server::get_color() const
+const std::string &Server::get_color() const
 {
     return color_;
 }
 
-void Server::set_color(const string &color)
+void Server::set_color(const std::string &color)
 {
     color_ = color;
+}
+
+std::ostream &operator<<(std::ostream &os, const Server &server)
+{
+    os << "Server: " <<  "selected_: " << server.selected_ << " position_: " << server.position_ << " name_: " << server.name_
+       << " color_: " << server.color_ << std::endl;
+    return os;
 }

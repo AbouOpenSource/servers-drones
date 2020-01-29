@@ -6,9 +6,9 @@
 #include <glutWindow.h>
 
 #include "Vector2D.hpp"
-#include "determinant.hpp"
 #include "../util/TypeUtil.hpp"
 #include "../view/View.hpp"
+#include "Determinant.hpp"
 
 class Triangle
 {

@@ -15,7 +15,7 @@ public:
 
     TriangleView(Triangle* triangle);
 
-    void init(InputManager *input_manager, EventManager *event_manager, const TextureLoader &texture_loader) override;
+    void init(DrawHelper *draw_helper, EventManager *event_manager) override;
 
     void start() override;
 

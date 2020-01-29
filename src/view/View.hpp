@@ -5,9 +5,8 @@
 #ifndef DRONEPROJECT_VIEW_HPP
 #define DRONEPROJECT_VIEW_HPP
 
-#include "../core/event/input/InputManager.hpp"
 #include "../core/event/EventManager.hpp"
-#include <glutWindow.h>
+#include "glutWindow.h"
 
 const float BLACK[4] = {0.0, 0.0, 0.0, 0.1f};
 const float GREY[4] = {0.75f, 0.75f, 0.75f, 0.1f};
@@ -24,11 +23,17 @@ class View
 
 public:
 
+    typedef std::function<int(const std::string& path, int& x, int& y)> TextureLoader;
+
     class DrawHelper {
 
     public:
 
-        DrawHelper();
+        static std::vector<std::string> COLORS;
+
+        explicit DrawHelper();
+
+        void init(TextureLoader* texture_loader);
 
         const float* get_color(const std::string& color_name);
         const float* red();
@@ -40,13 +45,17 @@ public:
         const float* grey();
         const float* pink();
         const float* cyan();
-    };
 
-    typedef std::function<int(const std::string& path, int& x, int& y)> TextureLoader;
+        int load_texture(const std::string& file_name, int& width, int& height);
+
+    private:
+
+        TextureLoader* texture_loader_;
+    };
 
     View();
 
-    virtual void init(InputManager* input_manager, EventManager* event_manager, const TextureLoader& texture_loader);
+    virtual void init(DrawHelper *draw_helper, EventManager *event_manager);
 
     virtual void start();
 
