@@ -7,6 +7,7 @@
 
 
 #include <vector>
+#include <ostream>
 #include "Vector2D.hpp"
 #include "Drone.hpp"
 
@@ -14,7 +15,7 @@ class Server {
 
 public:
 
-    Server(std::string& name, std::string& color);
+    Server(const std::string& name, const std::string& color);
 
     bool is_selected() const;
 
@@ -22,11 +23,13 @@ public:
 
     Vector2D& get_position();
 
-    const string &get_name() const;
+    const std::string &get_name() const;
 
-    const string &get_color() const;
+    const std::string &get_color() const;
 
-    void set_color(const string &color);
+    void set_color(const std::string &color);
+
+    friend std::ostream &operator<<(std::ostream &os, const Server &server);
 
 private:
 

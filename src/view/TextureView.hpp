@@ -13,11 +13,11 @@ class TextureView: public View
 
 public:
 
-    virtual void init(InputManager *input_manager, EventManager *event_manager, const TextureLoader &texture_loader) override;
+    void init(DrawHelper *draw_helper, EventManager *event_manager) override;
 
-    virtual void draw(DrawHelper* draw_helper) override;
+    void draw(DrawHelper* draw_helper) override;
 
-    virtual void start() override;
+    void start() override;
 
     void quit() override;
 

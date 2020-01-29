@@ -19,19 +19,26 @@ public:
 
     static std::string SERVICE;
 
-    typedef std::function<void(Event*, TypeUtil::Callback unsubscribe)> Subscription;
+    struct EventDetail {
+        const char* type;
+        const TypeUtil::Callback& unsubscribe;
+    };
+
+    typedef std::function<void(Event* e, const EventDetail& detail)> Subscription;
 
     EventManager();
 
-    void publish(const std::string& event_type, Event* event);
+    void publish(const char* event_type, Event* event);
 
-    void subscribe(const std::string& event_type, const Subscription&);
+    void subscribe(const char* event_type, const Subscription&);
+
+    void subscribe(const std::vector<const char*>& event_types, const Subscription&);
 
 private:
 
-    std::vector<Subscription>& get_subscriptions_for(const std::string& event_type);
+    std::vector<Subscription>& get_subscriptions_for(const char* event_type);
 
-    std::map<std::string, std::vector<Subscription>> subscriptions_;
+    std::map<const char*, std::vector<Subscription>> subscriptions_;
 
 };
 

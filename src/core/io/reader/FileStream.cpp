@@ -9,7 +9,7 @@
 #include "../../../util/StringUtil.hpp"
 #include "../../../util/VectorUtil.hpp"
 
-FileStream::FileStream(std::string file_path, const FileStream::ReadOption options)
+FileStream::FileStream(std::string file_path, const FileStream::StreamOptions options)
         : file_path_(std::move(file_path)), options_(options)
 {}
 
@@ -58,8 +58,7 @@ void FileStream::ReaderInterface::read(const StreamCallback &stream_callback,
         stream_callback(row, col, file_stream_->options_.trim ? StringUtil::trim(value) : value);
     };
 
-    while (std::getline( file, line ))
-    {
+    while (std::getline( file, line )) {
         previous = 0;
         current = line.find(file_stream_->options_.delimiter);
         while (current != std::string::npos) {

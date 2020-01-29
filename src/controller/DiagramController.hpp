@@ -6,15 +6,13 @@
 #define DRONEPROJECT_DIAGRAMCONTROLLER_HPP
 
 
-#include "../core/service/ServiceProvider.hpp"
 #include "../model/VoronoiDiagram.hpp"
 #include "../model/Polygon.hpp"
 #include "../view/PolygonView.hpp"
 #include "../Window.hpp"
-#include "ServerController.hpp"
-#include "../view/VoronoiDiagramView.hpp"
+#include "Controller.hpp"
 
-class DiagramController: public ServiceProvider
+class DiagramController: public Controller
 {
 
 public:
@@ -23,18 +21,24 @@ public:
 
     DiagramController();
 
+    std::vector<Polygon*>& get_polygons();
+
+    Polygon* get_polygon_for_server(Server* server);
+
+    Server* get_server_for_polygon(Polygon* polygon);
+
 private:
 
-    VoronoiDiagram* voronoi_diagram_;
+    void on_data_changed(const std::vector<Server*>& servers, Window* window);
 
-    Window* window_;
+    VoronoiDiagram voronoi_diagram_;
 
-    std::map<Polygon*, PolygonView*> polygon_view_;
+    Polygon base_polygon_;
 
-public:
+    std::map<Polygon*, PolygonView*> polygon_views_;
 
-    std::map<Polygon*, Server*> polygon_server_;
-    map<Polygon *, Server *> &get_polygon_server();
+    std::map<Polygon*, Server*> polygon_servers_;
+
 };
 
 

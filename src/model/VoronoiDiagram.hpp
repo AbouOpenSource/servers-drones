@@ -16,17 +16,15 @@ class VoronoiDiagram
 
 public:
 
-    VoronoiDiagram(Polygon& polygon);
+    VoronoiDiagram();
 
-public:
+    void init(Polygon* base_polygon, unsigned int width, unsigned int height);
 
     vector<Polygon*> &get_polygons();
 
 private:
 
     std::vector<Polygon*> polygons_;
-
-    // std::vector<Server> servers_;
 
     bool left_top_border_added_;
 
@@ -38,7 +36,7 @@ private:
 
     Vector2D* next_vertex(Triangle& triangle, Vector2D& vertex);
 
-    Vector2D* next_vertex(Polygon& polygon, Vector2D& vertex);
+    Vector2D* next_vertex(Polygon* polygon, Vector2D& vertex);
 
     Vector2D *next_edge(Triangle triangle, Vector2D vertex);
 
@@ -48,17 +46,17 @@ private:
 
     Vector2D intersection_with_borders(Vector2D a, Vector2D u, float x0, float y0, float x1, float y2);
 
-    Triangle* right_neighbor(Polygon& mesh, Triangle& triangle, Vector2D& a);
+    Triangle* right_neighbor(Polygon* mesh, Triangle& triangle, Vector2D& a);
 
     Triangle* left_triangle(std::vector<Triangle>& triangles, Vector2D& vertex);
 
-    void add_point(Vector2D A, Polygon& polygon);
+    void add_point(Vector2D A, Polygon* polygon);
 
     Vector2D right_orthogonal_vector(Vector2D& vertex);
 
     void remove_triangle(Triangle &triangle, vector<Triangle> &triangles);
 
-    void add_corner_points(Polygon& polygon);
+    void add_corner_points(Polygon* polygon, float width, float height);
 
     void push(Polygon* polygon);
 

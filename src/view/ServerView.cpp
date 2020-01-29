@@ -18,16 +18,16 @@ void ServerView::draw(DrawHelper* draw_helper)
 {
     glBindTexture(GL_TEXTURE_2D, texture_id_);
     glPushMatrix();
-    glTranslatef(server_->get_position().x_-48, server_->get_position().y_-48, 1.0);
+    glTranslatef(server_->get_position().x_-24, server_->get_position().y_-24, 1.0);
     glBegin(GL_QUADS);
     glTexCoord2f(0.0,0.0);
     glVertex2f(0.0,0.0);
     glTexCoord2f(1.0,0.0);
-    glVertex2f(96.0,0.0);
+    glVertex2f(48.0,0.0);
     glTexCoord2f(1.0,1.0);
-    glVertex2f(96.0,96.0);
+    glVertex2f(48.0,48.0);
     glTexCoord2f(0.0,1.0);
-    glVertex2f(0.0,96.0);
+    glVertex2f(0.0,48.0);
     glEnd();
     glPopMatrix();
 

@@ -6,40 +6,31 @@
 #include "Vector2D.hpp"
 #include "Triangle.hpp"
 #include "Server.hpp"
-#include "../view/View.hpp"
 
 class Polygon
 {
 
-private:
+public:
     /********** typedef **********/
     typedef std::function<void(Vector2D& point, unsigned int index)> VertexCallback;
 
-public:
-    int n_max_;
-    int current_n_;
-    float color_[4];
-    Vector2D* tab_pts_;
-
-    std::vector<Vector2D> points_to_build_polygon_;
-    std::vector<Triangle> triangles_;
-    std::vector<Vector2D> interior_points;
-
-    std::vector<Server*> servers_;
-
     /********** Constructor & destructor **********/
-    Polygon();
+    explicit Polygon(int max_pts = 100);
 
-    Polygon(int p_max, std::vector<Server*>& servers);
-
-    Polygon(std::vector<Server*>& servers);
+    Polygon(std::vector<Vector2D> points, int max_pts = 100);
 
     ~Polygon();
 
     /********** Getter **********/
-    vector<Vector2D> &get_points_to_build_polygon();
+
+    std::vector<Vector2D> &get_build_points();
+
+    std::vector<Triangle> &get_triangles();
+
+    Vector2D *get_tab_pts();
 
     /********** Modifier **********/
+
     bool add_vertex(Vector2D &p);
 
     void init();
@@ -65,8 +56,6 @@ public:
     */
     bool is_convex();
 
-    void draw(View::DrawHelper* draw_helper);
-
     void triangulation();
 
     static bool polar_comparison(Vector2D p1, Vector2D p2);
@@ -81,8 +70,6 @@ public:
 
     bool is_inside_triangle(const Vector2D& p);
 
-    void set_color(const float t_color[4]);
-
     void interior_triangulation();
 
     Triangle* neighbor_inside(Triangle* current);
@@ -91,23 +78,14 @@ public:
 
     void solve_delaunay();
 
-    void delaunay_triangulation(std::vector<Vector2D>& points_relative);
-
     void check_delaunay();
-
-    void onMouseMove(const Vector2D& pos);
 
     void foreach_vertex(VertexCallback cb);
 
     // Return the subset of triangles of the mesh that have v1 as vertex.
     std::vector<Triangle> get_triangles_from(Vector2D v1);
 
-    /********** Operator overloading **********/
-    friend std::ostream &operator<<(std::ostream &out, Polygon &polygon);
-
     Vector2D* next_vertex(Vector2D& vertex);
-
-    bool isOnTheRight(const Vector2D &p, int i);
 
     bool is_in_side_right(const Vector2D &p);
 
@@ -116,6 +94,21 @@ public:
     bool is_on_the_right(const Vector2D &p, int i);
 
     Vector2D* previous_vertex(Vector2D &vertex);
+
+    /********** Operator overloading **********/
+    friend std::ostream &operator<<(std::ostream &out, Polygon &polygon);
+
+private:
+
+    int n_max_;
+    int current_n_;
+    float color_[4];
+
+    Vector2D* tab_pts_;
+
+    std::vector<Vector2D> build_points_;
+    std::vector<Vector2D> interior_points_;
+    std::vector<Triangle> triangles_;
 };
 
 #endif //POINTS_AND_CONVEX_POLYGONS_Polygon_HPP

@@ -13,14 +13,11 @@ class Event
 
 protected:
 
-    Event(const std::string& name);
+    Event();
 
 public:
-    const std::string &get_name() const;
 
-private:
-
-    std::string name_;
+    friend std::ostream& operator<<(std::ostream& os, const Event& e);
 
 };
 

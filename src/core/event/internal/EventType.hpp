@@ -13,16 +13,28 @@ class EventType
 
 public:
 
-    static std::string CHANGE_SERVER_COLOR;
-    static std::string CLEAR_SELECTION;
-    static std::string DELETE_SELECTED_SERVER;
-    static std::string CHANGE_SELECTED_SERVERS_COLOR;
-    static std::string ADD_SERVER_TO_POSITION;
-    static std::string ADD_SERVER_TO_BEGIN;
-    static std::string SAVE_CONFIG_STATE;
-    static std::string FRAME_UPDATE;
-    static std::string SERVER_READY;
-    static std::string BACKGROUND_READY;
+    static const char* SELECTION_CLEARED;
+    static const char* SELECTION_DELETED;
+    static const char* SELECTION_COLOR_CHANGED;
+
+    static const char* DRONE_ADDED;
+    static const char* SERVER_ADDED;
+
+    static const char* CONFIG_SAVED;
+    static const char* CONFIG_LOADED;
+
+    static const char* SERVER_CONFIG_CHANGED;
+    static const char* DRONE_CONFIG_CHANGED;
+
+    static const char* COLLISION_DETECTED;
+
+    static const char* FRAME_UPDATED;
+    static const char* DIAGRAM_CHANGED;
+
+    static const char* MOUSE_MOVED;
+    static const char* MOUSE_CLICKED;
+    static const char* KEY_PRESSED;
+    static const char* INPUT;
 };
 
 

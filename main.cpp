@@ -1,13 +1,12 @@
-#include "src/core/io/command/internal/ConfigCommand.hpp"
-#include "src/core/io/command/CommandParser.hpp"
-#include "src/model/Polygon.hpp"
-#include "src/controller/ServerController.hpp"
-#include "src/Window.hpp"
+
 #include "src/core/service/ServiceContainer.hpp"
+#include "src/core/io/command/CommandParser.hpp"
+#include "src/core/event/EventManager.hpp"
+#include "src/controller/DirectionController.hpp"
+#include "src/controller/ServerController.hpp"
 #include "src/controller/CollisionController.hpp"
-#include "src/model/VoronoiDiagram.hpp"
-#include "src/view/VoronoiDiagramView.hpp"
 #include "src/controller/DiagramController.hpp"
+#include "src/Window.hpp"
 
 using namespace std;
 
@@ -21,10 +20,6 @@ int main(int argc, char** argv)
     // Instantiating service container
     ServiceContainer* service_container = ServiceContainer::get_instance();
     service_container->register_service(&command_container);
-
-    // Input Service
-    InputManager input_manager;
-    service_container->register_service(&input_manager);
 
     // Event Service;
     EventManager event_manager;
@@ -50,8 +45,8 @@ int main(int argc, char** argv)
     DiagramController diagram_controller_;
     service_container->register_service(&diagram_controller_);
 
-    // Init from last state
-    server_controller.load_last_state([&window, &server_controller, &service_container] () {});
+    // Load last saved state
+    server_controller.load_last_state();
 
     window.start();
 

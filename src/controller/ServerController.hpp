@@ -11,16 +11,14 @@
 #include "../model/Server.hpp"
 #include "../model/Drone.hpp"
 #include "../model/Position.hpp"
-#include "../core/service/ServiceProvider.hpp"
-#include "../core/event/input/InputManager.hpp"
 #include "../util/TypeUtil.hpp"
 #include "../core/event/EventManager.hpp"
 #include "../view/DroneView.hpp"
 #include "../view/ServerView.hpp"
 #include "../Window.hpp"
-#include "DirectionController.hpp"
+#include "Controller.hpp"
 
-class ServerController: public ServiceProvider
+class ServerController: public Controller
 {
 
 public:
@@ -29,21 +27,21 @@ public:
 
     ServerController();
 
-    Server* find_server_by_name(const std::string& server_name);
+    Server* create_server(const std::string& name, const std::string& color, int x, int y);
 
-    Drone* find_drone_by_id(int drone_id);
+    Server* find_server_by_name(const std::string& server_name);
 
     Server* get_server_at(Position position);
 
-    std::vector<Server*> get_selected_servers();
+    Drone* create_drone();
 
-    void delete_selected_servers();
+    Drone* find_drone_by_id(int drone_id);
 
-    void clear_selection();
+    Drone* get_drone_at(Position position);
 
-    void set_servers_color(const std::vector<Server*>& servers, const std::string& color);
+    void delete_server(Server* server);
 
-    void add_server(Server* server);
+    void delete_drone(Drone* drone);
 
     void attach_drone_to_server(Drone* drone, Server* server);
 
@@ -52,12 +50,6 @@ public:
     void load_last_state(const TypeUtil::Callback& on_loaded = nullptr);
 
     void save_current_state(const TypeUtil::Callback& on_saved = nullptr);
-
-    Drone* create_drone(Server* server = nullptr);
-
-    void delete_server(Server* server);
-
-    void delete_drone(Drone* drone);
 
     int get_server_attached_drone_count(Server* server);
 
@@ -69,21 +61,23 @@ private:
 
     static std::string get_config_file();
 
-    InputManager::KeyPressListener on_key_pressed();
+    std::vector<Server*> get_selection();
 
-    InputManager::MouseMoveListener on_mouse_move();
+    void delete_selection();
 
-    InputManager::MouseClickListener on_mouse_click();
+    void clear_selection();
 
-    EventManager::Subscription on_background_ready();
+    void color_selection(const std::string& color);
+
+    std::string get_next_color();
+
+    void on_input(const char* input_type, Event* event);
+
+    /*****************************************/
 
     int drone_id_incrementer_;
 
     Window* window_;
-
-    EventManager* event_manager_;
-
-    DirectionController* direction_controller_;
 
     std::vector<Server *> servers_;
 
@@ -94,9 +88,6 @@ private:
     std::map<Drone*, DroneView*> drone_view_;
 
     std::map<Server*, int> server_drone_count_;
-
-
-    Server *where_send_drone();
 };
 
 

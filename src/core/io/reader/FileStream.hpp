@@ -59,12 +59,12 @@ private:
 
 public:
 
-    struct ReadOption {
+    struct StreamOptions {
         const char* delimiter;
         const bool trim;
     };
 
-    explicit FileStream(std::string file_path, ReadOption options = {";", true});
+    explicit FileStream(std::string file_path, StreamOptions options = {";", true});
 
     ReaderInterface reader() const;
 
@@ -76,7 +76,7 @@ private:
 
     std::string file_path_;
 
-    ReadOption options_;
+    StreamOptions options_;
 
 };
 

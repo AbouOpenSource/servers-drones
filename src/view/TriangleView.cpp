@@ -8,9 +8,9 @@ TriangleView::TriangleView(Triangle *triangle)
     : triangle_(triangle)
 {}
 
-void TriangleView::init(InputManager *input_manager, EventManager *event_manager, const View::TextureLoader &texture_loader)
+void TriangleView::init(View::DrawHelper *draw_helper, EventManager *event_manager)
 {
-    View::init(input_manager, event_manager, texture_loader);
+    View::init(draw_helper, event_manager);
 }
 
 void TriangleView::start()

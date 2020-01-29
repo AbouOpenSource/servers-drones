@@ -9,10 +9,11 @@
 #include "../model/Drone.hpp"
 #include "../core/service/ServiceContainer.hpp"
 #include "../core/event/internal/EventType.hpp"
+#include "Controller.hpp"
 
 #define MAX_FORCE 200
 
-class DirectionController: public ServiceProvider
+class DirectionController: public Controller
 {
 
 public:

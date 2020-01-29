@@ -5,21 +5,33 @@
 #include "DirectionController.hpp"
 #include "../core/service/ServiceContainer.hpp"
 #include "../core/event/internal/EventType.hpp"
+#include "../core/event/internal/CollisionDetectEvent.hpp"
 
 
 std::string DirectionController::SERVICE = "DirectionService";
 
 DirectionController::DirectionController()
-    : ServiceProvider(DirectionController::SERVICE),
+    : Controller(DirectionController::SERVICE),
       callbacks_({})
 {
-    auto* event_manager = (EventManager *) ServiceContainer::get_instance()->get_service(EventManager::SERVICE);
-    EventManager::Subscription subscription = [this] (Event* e, const TypeUtil::Callback& unsubscribe) {
-        for(auto & it : callbacks_) {
+    event_manager_->subscribe(EventType::FRAME_UPDATED, [this] (Event* e, const EventManager::EventDetail& detail) {
+        for (auto & it : callbacks_) {
             it.second();
         }
-    };
-    event_manager->subscribe(EventType::FRAME_UPDATE, subscription);
+    });
+
+    event_manager_->subscribe(EventType::SERVER_CONFIG_CHANGED, [this] (Event* e, const EventManager::EventDetail& detail) {
+
+    });
+
+    event_manager_->subscribe(EventType::DRONE_ADDED, [this] (Event* e, const EventManager::EventDetail& detail) {
+
+    });
+
+    event_manager_->subscribe(EventType::COLLISION_DETECTED, [this] (Event* e, const EventManager::EventDetail& detail) {
+        auto* collision = (CollisionDetectEvent*)e;
+        prevent_collision_between_drones(collision->get_first_drone(), collision->get_second_drone());
+    });
 }
 
 void DirectionController::set_drone_target(Drone *drone, const Vector2D &target)
