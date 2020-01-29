@@ -550,17 +550,13 @@ void Polygon::interior_triangulation()
                 Vector2D* p2_triangle = it_triangle->ptr_[1];
                 Vector2D* p3_triangle = it_triangle->ptr_[2];
                 Vector2D *interior = new Vector2D(interior_point.x_, interior_point.y_);
-
                 Triangle triangle1 = Triangle(p1_triangle, p2_triangle, interior);
                 Triangle triangle2 = Triangle(p2_triangle, p3_triangle, interior);
                 Triangle triangle3 = Triangle(p3_triangle, p1_triangle, interior);
-
                 it_triangle = triangles_.erase(it_triangle);
-
                 triangles_.push_back(triangle1);
                 triangles_.push_back(triangle2);
                 triangles_.push_back(triangle3);
-
                 break;
             }
             else
@@ -684,60 +680,6 @@ vector<Vector2D> &Polygon::get_points_to_build_polygon()
     return points_to_build_polygon_;
 }
 
-//void Polygon::delaunay_triangulation(std::vector<Vector2D>& delaunay_triangulation)
-//{
-//    vector<Vector2D>::iterator pi = pointsRelative.begin() + 3;
-//
-//    while (pi != pointsRelative.end())
-//    {
-//        // Extract top and top_1.
-//        top = CHstack.top();
-//        CHstack.pop();
-//        top_1 = CHstack.top();
-//        CHstack.push(top);
-//
-//        while (!is_on_the_left(&(*pi), top_1, top))
-//        {
-//            CHstack.pop();
-//
-//             Update values of top and top_1.
-//            top = CHstack.top();
-//            CHstack.pop();
-//            top_1 = CHstack.top();
-//            CHstack.push(top);
-//        }
-//
-//        CHstack.push(&(*pi));
-//        pi++;
-//    }
-//
-//     Get stack points to create current polygon.
-//    current_n_ = CHstack.size();
-//    n_max_ = current_n_;
-//    tab_pts_ = new Vector2D[n_max_ + 1];
-//
-//    int i = current_n_ - 1;
-//
-//    while (!CHstack.empty())
-//    {
-//        tab_pts_[i--] = *(CHstack.top()) + origin; // Place the popped point in the global referential.
-//        CHstack.pop();
-//    }
-//
-//    tab_pts_[current_n_] = tab_pts_[0];
-//}
-
-//void Polygon::check_delaunay()
-//{
-//    auto t = triangles_.begin();
-//
-//    while (t != triangles_.end())
-//    {
-//        t->check_delaunay(tab_pts_);
-//        t++;
-//    }
-//}
-
 bool Polygon::is_on_the_right(const Vector2D &p, int i) {
     Vector2D u = tab_pts_[i + 1] - tab_pts_[i],
             v = p - tab_pts_[i];
@@ -765,7 +707,7 @@ Vector2D *Polygon::previous_vertex(Vector2D &vertex)
             }
             else
             {
-                previous_point =&points_to_build_polygon_[(index - 1)];
+                previous_point = &points_to_build_polygon_[(index - 1)];
             }
         }
     });

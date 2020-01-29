@@ -31,19 +31,31 @@ void DirectionController::set_drone_target(Drone *drone, const Vector2D &target)
     Vector2D& drone_position = drone->get_position();
 
     callbacks_[drone] = [this, drone, &move, &drone_position] () {
+        if(!move.target_reached){
 
-        move.dx = (move.target.x_ - drone_position.x_);
-        move.dy = (move.target.y_ - drone_position.y_);
-        move.distance = sqrt(move.dx * move.dx + move.dy * move.dy);
-        move.dx/=move.distance;
-        move.dy/=move.distance;
-        move.dx*=20;
-        move.dy*=20;
+            move.dx = (move.target.x_ - drone_position.x_);
+            move.dy = (move.target.y_ - drone_position.y_);
+            move.distance = sqrt(move.dx * move.dx + move.dy * move.dy);
+            move.dx/=move.distance;
+            move.dy/=move.distance;
+            move.dx*=20;
+            move.dy*=20;
+        }
+        else{
+            move.dx = (move.target.x_ - drone_position.x_);
+            move.dy = (move.target.y_ - drone_position.y_);
+            move.distance = sqrt(move.dx * move.dx + move.dy * move.dy);
+            move.dx/=move.distance;
+            move.dy/=move.distance;
+            move.dx*=0;
+            move.dy*=0;
 
-         //move.target_reached = move.distance > 60;
+        }
+
+        move.target_reached = move.distance < 20;
 
         if (!move.circular_mode && move.target_reached) {
-            move.circular_mode = true;
+         //   move.circular_mode = true;
         }
 
         update_forces_of_drone(drone);
@@ -57,29 +69,35 @@ void DirectionController::set_drone_target(Drone *drone, const Vector2D &target)
 void DirectionController::prevent_collision_between_drones(Drone *d1, Drone *d2)
 {
     auto& move = d1->get_move_data();
-
     auto& d1_pos = d1->get_position();
     auto& d2_pos = d2->get_position();
+
 
     //TODO define the force to avoid the collison with the drone passing in args
     float distance = get_distance_between_drones(d1, d2);
 
-    Vector2D ba =  Vector2D(d1_pos.x_ - d2_pos.x_, d1_pos.y_ - d2_pos.y_);
+   Vector2D ba =  Vector2D(d1_pos.x_ - d2_pos.x_, d1_pos.y_ - d2_pos.y_);
+ //   Vector2D ba =  Vector2D(d2_pos.x_ - d1_pos.x_, d2_pos.y_ - d1_pos.y_);
 
-    if (distance < 48) {
+    if (distance < 48 ) {
         Vector2D force_ba = MAX_FORCE * (ba / distance);
         move.forces = force_ba;
-        update_forces_of_drone(d1);
-        update_acceleration_of_drone(d1);
-        update_speed_of_drone(d1);
+        //move.dx=force_ba.x_;
+        //move.dy=force_ba.y_;
 
     } else if (distance < 96) {
+        //std::cout<<"Second condition"<<std::endl;
         Vector2D force_ba = ((distance - 96) / (48 - 96)) * (MAX_FORCE * (ba / distance));
+
         move.forces = force_ba;
-        update_forces_of_drone(d1);
-        update_acceleration_of_drone(d1);
-        update_speed_of_drone(d1);
+
+        move.dx=force_ba.x_;
+        move.dy=force_ba.y_;
     }
+    update_forces_of_drone(d1);
+    update_acceleration_of_drone(d1);
+    update_speed_of_drone(d1);
+
 }
 
 float DirectionController::get_distance_between_drones(Drone *d1, Drone *d2) const
@@ -93,10 +111,26 @@ float DirectionController::get_distance_between_drones(Drone *d1, Drone *d2) con
     );
 }
 
+void DirectionController::update_forces_of_drone(Drone *drone)
+{
+    auto& move = drone->get_move_data();
+    move.forces.x_ = move.dx;
+    move.forces.y_ = move.dy;
+
+}
 void DirectionController::update_acceleration_of_drone(Drone *drone)
 {
     auto& move = drone->get_move_data();
-     if (move.target_reached) {
+    if (move.circular_mode) {
+        // Acceleration for circular movement
+        move.theta_zero = 0;
+        move.radius = 100;
+        move.acceleration.x_ = (-move.radius) * (move.w * move.w) * cos(move.w * move.temps + move.theta_zero);
+        move.acceleration.y_ = (-move.radius) * (move.w * move.w) * sin(move.w * move.temps + move.theta_zero);
+    } else {
+        move.acceleration = move.forces / move.weight;
+    }
+    /*     if (move.target_reached) {
          // Acceleration for circular movement
          move.theta_zero = 0;
          move.radius = 100;
@@ -104,19 +138,11 @@ void DirectionController::update_acceleration_of_drone(Drone *drone)
          move.acceleration.y_ = (-move.radius) * (move.w * move.w) * sin(move.w * move.temps + move.theta_zero);
      } else if (!move.circular_mode){
          move.acceleration = move.forces / move.weight;
-     }
+     }*/
    // move.acceleration = move.forces / move.weight;
 
 }
 
-void DirectionController::update_forces_of_drone(Drone *drone)
-{
-        auto& move = drone->get_move_data();
-
-        move.forces.x_ = move.dx;
-        move.forces.y_ = move.dy;
-
-}
 
 void DirectionController::update_position_of_drone(Drone *drone)
 {
@@ -125,6 +151,14 @@ void DirectionController::update_position_of_drone(Drone *drone)
 
     move.temps += 0.1;
 
+    if (move.circular_mode){
+        // Positioning for circular movement
+         move.theta_zero = 1000;
+        drone_position.x_ = move.radius * cos(move.w * move.temps + move.theta_zero);
+        drone_position.y_ = move.radius * sin(move.w * move.temps + move.theta_zero);
+    } else {
+        drone_position = drone_position + move.speed;
+    }/*
     if (move.target_reached){
         // Positioning for circular movement
        // move.theta_zero = 1000;
@@ -132,8 +166,8 @@ void DirectionController::update_position_of_drone(Drone *drone)
         drone_position.y_ = move.radius * sin(move.w * move.temps + move.theta_zero);
     } else if (!move.circular_mode) {
         drone_position = drone_position + move.speed;
-    }
-     //            drone_position = drone_position + move.speed;
+    }*/
+             //    drone_position = drone_position + move.speed;
 }
 
 void DirectionController::update_speed_of_drone(Drone *drone)

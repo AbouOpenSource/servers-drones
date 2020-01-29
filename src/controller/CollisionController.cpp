@@ -17,8 +17,10 @@ CollisionController::CollisionController()
     server_controller_ = (ServerController *) service_container->get_service(ServerController::SERVICE);
     EventManager::Subscription subscription = [this] (Event* e, const TypeUtil::Callback& unsubscribe) {
         for(auto & drone : get_drones()) {
+
             prevent_collision_for_drone(drone);
-            monitor_trajectory_of_drone(drone);
+          //  monitor_trajectory_of_drone(drone);
+
         }
     };
     auto* event_manager = (EventManager *) service_container->get_service(EventManager::SERVICE);
@@ -32,6 +34,7 @@ void CollisionController::prevent_collision_for_drone(Drone *drone)
         Circle zone_bis = get_zone_for_drone(drone_bis);
         if(drone !=drone_bis){
             if (zone.touch_with(&zone_bis)) {
+              //  std::cout<<"Colission"<<std::endl;
                 direction_controller_->prevent_collision_between_drones(drone, drone_bis);
             }
         }

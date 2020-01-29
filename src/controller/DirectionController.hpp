@@ -10,7 +10,7 @@
 #include "../core/service/ServiceContainer.hpp"
 #include "../core/event/internal/EventType.hpp"
 
-#define MAX_FORCE 200
+#define MAX_FORCE 1000
 
 class DirectionController: public ServiceProvider
 {
