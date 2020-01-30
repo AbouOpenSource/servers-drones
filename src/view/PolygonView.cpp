@@ -21,7 +21,8 @@ void PolygonView::draw(View::DrawHelper *draw_helper)
 {
     glDisable(GL_TEXTURE_2D);
 
-    glColor3fv(draw_helper->get_color(server_->get_color()));
+    //glColor3fv(draw_helper->get_color(server_->get_color()));
+    glColor3fv(YELLOW);
 
     glBegin(GL_POLYGON);
     for (auto &point: polygon_->get_build_points()) {
@@ -48,3 +49,4 @@ void PolygonView::quit()
 {
     View::quit();
 }
+//

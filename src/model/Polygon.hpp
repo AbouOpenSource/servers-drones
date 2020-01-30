@@ -95,6 +95,8 @@ public:
 
     Vector2D* previous_vertex(Vector2D &vertex);
 
+    float area();
+
     /********** Operator overloading **********/
     friend std::ostream &operator<<(std::ostream &out, Polygon &polygon);
 
