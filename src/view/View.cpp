@@ -24,9 +24,10 @@ void View::quit()
 View::DrawHelper::DrawHelper()
 {}
 
-void View::DrawHelper::init(View::TextureLoader* texture_loader)
+void View::DrawHelper::init(View::TextureLoader* texture_loader, View::TextWriter * text_writer)
 {
     texture_loader_ = texture_loader;
+    text_writer_ = text_writer;
 }
 
 const float * View::DrawHelper::get_color(const std::string &color_name)
@@ -110,4 +111,9 @@ const float *View::DrawHelper::cyan()
 int View::DrawHelper::load_texture(const std::string &file_name, int &width, int &height)
 {
     return (*texture_loader_)(file_name, width, height);
+}
+
+void View::DrawHelper::write_text(const std::string &text, int x, int y, View::WriteOptions opts)
+{
+    (*text_writer_)(text, x, y, opts);
 }

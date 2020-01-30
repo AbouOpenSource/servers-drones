@@ -6,10 +6,10 @@
 #define DRONEPROJECT_DRONE_HPP
 
 
+#include <string>
 #include "Vector2D.hpp"
 #include "../view/View.hpp"
 
-#include <string>
 
 class Drone
 {

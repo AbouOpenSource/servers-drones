@@ -5,6 +5,7 @@
 #include <iostream>
 #include "EventManager.hpp"
 #include "internal/EventType.hpp"
+#include "internal/DroneChangeZoneEvent.hpp"
 
 std::string EventManager::SERVICE = "EventService";
 
@@ -20,6 +21,10 @@ void EventManager::publish(const char* event_type, Event *event)
     /*if (event_type != EventType::FRAME_UPDATED && event_type != EventType::INPUT) {
         std::cout << "Called by: " << event_type << std::endl;
     }*/
+
+    if (event_type == EventType::DRONE_CHANGED_ZONE) {
+        std::cout << *((DroneChangeZoneEvent*)event) << std::endl;
+    }
 
     int i(0);
     for (auto& subscription: subscriptions) {

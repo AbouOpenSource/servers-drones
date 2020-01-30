@@ -20,7 +20,6 @@ CollisionController::CollisionController()
         if (!drones_.empty()) {
             for(auto* drone : drones_) {
                 prevent_collision_for_drone(drone);
-                monitor_trajectory_of_drone(drone);
             }
         }
     });
@@ -36,36 +35,6 @@ void CollisionController::prevent_collision_for_drone(Drone *drone)
                 event_manager_->publish(EventType::COLLISION_DETECTED, new CollisionDetectEvent(drone, drone_bis));
             }
         }
-    }
-}
-
-void CollisionController::monitor_trajectory_of_drone(Drone *drone)
-{
-    auto& move = drone->get_move_data();
-    auto& drone_position = drone->get_position();
-
-    if (abs(drone_position.y_ - Window::getWindowHeight()) < 100 && move.speed.y_ > 0){
-        move.acceleration.y_ = -move.acceleration.y_;
-        move.acceleration.x_ = -move.acceleration.x_;
-        move.speed.y_ = -move.speed.y_;
-    }
-
-    if (drone_position.y_ < 10 && move.speed.y_ < 0){
-        move.acceleration.y_ = -move.acceleration.y_;
-        move.acceleration.x_ = -move.acceleration.x_;
-        move.speed.y_ = -move.speed.y_;
-    }
-    
-    if (drone_position.x_ < 10 && move.speed.x_ < 0){
-        move.acceleration.y_ = -move.acceleration.y_;
-        move.acceleration.x_ = -move.acceleration.x_;
-        move.speed.x_ = -move.speed.x_;
-    }
-    
-    if (abs(drone_position.x_ - Window::getWindowWidth()) < 100 && move.speed.x_ > 0){
-        move.acceleration.y_ = -move.acceleration.y_;
-        move.acceleration.x_ = -move.acceleration.x_;
-        move.speed.x_ = -move.speed.x_;
     }
 }
 

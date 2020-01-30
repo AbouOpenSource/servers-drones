@@ -23,6 +23,8 @@ Window::Window(int argc, char **argv)
 {
     draw_helper_.init(new View::TextureLoader ([](const std::string &file_name, int &x, int &y) {
         return loadTGATexture(TEXTURE_DIR + file_name + ".tga", x, y);
+    }), new View::TextWriter([](const std::string &text, int x, int y, View::WriteOptions opts) {
+        drawText(x, y, text, opts.align, opts.font);
     }));
 }
 
@@ -89,13 +91,13 @@ void Window::onKeyPressed(unsigned char c, double cx, double cy)
     publishInputEvent(EventType::KEY_PRESSED, new KeyPressEvent(static_cast<Key>(c), mouse_position));
 }
 
-Window::MousePosition Window::get_current_mouse_position() const
-{
-    return current_mouse_position_;
-}
-
 void Window::publishInputEvent(const char *event_type, Event* event)
 {
     event_manager_->publish(event_type, event);
     event_manager_->publish(EventType::INPUT, event);
+}
+
+Window::MousePosition Window::get_current_mouse_position() const
+{
+    return current_mouse_position_;
 }
