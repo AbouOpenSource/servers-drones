@@ -17,6 +17,7 @@
 #include "../view/ServerView.hpp"
 #include "../Window.hpp"
 #include "Controller.hpp"
+#include "../../data/config/config.hpp"
 
 class ServerController: public Controller
 {
@@ -87,7 +88,7 @@ private:
 
     std::map<Drone*, DroneView*> drone_view_;
 
-    std::map<Server*, int> server_drone_count_;
+    std::map<Server*, std::vector<Drone*>> server_drones_;
 };
 
 

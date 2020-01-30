@@ -13,8 +13,7 @@
 #include "DirectionController.hpp"
 #include "ServerController.hpp"
 #include "Controller.hpp"
-
-#define COLLISION_RADIUS 48
+#include "../../data/config/config.hpp"
 
 class
 CollisionController: public Controller
@@ -27,8 +26,6 @@ public:
     CollisionController();
 
     void prevent_collision_for_drone(Drone* drone);
-
-    void monitor_trajectory_of_drone(Drone* drone);
 
 private:
 

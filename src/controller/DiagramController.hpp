@@ -23,17 +23,23 @@ public:
 
     std::vector<Polygon*>& get_polygons();
 
+    std::vector<Server*> get_servers();
+
     Polygon* get_polygon_for_server(Server* server);
 
     Server* get_server_for_polygon(Polygon* polygon);
 
 private:
 
-    void on_data_changed(const std::vector<Server*>& servers, Window* window);
+    void on_config_changed();
+
+    Window* window_;
 
     VoronoiDiagram voronoi_diagram_;
 
     Polygon base_polygon_;
+
+    std::vector<Server*> servers_;
 
     std::map<Polygon*, PolygonView*> polygon_views_;
 
