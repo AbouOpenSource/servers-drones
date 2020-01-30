@@ -50,7 +50,7 @@ private:
 
     Triangle* left_triangle(std::vector<Triangle>& triangles, Vector2D& vertex);
 
-    void add_point(Vector2D A, Polygon* polygon);
+    void add_point(Vector2D& A, Polygon* polygon);
 
     Vector2D right_orthogonal_vector(Vector2D& vertex);
 

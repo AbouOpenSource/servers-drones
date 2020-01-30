@@ -32,6 +32,8 @@ void View::DrawHelper::init(View::TextureLoader* texture_loader, View::TextWrite
 
 const float * View::DrawHelper::get_color(const std::string &color_name)
 {
+    std::cout << "Color: " << color_name << std::endl;
+
 	if (color_name == "BLACK") {
         return BLACK;
     }

@@ -43,12 +43,19 @@ void DiagramController::on_config_changed()
     // Associates each polygon with its corresponding server.
     for (Polygon* polygon: voronoi_diagram_.get_polygons()) {
         for (Server *server: servers_) {
+            std::cout << "Server inside loop1: " << server << std::endl;
+
             // TODO is_inside not always working?
             if (polygon->is_inside(server->get_position())) {
+                std::cout << "Server inside loop2: " << server << std::endl;
                 polygon_servers_[polygon] = server;
+                std::cout << "test: " << polygon_servers_[polygon] << std::endl;
                 break;
             }
         }
+
+        std::cout << "Server: " << polygon_servers_[polygon] << std::endl;
+
         polygon_views_[polygon] = new PolygonView(polygon, polygon_servers_[polygon]);
         window_->addView(polygon_views_[polygon]);
     }
