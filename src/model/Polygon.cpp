@@ -528,3 +528,26 @@ Vector2D *Polygon::get_tab_pts()
 {
     return tab_pts_;
 }
+
+float Polygon::area()
+{
+   float area=0.0;
+    for (auto p: triangles_) {
+        Vector2D AB = *p.ptr_[1] - *p.ptr_[0];
+        Vector2D BC = *p.ptr_[2] - *p.ptr_[1];
+        Vector2D CA = *p.ptr_[0] - *p.ptr_[2];
+
+        double a = AB.norm();
+        double b = BC.norm();
+        double c = CA.norm();
+
+        auto s = (a + b + c) / 2;
+        auto calculated = std::sqrt(s * (s - a) * (s - b) * (s - c));
+        std::cout << calculated << std::endl;
+        area += calculated;
+    }
+    std::cout << "Final Area: " << area << std::endl;
+
+
+    return area;
+}
