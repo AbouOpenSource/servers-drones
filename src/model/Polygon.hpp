@@ -12,6 +12,9 @@ class Polygon
 
 public:
     /********** typedef **********/
+    /**
+     * @brief: callback on the Vertex of the polygone.
+     */
     typedef std::function<void(Vector2D& point, unsigned int index)> VertexCallback;
 
     /********** Constructor & destructor **********/
@@ -55,7 +58,9 @@ public:
     * @return true if the polygon is convex, false otherwise.
     */
     bool is_convex();
-
+    /**
+     * @brief creating the triangles from polygone with the triagulation processe.
+     */
     void triangulation();
 
     static bool polar_comparison(Vector2D p1, Vector2D p2);
@@ -73,28 +78,50 @@ public:
     void interior_triangulation();
 
     Triangle* neighbor_inside(Triangle* current);
-
+    /**
+     * @brief modify the organisation of the triangle to get right delaunay configuraton.
+     * @param current: Triangle
+     * @param neighbor: Trianlge
+     */
     void flip(Triangle* current, Triangle* neighbor);
-
+    /**
+     * @brief make delaunay configuraton in the mesh of triangle.
+     */
     void solve_delaunay();
-
+    /**
+     * @brief: check if that respests the delaunay configuration
+     */
     void check_delaunay();
-
+    /**
+     * @brief like a loop, this function loop on each vertex of the polygon.
+     * @param cb the callback
+     */
     void foreach_vertex(VertexCallback cb);
 
     // Return the subset of triangles of the mesh that have v1 as vertex.
     std::vector<Triangle> get_triangles_from(Vector2D v1);
 
     Vector2D* next_vertex(Vector2D& vertex);
-
+    /**
+     * @brief check the Vector is in next right vector.
+     * @param p the vector that we want to check if it is in the next right.
+     * @return true or false.
+     */
     bool is_in_side_right(const Vector2D &p);
-
+    /**
+     * @brief check the Vector is the next left vector.
+     * @param p  the vector that we want to check if it is in the left right
+     * @return true or false.
+     */
     bool is_inside_left(const Vector2D &p);
 
     bool is_on_the_right(const Vector2D &p, int i);
 
     Vector2D* previous_vertex(Vector2D &vertex);
-
+    /**
+     * @brief: computing the area of the polygone
+     * @return: a float (area)
+     */
     float area();
 
     /********** Operator overloading **********/
