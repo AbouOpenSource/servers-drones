@@ -7,6 +7,11 @@
 ServerView::ServerView(Server *server): TextureView("master"), server_(server)
 {}
 
+void ServerView::init(View::DrawHelper *draw_helper, EventManager *event_manager)
+{
+    TextureView::init(draw_helper, event_manager);
+}
+
 void ServerView::start()
 {
     glClearColor(1.0,1.0,1.0,1.0); // background color
@@ -16,6 +21,7 @@ void ServerView::start()
 
 void ServerView::draw(DrawHelper* draw_helper)
 {
+    glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, texture_id_);
     glPushMatrix();
     glTranslatef(server_->get_position().x_ ICON_MARGIN, server_->get_position().y_ ICON_MARGIN, 1.0);
@@ -30,5 +36,11 @@ void ServerView::draw(DrawHelper* draw_helper)
     glVertex2f(0.0, ICON_SIZE);
     glEnd();
     glPopMatrix();
-    draw_helper->write_text(server_->get_name(), server_->get_position().x_, server_->get_position().y_);
+    glDisable(GL_TEXTURE_2D);
+
+    draw_helper->write_text(
+            server_->get_name(),
+            server_->get_position().x_ + (ICON_SIZE / 2) + 10,
+            server_->get_position().y_ - 5
+    );
 }

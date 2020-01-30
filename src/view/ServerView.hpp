@@ -20,6 +20,8 @@ public:
 
     void draw(DrawHelper* draw_helper) override;
 
+    void init(DrawHelper *draw_helper, EventManager *event_manager) override;
+
 private:
 
     Server* server_;

@@ -12,11 +12,11 @@ std::string CollisionController::SERVICE = "CollisionService";
 CollisionController::CollisionController()
     : Controller(CollisionController::SERVICE)
 {
-    event_manager_->subscribe(EventType::DRONE_CONFIG_CHANGED, [this] (Event* e, const EventManager::EventDetail& detail) {
+    event_manager_->subscribe(EventType::DRONE_CONFIG_CHANGED, [this] (Event* e, auto&) {
         drones_ = ((DroneConfigChangeEvent*)e)->get_drones();
     });
 
-    event_manager_->subscribe(EventType::FRAME_UPDATED, [this] (Event* e, const EventManager::EventDetail& detail) {
+    event_manager_->subscribe(EventType::FRAME_UPDATED, [this] (Event* e, auto&) {
         if (!drones_.empty()) {
             for(auto* drone : drones_) {
                 prevent_collision_for_drone(drone);

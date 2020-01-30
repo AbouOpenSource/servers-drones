@@ -21,8 +21,7 @@ void PolygonView::draw(View::DrawHelper *draw_helper)
 {
     glDisable(GL_TEXTURE_2D);
 
-    //glColor3fv(draw_helper->get_color(server_->get_color()));
-    glColor3fv(YELLOW);
+    glColor3fv(draw_helper->get_color(server_->get_color()));
 
     glBegin(GL_POLYGON);
     for (auto &point: polygon_->get_build_points()) {
@@ -31,8 +30,7 @@ void PolygonView::draw(View::DrawHelper *draw_helper)
     glEnd();
 
     glColor3fv(BLACK);
-    for (auto &point: polygon_->get_build_points())
-    {
+    for (auto &point: polygon_->get_build_points()) {
         Vector2D *next_point = polygon_->next_vertex(point);
 
         glLineWidth(3);
@@ -41,8 +39,6 @@ void PolygonView::draw(View::DrawHelper *draw_helper)
         glVertex2f(next_point->x_, next_point->y_);
         glEnd();
     }
-
-    glEnable(GL_TEXTURE_2D);
 }
 
 void PolygonView::quit()

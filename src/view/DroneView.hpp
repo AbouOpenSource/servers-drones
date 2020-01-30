@@ -8,6 +8,7 @@
 
 #include "../model/Drone.hpp"
 #include "TextureView.hpp"
+#include "../model/Server.hpp"
 
 class DroneView: public TextureView
 {
@@ -16,6 +17,8 @@ public:
 
     explicit DroneView(Drone* drone);
 
+    void init(DrawHelper *draw_helper, EventManager *event_manager) override;
+
     void start() override;
 
     void draw(DrawHelper* draw_helper) override;
@@ -23,6 +26,8 @@ public:
 private:
 
     Drone* drone_;
+
+    Server* server_;
 };
 
 
