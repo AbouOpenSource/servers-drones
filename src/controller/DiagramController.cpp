@@ -10,24 +10,28 @@
 std::string DiagramController::SERVICE = "DiagramService";
 
 DiagramController::DiagramController()
-    : Controller(DiagramController::SERVICE)
+    : Controller(DiagramController::SERVICE),
+    window_((Window *) get_service(Window::SERVICE))
 {
-    auto* window = (Window *) get_service(Window::SERVICE);
-
     event_manager_->subscribe(
             {EventType::SERVER_CONFIG_CHANGED, EventType::CONFIG_LOADED},
-            [this, window] (Event* e, const EventManager::EventDetail& detail) {
+            [this] (Event* e, const EventManager::EventDetail& detail) {
         auto* server_config = (ServerConfigChangeEvent*)e;
-        on_data_changed(server_config->get_servers(), window);
+        servers_ = server_config->get_servers();
+        on_config_changed();
     });
 }
 
-void DiagramController::on_data_changed(const std::vector<Server*>& servers, Window* window)
+void DiagramController::on_config_changed()
 {
+    for (auto* polygon: voronoi_diagram_.get_polygons()) {
+        window_->removeView(polygon_views_[polygon]);
+    }
+
     std::vector<Vector2D> points;
 
-    points.reserve(servers.size());
-    for (Server* server: servers) {
+    points.reserve(servers_.size());
+    for (Server* server: servers_) {
         points.push_back(server->get_position());
     }
 
@@ -38,7 +42,7 @@ void DiagramController::on_data_changed(const std::vector<Server*>& servers, Win
 
     // Associates each polygon with its corresponding server.
     for (Polygon* polygon: voronoi_diagram_.get_polygons()) {
-        for (Server *server: servers) {
+        for (Server *server: servers_) {
             // TODO is_inside not always working?
             if (polygon->is_inside(server->get_position())) {
                 polygon_servers_[polygon] = server;
@@ -46,7 +50,7 @@ void DiagramController::on_data_changed(const std::vector<Server*>& servers, Win
             }
         }
         polygon_views_[polygon] = new PolygonView(polygon, polygon_servers_[polygon]);
-        window->addView(polygon_views_[polygon]);
+        window_->addView(polygon_views_[polygon]);
     }
 
     event_manager_->publish(EventType::DIAGRAM_CHANGED, new DiagramChangeEvent(this));
@@ -56,6 +60,11 @@ void DiagramController::on_data_changed(const std::vector<Server*>& servers, Win
 std::vector<Polygon *> &DiagramController::get_polygons()
 {
     return voronoi_diagram_.get_polygons();
+}
+
+std::vector<Server *> DiagramController::get_servers()
+{
+    return servers_;
 }
 
 Polygon *DiagramController::get_polygon_for_server(Server *server)

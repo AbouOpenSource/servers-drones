@@ -27,6 +27,7 @@ public:
     static const char* DRONE_CONFIG_CHANGED;
 
     static const char* COLLISION_DETECTED;
+    static const char* DRONE_CHANGED_ZONE;
 
     static const char* FRAME_UPDATED;
     static const char* DIAGRAM_CHANGED;

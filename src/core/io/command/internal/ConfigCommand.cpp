@@ -22,5 +22,5 @@ const char* ConfigCommand::get_value() const
     if (value_) {
         return value_;
     }
-    return DEFAULT_FILE;
+    return DEFAULT_CONFIG_FILE;
 }

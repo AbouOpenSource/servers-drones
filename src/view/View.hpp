@@ -6,6 +6,7 @@
 #define DRONEPROJECT_VIEW_HPP
 
 #include "../core/event/EventManager.hpp"
+#include "../../data/config/config.hpp"
 #include "glutWindow.h"
 
 const float BLACK[4] = {0.0, 0.0, 0.0, 0.1f};
@@ -23,7 +24,13 @@ class View
 
 public:
 
+    struct WriteOptions {
+        GlutWindow::textAlign align = GlutWindow::ALIGN_LEFT;
+        void* font = GLUT_BITMAP_8_BY_13;
+    };
+
     typedef std::function<int(const std::string& path, int& x, int& y)> TextureLoader;
+    typedef std::function<void(const std::string& path, int x, int y, WriteOptions opts)> TextWriter;
 
     class DrawHelper {
 
@@ -33,7 +40,7 @@ public:
 
         explicit DrawHelper();
 
-        void init(TextureLoader* texture_loader);
+        void init(TextureLoader* texture_loader, TextWriter * text_writer);
 
         const float* get_color(const std::string& color_name);
         const float* red();
@@ -48,9 +55,14 @@ public:
 
         int load_texture(const std::string& file_name, int& width, int& height);
 
+        void write_text(const std::string& text, int x, int y,
+                WriteOptions opts = {GlutWindow::ALIGN_LEFT, GLUT_BITMAP_8_BY_13});
+
     private:
 
         TextureLoader* texture_loader_;
+
+        TextWriter* text_writer_;
     };
 
     View();

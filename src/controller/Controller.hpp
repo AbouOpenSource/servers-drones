@@ -14,11 +14,15 @@ class Controller: public ServiceProvider
 
 protected:
 
-    Controller(std::string& name);
+    explicit Controller(std::string& name);
+
+    Controller(std::string& name, const std::vector<const char*>& managed_events);
 
     static ServiceProvider* get_service(const std::string& service_id);
 
     EventManager* event_manager_;
+
+    void on_event(const char* event_type, Event* event);
 
 };
 
