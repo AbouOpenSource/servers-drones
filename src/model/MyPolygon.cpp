@@ -624,6 +624,27 @@ Vector2D *MyPolygon::next_vertex(Vector2D &vertex)
     return next_point;
 }
 
+Vector2D *MyPolygon::previous_vertex(Vector2D &vertex)
+{
+    Vector2D* previous_point(nullptr);
+
+    foreach_vertex([&previous_point, &vertex, this](Vector2D& point, unsigned int index) {
+        if (point == vertex)
+        {
+            if (index == 0)
+            {
+                previous_point = &points_to_build_polygon_[points_to_build_polygon_.size()-1];
+            }
+            else
+            {
+                previous_point =&points_to_build_polygon_[(index - 1)];
+            }
+        }
+    });
+
+    return previous_point;
+}
+
 
 
 

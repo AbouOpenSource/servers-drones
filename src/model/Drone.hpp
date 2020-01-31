@@ -14,7 +14,8 @@
 //why
 //#include "Server.hpp"
 #include <string>
-#include <OpenGL/OpenGL.h>
+#include <GL/gl.h>
+//#include <OpenGL/OpenGL.h>
 
 //enum Color { RED, GREEN, BLUE, PINK, YELLOW, CYAN };
 

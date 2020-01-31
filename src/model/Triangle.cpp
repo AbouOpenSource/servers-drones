@@ -1,5 +1,7 @@
 #include "Triangle.hpp"
 
+bool contains(Vector2D *point);
+
 Triangle::Triangle()
 {
 }
@@ -49,6 +51,15 @@ void Triangle::calculate_circle()
     circum_center_ = 0.5f * ac + (k * vac) + *ptr_[0]; // O + 0.5AC + K * vac + A
     circum_radius_ = (circum_center_ - *ptr_[0]).norm(); // R = AO = BO = CO
 }
+//bool Triangle::contains(Vector2D point){
+//    if(*ptr_[0]==point||*ptr_[1]==point||*ptr_[2]==point){
+//        return true;
+//    }
+//    else{
+//        return false;
+//    }
+//
+//}
 
 
 void Triangle::on_mouse_move(const Vector2D& pos)
@@ -198,4 +209,16 @@ Triangle::Triangle(Triangle *toCopy)
     circum_radius_ = toCopy->circum_radius_;
     is_delaunay_ = toCopy->is_delaunay_;
 }
+
+//Vector2D* Triangle::get_unique_point(Triangle *triangle) {
+//    bool b0, b1, b2;
+//
+//    for (int i = 0; i < 3; i++) {
+//        b0 = (ptr_[i]->x_ != triangle->ptr_[0]->x_) && (ptr_[i]->y_ != triangle->ptr_[0]->y_);
+//        b1 = (ptr_[i]->x_ != triangle->ptr_[1]->x_) && (ptr_[i]->y_ != triangle->ptr_[1]->y_);
+//        b2 = (ptr_[i]->x_ != triangle->ptr_[2]->x_) && (ptr_[i]->y_ != triangle->ptr_[2]->y_);
+//        if (b0 && b1 && b2)
+//            return ptr_[i];
+//    }
+//}
 

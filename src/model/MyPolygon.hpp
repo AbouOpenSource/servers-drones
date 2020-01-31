@@ -108,6 +108,8 @@ public:
     friend std::ostream &operator<<(std::ostream &out, MyPolygon &polygon);
 
     Vector2D* next_vertex(Vector2D& vertex);
+
+    Vector2D *previous_vertex(Vector2D &vertex);
 };
 
 #endif //POINTS_AND_CONVEX_POLYGONS_MYPOLYGON_HPP
