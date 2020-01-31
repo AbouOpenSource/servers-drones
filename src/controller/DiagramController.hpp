@@ -29,6 +29,8 @@ public:
 
     Server* get_server_for_polygon(Polygon* polygon);
 
+    float get_server_area(Server* server);
+
 private:
 
     void on_config_changed();

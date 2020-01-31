@@ -15,9 +15,7 @@ ZoneController::ZoneController()
 {
     event_manager_->subscribe(EventType::FRAME_UPDATED, [this] (Event* e, const EventManager::EventDetail& detail) {
         if (!drones_.empty()) {
-            for (auto* drone: drones_) {
-                track_drone_zone_change(drone);
-            }
+            track_drone_zone_change();
         }
     });
 
@@ -27,28 +25,30 @@ ZoneController::ZoneController()
 
     event_manager_->subscribe(EventType::DIAGRAM_CHANGED, [this] (Event* e, const EventManager::EventDetail& detail) {
         diagram_controller_ = ((DiagramChangeEvent*)e)->get_diagram_controller();
-        for (auto* server: diagram_controller_->get_servers()) {
-            server_drones_[server] = {};
-        }
     });
 }
 
-void ZoneController::track_drone_zone_change(Drone *drone)
+void ZoneController::track_drone_zone_change()
 {
+
+
+
+
     auto& polygons = diagram_controller_->get_polygons();
-    auto& drone_position = drone->get_position();
     Polygon* polygon;
     Server* server;
-    int i(0);
-    do {
-        polygon = polygons[i];
-        server = diagram_controller_->get_server_for_polygon(polygons[i]);
-        if (polygon->is_inside(drone->get_position())) {
-            if (drone->get_server_name() != server->get_name()) {
-                event_manager_->publish(EventType::DRONE_CHANGED_ZONE, new DroneChangeZoneEvent(drone, server, polygon));
-                break;
+    for (auto* drone: drones_) {
+        int i(0);
+        do {
+            polygon = polygons[i];
+            server = diagram_controller_->get_server_for_polygon(polygons[i]);
+            if (polygon->is_inside(drone->get_position())) {
+                if (drone->get_server_name() != server->get_name()) {
+                    event_manager_->publish(EventType::DRONE_CHANGED_ZONE, new DroneChangeZoneEvent(drone, server, polygon));
+                    break;
+                }
             }
-        }
-        i++;
-    } while (i < diagram_controller_->get_servers().size());
+            i++;
+        } while (i < diagram_controller_->get_servers().size());
+    }
 }

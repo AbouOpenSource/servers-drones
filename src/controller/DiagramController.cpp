@@ -24,8 +24,10 @@ DiagramController::DiagramController()
 
 void DiagramController::on_config_changed()
 {
-    for (auto* polygon: voronoi_diagram_.get_polygons()) {
-        window_->removeView(polygon_views_[polygon]);
+    if (!voronoi_diagram_.get_polygons().empty()) {
+        for (auto* polygon: voronoi_diagram_.get_polygons()) {
+            window_->removeView(polygon_views_[polygon]);
+        }
     }
 
     std::vector<Vector2D> points;
@@ -80,4 +82,9 @@ Polygon *DiagramController::get_polygon_for_server(Server *server)
 Server *DiagramController::get_server_for_polygon(Polygon *polygon)
 {
     return polygon_servers_[polygon];
+}
+
+float DiagramController::get_server_area(Server *server)
+{
+    return get_polygon_for_server(server)->area() / (Window::getWindowWidth() * Window::getWindowHeight());
 }

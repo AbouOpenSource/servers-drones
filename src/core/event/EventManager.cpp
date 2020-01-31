@@ -18,14 +18,6 @@ void EventManager::publish(const char* event_type, Event *event)
 {
     auto& subscriptions = get_subscriptions_for(event_type);
 
-    /*if (event_type != EventType::FRAME_UPDATED && event_type != EventType::INPUT) {
-        std::cout << "Called by: " << event_type << std::endl;
-    }*/
-
-    if (event_type == EventType::DRONE_CHANGED_ZONE) {
-        std::cout << *((DroneChangeZoneEvent*)event) << std::endl;
-    }
-
     int i(0);
     for (auto& subscription: subscriptions) {
         subscription(event, {event_type, [&subscriptions, i] () {

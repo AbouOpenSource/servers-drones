@@ -26,12 +26,12 @@ std::string ServerController::SERVICE = "ServerService";
 
 ServerController::ServerController()
     : Controller(ServerController::SERVICE),
-      servers_({}),
-      server_view_({}),
-      drone_view_({}),
-      server_drones_({}),
-      drone_id_incrementer_(0),
-      window_((Window *) get_service(Window::SERVICE))
+    servers_({}),
+    server_view_({}),
+    drone_view_({}),
+    server_drones_({}),
+    drone_id_incrementer_(0),
+    window_((Window *) get_service(Window::SERVICE))
 {
     event_manager_->subscribe({EventType::KEY_PRESSED, EventType::MOUSE_CLICKED, EventType::MOUSE_MOVED},
             [this] (Event* e, const EventManager::EventDetail& detail) {
@@ -195,6 +195,7 @@ void ServerController::delete_selection()
     }
 
     event_manager_->publish(EventType::SELECTION_DELETED, new SelectionDeleteEvent(selection));
+    event_manager_->publish(EventType::SERVER_CONFIG_CHANGED, new ServerConfigChangeEvent(servers_));
 }
 
 void ServerController::color_selection(const std::string& color)

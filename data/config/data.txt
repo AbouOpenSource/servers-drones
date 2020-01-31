@@ -1,6 +1,6 @@
-Paris;(221,128);PINK
-Rome;(141,652);ORANGE
+Paris;(221,128);GREY
+Rome;(141,652);GREY
 London;(414,406);CYAN
-Berlin;(876,569);GREEN
-Beijing;(532,756);YELLOW
+Berlin;(876,569);GREY
+Beijing;(532,756);GREY
 San Francisco;(690,210);GREY

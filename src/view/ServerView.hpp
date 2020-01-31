@@ -25,6 +25,8 @@ public:
 private:
 
     Server* server_;
+
+    float area_;
 };
 
 

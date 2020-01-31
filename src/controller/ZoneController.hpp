@@ -22,13 +22,11 @@ public:
 
 private:
 
-    void track_drone_zone_change(Drone* drone);
+    void track_drone_zone_change();
 
     std::vector<Drone*> drones_;
 
     DiagramController* diagram_controller_;
-
-    std::map<Server*, std::vector<Drone*>> server_drones_;
 
 };
 
