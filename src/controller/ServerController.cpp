@@ -401,6 +401,9 @@ void ServerController::on_input(const char* type, Event *event)
             case Window::F9:
                 color_selection("GREEN");
                 break;
+            case Window::F10:
+                color_selection(window_->getDrawHelper()->dynamic_color_string());
+                break;
             case Window::S:
                 save_current_state();
                 break;
@@ -425,7 +428,7 @@ void ServerController::on_input(const char* type, Event *event)
             }
         } else if (click == Window::RIGHT) {
             if (Server* server = get_server_at({position.X, position.Y})) {
-                server->set_color(get_next_color());
+                server->set_color(window_->getDrawHelper()->dynamic_color_string());
             } else if (Drone* drone = get_drone_at({position.X, position.Y})) {
                 delete_drone(drone);
                 event_manager_->publish(EventType::DRONE_CONFIG_CHANGED, new DroneConfigChangeEvent(drones()));

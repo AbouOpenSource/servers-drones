@@ -41,9 +41,11 @@ public:
 
         explicit DrawHelper();
 
+        ~DrawHelper();
+
         void init(TextureLoader* texture_loader, TextWriter * text_writer);
 
-        const float* get_color(const std::string& color_name);
+        const float* parse(const std::string& color_name);
         const float* red();
         const float* green();
         const float* blue();
@@ -53,6 +55,10 @@ public:
         const float* grey();
         const float* pink();
         const float* cyan();
+        const float* white();
+        const float* dynamic_color();
+
+        const std::string dynamic_color_string();
 
         int load_texture(const std::string& file_name, int& width, int& height);
 
@@ -61,9 +67,17 @@ public:
 
     private:
 
+        const float* parse_dynamic_color(const std::string& color);
+
+        const float* push_dynamic_color(const string &color, float d, float d1, float d2);
+
+        float random_float();
+
         TextureLoader* texture_loader_;
 
         TextWriter* text_writer_;
+
+        std::map<std::string, float*> colors_;
     };
 
     View();

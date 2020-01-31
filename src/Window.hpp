@@ -30,6 +30,7 @@ public:
         F7 = 55,
         F8 = 56,
         F9 = 57,
+        F10 = 48,
         S = 115,
         D = 100,
         DEL = 127,
@@ -53,7 +54,9 @@ public:
 
     /********** Getter **********/
 
-    MousePosition get_current_mouse_position() const;
+    MousePosition getCurrentMousePosition() const;
+
+    View::DrawHelper* getDrawHelper();
 
     /********** Event **********/
 
