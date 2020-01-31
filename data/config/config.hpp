@@ -5,7 +5,7 @@
 #ifndef DRONEPROJECT_CONFIG_HPP
 #define DRONEPROJECT_CONFIG_HPP
 
-#define DEFAULT_CONFIG_FILE "../data/config/data.txt"
+#define DEFAULT_CONFIG_FILE "../data/config/quad.txt"
 
 #define ICON_SIZE 48
 #define ICON_MARGIN -24

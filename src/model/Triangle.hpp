@@ -36,7 +36,7 @@ public:
 
     bool is_delaunay() const;
 
-    const Vector2D &get_circum_center() const;
+    Vector2D &get_circum_center();
 
     /********** Modifiers **********/
     void calculate_circle();

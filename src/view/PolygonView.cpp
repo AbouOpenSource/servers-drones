@@ -22,7 +22,7 @@ void PolygonView::draw(View::DrawHelper *draw_helper)
     glDisable(GL_TEXTURE_2D);
 
 //    std::cout << "SERVER ADDRESS: " << server_ << std::endl;
-//    glColor3fv(draw_helper->get_color(server_->get_color()));
+    glColor3fv(draw_helper->get_color(server_->get_color()));
 
     glBegin(GL_POLYGON);
     for (auto &point: polygon_->get_build_points()) {

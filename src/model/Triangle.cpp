@@ -165,7 +165,7 @@ bool Triangle::is_delaunay() const
     return is_delaunay_;
 }
 
-const Vector2D &Triangle::get_circum_center() const
+Vector2D &Triangle::get_circum_center()
 {
     return circum_center_;
 }
