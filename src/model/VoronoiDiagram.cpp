@@ -29,6 +29,15 @@ void VoronoiDiagram::init(Polygon* base_polygon, unsigned int width, unsigned in
             Vector2D u = right_orthogonal_vector(E);
             Vector2D Q = intersection_with_borders(center, u, 0, 0, width, heigth);
 
+            std::cout << "current vertex: " << &vertex << std::endl;
+            std::cout << "current vertex: " << vertex << std::endl;
+            std::cout << "triangle: " << *triangle;
+            std::cout << "next vertex: " << *b << std::endl;
+            std::cout << "next edge: " << E << std::endl;
+            std::cout << "center: " << center << std::endl;
+            std::cout << "right orthogonal vector: " << u << std::endl;
+            std::cout << "Intersection with borders: " << Q << std::endl << std::endl;
+
             add_point(Q, polygon);
         } else {
             triangle = &triangles[0];
@@ -52,6 +61,14 @@ void VoronoiDiagram::init(Polygon* base_polygon, unsigned int width, unsigned in
             Vector2D center = Vector2D::center(vertex, *b);
             Vector2D u = right_orthogonal_vector(E);
             Vector2D Q = intersection_with_borders(center, u, 0, 0, width, heigth);
+
+            std::cout << "current vertex: " << vertex << std::endl;
+            std::cout << "triangle: " << *triangle;
+            std::cout << "prev vertex: " << *b << std::endl;
+            std::cout << "next edge: " << E << std::endl;
+            std::cout << "center: " << center << std::endl;
+            std::cout << "right orthogonal vector: " << u << std::endl;
+            std::cout << "Intersection with borders: " << Q << std::endl << std::endl;
 
             add_point(Q, polygon);
         }

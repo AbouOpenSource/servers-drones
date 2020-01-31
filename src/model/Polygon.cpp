@@ -132,7 +132,8 @@ bool Polygon::polar_comparison(Vector2D p1, Vector2D p2)
 
 bool Polygon::is_on_the_left(const Vector2D& p, int i)
 {
-    Vector2D ab = tab_pts_[i + 1] - tab_pts_[i], ap = p - tab_pts_[i];
+    Vector2D ab = tab_pts_[i + 1] - tab_pts_[i],
+    ap = p - tab_pts_[i];
 
     return cross_product(ab, ap) >= 0;
 }
@@ -158,7 +159,8 @@ bool Polygon::is_convex()
 
 bool Polygon::add_vertex(Vector2D &p)
 {
-    if (current_n_ == n_max_) {
+    if (current_n_ == n_max_)
+    {
         return false;
     }
 
@@ -173,7 +175,7 @@ bool Polygon::add_vertex(Vector2D &p)
 // Complexity is N because for each edge and there is N edges.
 bool Polygon::is_inside(const Vector2D& p)
 {
-    return is_inside_left(p) || is_in_side_right(p);
+    return is_inside_left(p) || is_inside_right(p);
 }
 
 bool Polygon::is_inside_left(const Vector2D &p) {
@@ -462,7 +464,7 @@ std::ostream &operator<<(std::ostream &out, Polygon &polygon)
 {
     out << "Polygon | ";
 
-    polygon.foreach_vertex([&out](Vector2D vertex, unsigned int index) {
+    polygon.foreach_vertex([&out](Vector2D& vertex, unsigned int index) {
         out << vertex << std::endl;
     });
 
@@ -483,11 +485,13 @@ Vector2D *Polygon::next_vertex(Vector2D &vertex)
 }
 
 bool Polygon::is_on_the_right(const Vector2D &p, int i) {
-    Vector2D u = tab_pts_[i + 1] - tab_pts_[i], v = p - tab_pts_[i];
+    Vector2D u = tab_pts_[i + 1] - tab_pts_[i],
+    v = p - tab_pts_[i];
+
     return cross_product(u, v) <= 0;
 }
 
-bool Polygon::is_in_side_right(const Vector2D &p) {
+bool Polygon::is_inside_right(const Vector2D &p) {
     int i = 0;
 
     while (i < current_n_ && is_on_the_right(p, i)) {

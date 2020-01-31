@@ -87,7 +87,7 @@ public:
 
     Vector2D* next_vertex(Vector2D& vertex);
 
-    bool is_in_side_right(const Vector2D &p);
+    bool is_inside_right(const Vector2D &p);
 
     bool is_inside_left(const Vector2D &p);
 
