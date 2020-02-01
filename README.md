@@ -146,7 +146,7 @@
 
 <span class="c4"></span>
 
-<span class="c45 c14">Event-based programming</span>
+<span class="c45 c14">**Event-based programming**</span>
 
 <span class="c1"></span>
 
@@ -154,7 +154,7 @@
 
 <span class="c5"></span>
 
-<span class="c35 c14">Example</span>
+<span class="c35 c14">**Example**</span>
 
 <span class="c15"></span>
 
@@ -172,7 +172,7 @@
 
 <span class="c15"></span>
 
-<span class="c14 c45">Main folders</span>
+<span class="c14 c45">**Main folders**</span>
 
 <span class="c15"></span>
 
