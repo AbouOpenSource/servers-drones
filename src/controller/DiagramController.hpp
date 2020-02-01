@@ -7,7 +7,7 @@
 
 
 #include "../model/VoronoiDiagram.hpp"
-#include "../model/Polygon.hpp"
+#include "../model/MyPolygon.hpp"
 #include "../view/PolygonView.hpp"
 #include "../Window.hpp"
 #include "Controller.hpp"
@@ -21,15 +21,15 @@ public:
 
     DiagramController();
 
-    std::vector<Polygon*>& get_polygons();
+    std::vector<MyPolygon*>& get_polygons();
 
     std::vector<Server*> get_servers();
 
-    Polygon* get_polygon_for_server(Server* server);
+    MyPolygon* get_polygon_for_server(Server* server);
 
-    Server* get_server_for_polygon(Polygon* polygon);
+    Server* get_server_for_polygon(MyPolygon* polygon);
 
-    bool are_polygons_neighbors(Polygon* p1, Polygon* p2);
+    bool are_polygons_neighbors(MyPolygon* p1, MyPolygon* p2);
 
     float get_server_area(Server* server);
 
@@ -43,13 +43,13 @@ private:
 
     VoronoiDiagram voronoi_diagram_;
 
-    Polygon base_polygon_;
+    MyPolygon base_polygon_;
 
     std::vector<Server*> servers_;
 
-    std::map<Polygon*, PolygonView*> polygon_views_;
+    std::map<MyPolygon*, PolygonView*> polygon_views_;
 
-    std::map<Polygon*, Server*> polygon_servers_;
+    std::map<MyPolygon*, Server*> polygon_servers_;
 
 };
 

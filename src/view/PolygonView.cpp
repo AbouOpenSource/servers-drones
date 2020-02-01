@@ -4,7 +4,7 @@
 
 #include "PolygonView.hpp"
 
-PolygonView::PolygonView(Polygon *polygon, Server* server): View(), polygon_(polygon), server_(server)
+PolygonView::PolygonView(MyPolygon *polygon, Server* server): View(), polygon_(polygon), server_(server)
 {}
 
 void PolygonView::init(DrawHelper* draw_helper, ServiceContainer *service_container)

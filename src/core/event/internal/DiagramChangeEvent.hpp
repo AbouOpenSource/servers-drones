@@ -8,7 +8,7 @@
 
 #include <ostream>
 #include "../Event.hpp"
-#include "../../../model/Polygon.hpp"
+#include "../../../model/MyPolygon.hpp"
 #include "../../../controller/DiagramController.hpp"
 
 class DiagramChangeEvent: public Event

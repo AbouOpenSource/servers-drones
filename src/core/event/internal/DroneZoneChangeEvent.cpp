@@ -4,7 +4,7 @@
 
 #include "DroneZoneChangeEvent.hpp"
 
-DroneZoneChangeEvent::DroneZoneChangeEvent(Drone *drone, Server *server, Polygon *polygon)
+DroneZoneChangeEvent::DroneZoneChangeEvent(Drone *drone, Server *server, MyPolygon *polygon)
     : Event(),
     drone_(drone),
     server_(server),
@@ -21,7 +21,7 @@ Server *DroneZoneChangeEvent::get_server() const
     return server_;
 }
 
-Polygon *DroneZoneChangeEvent::get_polygon() const
+MyPolygon *DroneZoneChangeEvent::get_polygon() const
 {
     return polygon_;
 }

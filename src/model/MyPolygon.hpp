@@ -7,7 +7,7 @@
 #include "Triangle.hpp"
 #include "Server.hpp"
 
-class Polygon
+class MyPolygon
 {
 
 public:
@@ -24,19 +24,19 @@ public:
      * @brief a constructor to create a polygon of size 100 (number of vertices).
      * @param max_pts the maximum number of vertices.
      */
-    explicit Polygon(int max_pts = 100);
+    explicit MyPolygon(int max_pts = 100);
 
     /**
      * @brief a constructor to create a polygon (it creates a convex hull and then a mesh).
      * @param points a list of points to create the polygon.
      * @param max_pts the maximum number of points (default 100, it can be changed later).
      */
-    Polygon(std::vector<Vector2D> points, int max_pts = 100);
+    MyPolygon(std::vector<Vector2D> points, int max_pts = 100);
 
     /**
      * @brief destructor of the polygon. It destroy the pointer of the tab_pts_ variable.
      */
-    ~Polygon();
+    ~MyPolygon();
 
     /********** Getter **********/
 
@@ -218,7 +218,7 @@ public:
     * @param polygon the server to print.
     * @return the output stream.
     */
-    friend std::ostream &operator<<(std::ostream &out, Polygon &polygon);
+    friend std::ostream &operator<<(std::ostream &out, MyPolygon &polygon);
 
 private:
 

@@ -7,7 +7,7 @@
 #define DRONEPROJECT_VORONOIDIAGRAM_HPP
 
 #include <vector>
-#include "Polygon.hpp"
+#include "MyPolygon.hpp"
 #include "Vector2D.hpp"
 #include "Triangle.hpp"
 
@@ -18,13 +18,13 @@ public:
 
     VoronoiDiagram();
 
-    void init(Polygon* base_polygon, unsigned int width, unsigned int height);
+    void init(MyPolygon* base_polygon, unsigned int width, unsigned int height);
 
-    vector<Polygon*> &get_polygons();
+    vector<MyPolygon*> &get_polygons();
 
 private:
 
-    std::vector<Polygon*> polygons_;
+    std::vector<MyPolygon*> polygons_;
 
     bool left_top_border_added_;
 
@@ -48,7 +48,7 @@ private:
     * @param vertex the vertex to check for the next one.
     * @return a pointer on the next vertex if it exist, otherwise return a nullptr.
     */
-    Vector2D* next_vertex(Polygon* polygon, Vector2D& vertex);
+    Vector2D* next_vertex(MyPolygon* polygon, Vector2D& vertex);
 
     /**
      * @brief return the next edge of the vertex passed in parameter.
@@ -93,7 +93,7 @@ private:
      * @param a the vertex to get the edge (b, a).
      * @return returns the triangle that share the edge (b, a) of "triangle" (or ∅ if it does not exists).
      */
-    Triangle* right_neighbor(Polygon* mesh, Triangle& triangle, Vector2D& a);
+    Triangle* right_neighbor(MyPolygon* mesh, Triangle& triangle, Vector2D& a);
 
     /**
      * @brief return the triangle of the subset of triangle "triangles" (sharing a same point "vertex") that has no left neighbor.
@@ -108,7 +108,7 @@ private:
      * @param A the vertex to add.
      * @param polygon the polygon where the point will be add.
      */
-    void add_point(Vector2D A, Polygon* polygon);
+    void add_point(Vector2D A, MyPolygon* polygon);
 
     /**
      * @brief return a vector v which is orthogonal to the edge E(a, b) (and
@@ -131,13 +131,13 @@ private:
      * @param width the width of the window.
      * @param height the height of the window.
      */
-    void add_corner_points(Polygon* polygon, float width, float height);
+    void add_corner_points(MyPolygon* polygon, float width, float height);
 
     /**
      * @brief push a polygon inside the list of polygon "polygons_"
      * @param polygon the polygon to add.
      */
-    void push(Polygon* polygon);
+    void push(MyPolygon* polygon);
 
     /**
      * @brief return the minimum positive number from the 4 variables passed in parameter.

@@ -65,7 +65,7 @@ void ZoneController::check_drones_distribution()
 void ZoneController::track_drone_zone_change()
 {
     auto& polygons = diagram_controller_->get_polygons();
-    Polygon* polygon;
+    MyPolygon* polygon;
     Server* server;
     for (auto* drone: drones_) {
         int i(0);

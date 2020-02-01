@@ -12,10 +12,10 @@ VoronoiDiagram::VoronoiDiagram()
     right_bottom_border_added_(false)
 {}
 
-void VoronoiDiagram::init(Polygon* base_polygon, unsigned int width, unsigned int heigth)
+void VoronoiDiagram::init(MyPolygon* base_polygon, unsigned int width, unsigned int heigth)
 {
     base_polygon->foreach_vertex([this, base_polygon, &width, &heigth](Vector2D &vertex, unsigned int index) {
-        auto *polygon = new Polygon();
+        auto *polygon = new MyPolygon();
         // subset of triangles of D that have Qi as vertex
         std::vector<Triangle> triangles = base_polygon->get_triangles_from(vertex);
 
@@ -78,7 +78,7 @@ void VoronoiDiagram::remove_triangle(Triangle &triangle, std::vector<Triangle> &
     }
 }
 
-Triangle *VoronoiDiagram::right_neighbor(Polygon* mesh, Triangle &current, Vector2D &a)
+Triangle *VoronoiDiagram::right_neighbor(MyPolygon* mesh, Triangle &current, Vector2D &a)
 {
     // Get the previous point.
     Vector2D *b_current = previous_vertex(current, a);
@@ -149,7 +149,7 @@ Vector2D *VoronoiDiagram::next_vertex(Triangle &triangle, Vector2D &vertex)
     return next_point;
 }
 
-Vector2D *VoronoiDiagram::next_vertex(Polygon* polygon, Vector2D &vertex)
+Vector2D *VoronoiDiagram::next_vertex(MyPolygon* polygon, Vector2D &vertex)
 {
     Vector2D *next_point(nullptr);
 
@@ -246,12 +246,12 @@ float VoronoiDiagram::min(float k0, float k1, float k2, float k3)
     return min_positive_number;
 }
 
-void VoronoiDiagram::add_point(Vector2D A, Polygon* polygon)
+void VoronoiDiagram::add_point(Vector2D A, MyPolygon* polygon)
 {
     polygon->add_vertex(A);
 }
 
-void VoronoiDiagram::add_corner_points(Polygon* polygon, float width, float height)
+void VoronoiDiagram::add_corner_points(MyPolygon* polygon, float width, float height)
 {
     Vector2D* next_point;
 
@@ -333,12 +333,12 @@ void VoronoiDiagram::add_corner_points(Polygon* polygon, float width, float heig
     });
 }
 
-void VoronoiDiagram::push(Polygon *polygon)
+void VoronoiDiagram::push(MyPolygon *polygon)
 {
     polygons_.push_back(polygon);
 }
 
-vector<Polygon*> &VoronoiDiagram::get_polygons()
+vector<MyPolygon*> &VoronoiDiagram::get_polygons()
 {
     return polygons_;
 }

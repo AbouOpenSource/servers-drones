@@ -10,20 +10,20 @@
 #include "../Event.hpp"
 #include "../../../model/Drone.hpp"
 #include "../../../model/Server.hpp"
-#include "../../../model/Polygon.hpp"
+#include "../../../model/MyPolygon.hpp"
 
 class DroneZoneChangeEvent: public Event
 {
 
 public:
 
-    DroneZoneChangeEvent(Drone *drone, Server *server, Polygon *polygon);
+    DroneZoneChangeEvent(Drone *drone, Server *server, MyPolygon *polygon);
 
     Drone *get_drone() const;
 
     Server *get_server() const;
 
-    Polygon *get_polygon() const;
+    MyPolygon *get_polygon() const;
 
     friend std::ostream &operator<<(std::ostream &os, const DroneZoneChangeEvent &event);
 
@@ -33,7 +33,7 @@ private:
 
     Server* server_;
 
-    Polygon* polygon_;
+    MyPolygon* polygon_;
 
 };
 
