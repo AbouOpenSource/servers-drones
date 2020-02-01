@@ -4,19 +4,19 @@
 
 </div>
 
-### <span class="c14">Serves and Drone Project</span>
+## <span class="c14">Serves and Drone Project</span>
 
 <span class="c27">The context of the project is to place servers and drones on a field and make them communicate with each other.</span>
 
-### <span class="c4">Getting Started</span>
+## <span class="c4">Getting Started</span>
 
 <span class="c27">Follow these instructions to get a copy of the project running on your local machine for development and testing purposes.</span>
 
-### <span class="c4">Prerequisites</span>
+## <span class="c4">Prerequisites</span>
 
 <span class="c1"></span>
 
-<span class="c5">CLion</span>
+ <span class="c5">**CLion**</span>
 
 <span class="c12"></span>
 
@@ -24,7 +24,7 @@
 
 <span class="c11 c39"></span>
 
-<span class="c35 c14">C++ Compiler (to run C++ 17)</span>
+<span class="c35 c14">**C++ Compiler (to run C++ 17)**</span>
 
 <span class="c11">For C/C++ projects, CLion uses GCC/G++, Clang, or MSVC toolset.</span>
 
@@ -42,13 +42,13 @@
 
 <span class="c12"></span>
 
-### <span class="c4">Deploying the project</span>
+## <span class="c4">Deploying the project</span>
 
 <span class="c1"></span>
 
 <span class="c11 c39"></span>
 
-<span class="c35 c14">Cloning GitHub repository</span>
+<span class="c35 c14">**Cloning GitHub repository**</span>
 
 <span class="c1"></span>
 
@@ -68,7 +68,7 @@
 
 <span class="c11 c39"></span>
 
-<span class="c5">Running the cloned project</span>
+<span class="c5">**Running the cloned project**</span>
 
 <span class="c5"></span>
 
@@ -104,7 +104,7 @@
 
 <span class="c5"></span>
 
-### <span class="c14">Architecture</span>
+## <span class="c14">Architecture</span>
 
 <a id="t.45ea6120553329215d7f8c4efe74e693f036bbba"></a><a id="t.0"></a>
 
@@ -186,13 +186,13 @@
 
 <td class="c2" colspan="1" rowspan="1">
 
-<span class="c6">Folder name</span>
+<span class="c6">**Folder name**</span>
 
 </td>
 
 <td class="c2" colspan="1" rowspan="1">
 
-<span class="c6">Purpose</span>
+<span class="c6">**Purpose**</span>
 
 </td>
 
@@ -268,7 +268,7 @@
 
 <span class="c15"></span>
 
-### <span class="c4">Project organization</span>
+## <span class="c4">Project organization</span>
 
 <span class="c1"></span>
 
@@ -282,13 +282,13 @@
 
 <td class="c2" colspan="1" rowspan="1">
 
-<span class="c6">Parts</span>
+<span class="c6">**Parts**</span>
 
 </td>
 
 <td class="c2" colspan="1" rowspan="1">
 
-<span class="c6">Members</span>
+<span class="c6">**Members**</span>
 
 </td>
 
@@ -352,9 +352,9 @@
 
 <span class="c1"></span>
 
-### <span class="c4">Conventions</span>
+## <span class="c4">Conventions</span>
 
-<span class="c5">File</span>
+<span class="c5">**File**</span>
 
 <span class="c5"></span>
 
@@ -365,7 +365,7 @@
 
 <span class="c1"></span>
 
-<span class="c14 c35">Code</span>
+<span class="c14 c35">**Code**</span>
 
 <span class="c1"></span>
 
@@ -385,13 +385,13 @@
 
 <td class="c13" colspan="1" rowspan="1">
 
-<span class="c1">Do</span>
+<span class="c1">**Do**</span>
 
 </td>
 
 <td class="c13" colspan="1" rowspan="1">
 
-<span class="c1">Don’t</span>
+<span class="c1">**Don’t**</span>
 
 </td>
 
@@ -585,7 +585,7 @@
 
 <span class="c1"></span>
 
-### <span class="c14">Project steps</span>
+## <span class="c14">Project steps</span>
 
 <span class="c1"></span>
 
@@ -604,9 +604,9 @@
 
 <span class="c5"></span>
 
-### <span class="c4">Server File</span>
+## <span class="c4">Server File</span>
 
-<span class="c5">File Format</span>
+<span class="c5">**File Format**</span>
 
 <span class="c5"></span>
 
@@ -616,7 +616,7 @@
 
 <span class="c1"></span>
 
-<span class="c35 c14">Example</span>
+<span class="c35 c14">**Example**</span>
 
 <span class="c1"></span>
 
@@ -624,7 +624,7 @@
 
 <span>        </span>
 
-<span class="c35 c14">Valid server colors</span>
+<span class="c35 c14">__Valid server colors__</span>
 
 <span class="c6"></span>
 
@@ -632,9 +632,9 @@
 
 <span class="c1"></span>
 
-### <span class="c4">Functionalities</span>
+## <span class="c4">Functionalities</span>
 
-<span class="c35 c14">Read Options</span>
+<span class="c35 c14">**Read Options**</span>
 
 <span class="c1">        </span>
 
@@ -648,13 +648,13 @@
 
 <td class="c2" colspan="1" rowspan="1">
 
-<span class="c6">Option</span>
+<span class="c6">**Option**</span>
 
 </td>
 
 <td class="c2" colspan="1" rowspan="1">
 
-<span class="c6">Action</span>
+<span class="c6">**Action**</span>
 
 </td>
 
@@ -700,7 +700,7 @@
 
 <span class="c5"></span>
 
-<span class="c35 c14">Event Handling</span>
+<span class="c35 c14">**Event Handling**</span>
 
 <span class="c1"></span>
 
@@ -714,13 +714,13 @@
 
 <td class="c2" colspan="1" rowspan="1">
 
-<span class="c6">Event</span>
+<span class="c6">**Event**</span>
 
 </td>
 
 <td class="c2" colspan="1" rowspan="1">
 
-<span class="c6">Action</span>
+<span class="c6">**Action**</span>
 
 </td>
 
@@ -880,32 +880,32 @@
 
 <span class="c1"></span>
 
-### <span class="c4">Built With</span>
+## <span class="c4">Built With</span>
 
 *   <span class="c27">C++ (Version 17)</span><span class="c28 c27"> - The programming language used</span>
 *   <span class="c28 c27">CMake Version - 3.14</span>
 *   <span class="c28 c27">CLion - The IDE used</span>
 
-### <span class="c4">Versioning</span>
+## <span class="c4">Versioning</span>
 
 <span class="c28 c27">We use GitHub for versioning.</span>
 
-### <span class="c4">Cloning</span>
+## <span class="c4">Cloning</span>
 
 <span class="c27">Clone the project repository to your local machine using</span> <span class="c19">[https://github.com/AbouOpenSource/servers-drones](https://www.google.com/url?q=https://github.com/AbouOpenSource/servers-drones&sa=D&ust=1580571561505000)</span>
 
-### <span class="c14">Team</span>
+## <span class="c14">Team</span>
 
 *   <span class="c27 c28">Abou Sanou</span>
 *   <span class="c28 c27">Joshua Shakya</span>
 *   <span class="c28 c27">Julien Lecoq</span>
 *   <span class="c27">Maanrifa Bacar Ali</span>
 
-### <span class="c14">Contributing</span>
+## <span class="c14">Contributing</span>
 
 <span class="c27">Your contributions are always welcome!</span>
 
-### <span class="c4">Acknowledgments</span>
+## <span class="c4">Acknowledgments</span>
 
 *   <span class="c28 c27">Professor Benoit Piranda</span>
 *   <span class="c28 c27">Professor Abdallah Makhoul</span>
