@@ -4,12 +4,12 @@
 
 #include "PolygonView.hpp"
 
-PolygonView::PolygonView(Polygon *polygon, Server* server): View(), polygon_(polygon), server_(server)
+PolygonView::PolygonView(MyPolygon *polygon, Server* server): View(), polygon_(polygon), server_(server)
 {}
 
-void PolygonView::init(DrawHelper* draw_helper, EventManager* event_manager)
+void PolygonView::init(DrawHelper* draw_helper, ServiceContainer *service_container)
 {
-    View::init(draw_helper, event_manager);
+    View::init(draw_helper, service_container);
 }
 
 void PolygonView::start()
@@ -21,7 +21,16 @@ void PolygonView::draw(View::DrawHelper *draw_helper)
 {
     glDisable(GL_TEXTURE_2D);
 
-    glColor3fv(draw_helper->get_color(server_->get_color()));
+    //Issue where server_ has nullptr
+    if (server_) {
+        glColor3fv(draw_helper->parse(server_->get_color()));
+    } else {
+        if (color_.empty()) {
+            color_ = draw_helper->dynamic_color_string();
+        }
+        glColor3fv(draw_helper->parse(color_));
+    }
+
 
     glBegin(GL_POLYGON);
     for (auto &point: polygon_->get_build_points()) {

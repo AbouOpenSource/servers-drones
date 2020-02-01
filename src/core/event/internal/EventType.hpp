@@ -19,6 +19,8 @@ public:
 
     static const char* DRONE_ADDED;
     static const char* SERVER_ADDED;
+    static const char* DRONE_DELETED;
+    static const char* SERVER_DELETED;
 
     static const char* CONFIG_SAVED;
     static const char* CONFIG_LOADED;
@@ -28,6 +30,7 @@ public:
 
     static const char* COLLISION_DETECTED;
     static const char* DRONE_CHANGED_ZONE;
+    static const char* DRONE_CHANGED_TARGET;
 
     static const char* FRAME_UPDATED;
     static const char* DIAGRAM_CHANGED;

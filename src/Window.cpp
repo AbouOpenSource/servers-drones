@@ -59,7 +59,7 @@ void Window::addView(View* view, bool front)
     } else {
         views_.push_back(view);
     }
-    view->init(&draw_helper_, event_manager_);
+    view->init(&draw_helper_, ServiceContainer::get_instance());
 }
 
 void Window::removeView(View *view)
@@ -97,7 +97,12 @@ void Window::publishInputEvent(const char *event_type, Event* event)
     event_manager_->publish(EventType::INPUT, event);
 }
 
-Window::MousePosition Window::get_current_mouse_position() const
+Window::MousePosition Window::getCurrentMousePosition() const
 {
     return current_mouse_position_;
+}
+
+View::DrawHelper* Window::getDrawHelper()
+{
+    return &draw_helper_;
 }

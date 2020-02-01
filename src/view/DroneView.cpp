@@ -4,16 +4,19 @@
 
 #include "DroneView.hpp"
 #include "../core/event/internal/EventType.hpp"
-#include "../core/event/internal/DroneChangeZoneEvent.hpp"
+#include "../core/event/internal/DroneZoneChangeEvent.hpp"
 
-DroneView::DroneView(Drone *drone): TextureView("drone"), drone_(drone)
+DroneView::DroneView(Drone *drone)
+    : TextureView("drone"),
+    drone_(drone)
 {}
 
-void DroneView::init(View::DrawHelper *draw_helper, EventManager *event_manager)
+void DroneView::init(View::DrawHelper *draw_helper, ServiceContainer *service_container)
 {
-    TextureView::init(draw_helper, event_manager);
-    event_manager->subscribe(EventType::DRONE_CHANGED_ZONE, [this] (Event* e, auto&) {
-        auto* event = (DroneChangeZoneEvent*)e;
+    TextureView::init(draw_helper, service_container);
+    ((EventManager*)service_container->get_service(EventManager::SERVICE))
+    ->subscribe(EventType::DRONE_CHANGED_ZONE, [this] (Event* e, auto&) {
+        auto* event = (DroneZoneChangeEvent*)e;
         if (event->get_drone() == drone_) {
             server_ = event->get_server();
         }
@@ -61,4 +64,6 @@ void DroneView::draw(DrawHelper* draw_helper)
     glPopMatrix();
 
     glDisable(GL_TEXTURE_2D);
+
+    //draw_helper->write_text(&"ID: " [ drone_->get_id()], position.x_ + (ICON_SIZE / 2) + 6, position.y_ - 5);
 }

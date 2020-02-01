@@ -7,16 +7,16 @@
 
 
 #include "View.hpp"
-#include "../model/Polygon.hpp"
+#include "../model/MyPolygon.hpp"
 
 class PolygonView: public View
 {
 
 public:
 
-    explicit PolygonView(Polygon* polygon, Server* server);
+    explicit PolygonView(MyPolygon* polygon, Server* server);
 
-    void init(DrawHelper* draw_helper, EventManager *event_manager) override;
+    void init(DrawHelper* draw_helper, ServiceContainer *service_container) override;
 
     void start() override;
 
@@ -26,9 +26,11 @@ public:
 
 private:
 
-    Polygon* polygon_;
+    MyPolygon* polygon_;
 
     Server* server_;
+
+    std::string color_;
 };
 
 

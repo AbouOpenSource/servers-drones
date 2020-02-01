@@ -30,6 +30,7 @@ public:
         F7 = 55,
         F8 = 56,
         F9 = 57,
+        F10 = 48,
         S = 115,
         D = 100,
         DEL = 127,
@@ -49,11 +50,14 @@ public:
     static std::string SERVICE;
 
     /********** Constructor **********/
+
     Window(int argc, char **argv);
 
     /********** Getter **********/
 
-    MousePosition get_current_mouse_position() const;
+    MousePosition getCurrentMousePosition() const;
+
+    View::DrawHelper* getDrawHelper();
 
     /********** Event **********/
 

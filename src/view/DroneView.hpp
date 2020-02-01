@@ -6,8 +6,8 @@
 #define DRONEPROJECT_DRONEVIEW_HPP
 
 
-#include "../model/Drone.hpp"
 #include "TextureView.hpp"
+#include "../model/Drone.hpp"
 #include "../model/Server.hpp"
 
 class DroneView: public TextureView
@@ -17,7 +17,7 @@ public:
 
     explicit DroneView(Drone* drone);
 
-    void init(DrawHelper *draw_helper, EventManager *event_manager) override;
+    void init(DrawHelper *draw_helper, ServiceContainer *service_container) override;
 
     void start() override;
 

@@ -9,20 +9,19 @@
 #include <algorithm>
 
 Vector2D::Vector2D()
-        : x_(0),
-          y_(0)
+    : x_(0),
+    y_(0)
 {
 }
 
 Vector2D::Vector2D(const Vector2D &v)
+    : x_(v.x_), y_(v.y_)
 {
-    x_ = v.x_;
-    y_ = v.y_;
 }
 
 Vector2D::Vector2D(float p_x, float p_y)
-        : x_(p_x),
-          y_(p_y)
+    : x_(p_x),
+    y_(p_y)
 {
 }
 
@@ -90,6 +89,16 @@ std::ostream &operator<<(std::ostream &out, const Vector2D &vector)
 bool operator==(const Vector2D &vector1, const Vector2D &vector2)
 {
     return vector1.x_ == vector2.x_ && vector1.y_ == vector2.y_;
+}
+
+bool operator!=(const Vector2D &vector1, const Vector2D &vector2)
+{
+    return !(operator==(vector1, vector2));
+}
+
+bool Vector2D::is_null()
+{
+    return x_ == 0 && y_ == 0;
 }
 
 

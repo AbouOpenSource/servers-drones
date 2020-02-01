@@ -8,9 +8,9 @@
 #include "../core/event/EventManager.hpp"
 #include "../../data/config/config.hpp"
 #include "glutWindow.h"
+#include "../core/service/ServiceContainer.hpp"
 
 const float WHITE[4] = {1.0, 1.0, 1.0, 0.15f};
-const float BLACK[4] = {0.0, 0.0, 0.0, 1.0f};
 const float GREY[4] = {0.75f, 0.75f, 0.75f, 1.0f};
 const float RED[4] = {1.0f, 0.0, 0.0, 1.0f};
 const float ORANGE[4] = {1.0f, 0.27f, 0.0, 1.0f};
@@ -19,6 +19,10 @@ const float GREEN[4] = {0.0, 1.0f, 0.0, 1.0f};
 const float BLUE[4] = {0.0, 0.0, 1.0f, 1.0f};
 const float PINK[4] = {0.9569f, 0.7529f, 0.7961f, 1.0f};
 const float CYAN[4] = {0.0, 1.0f, 1.0f, 1.0f};
+const float BROWN[4] = {0.6471f, 0.1647f, 0.1647f, 1.0f};
+const float PURPLE[4] = {0.5020f, 0.0f, 0.5020f, 1.0f};
+const float MAGENTA[4] = {1.0f, 0.0f, 1.0f, 1.0f};
+const float BLACK[4] = {0.0f, 0.0f, 0.0f, 1.0f};
 
 class View
 {
@@ -41,9 +45,11 @@ public:
 
         explicit DrawHelper();
 
+        ~DrawHelper();
+
         void init(TextureLoader* texture_loader, TextWriter * text_writer);
 
-        const float* get_color(const std::string& color_name);
+        const float* parse(const std::string& color_name);
         const float* red();
         const float* green();
         const float* blue();
@@ -53,6 +59,10 @@ public:
         const float* grey();
         const float* pink();
         const float* cyan();
+        const float* white();
+        const float* dynamic_color();
+
+        const std::string dynamic_color_string();
 
         int load_texture(const std::string& file_name, int& width, int& height);
 
@@ -61,14 +71,22 @@ public:
 
     private:
 
+        const float* parse_dynamic_color(const std::string& color);
+
+        const float* push_dynamic_color(const string &color, float d, float d1, float d2);
+
+        float random_float();
+
         TextureLoader* texture_loader_;
 
         TextWriter* text_writer_;
+
+        std::map<std::string, float*> colors_;
     };
 
     View();
 
-    virtual void init(DrawHelper *draw_helper, EventManager *event_manager);
+    virtual void init(DrawHelper *draw_helper, ServiceContainer *service_container);
 
     virtual void start();
 

@@ -37,13 +37,13 @@ void DiagramController::on_config_changed()
         points.push_back(server->get_position());
     }
 
-    base_polygon_ = Polygon(points);
+    base_polygon_ = MyPolygon(points);
     base_polygon_.init();
     voronoi_diagram_ = VoronoiDiagram();
     voronoi_diagram_.init(&base_polygon_, Window::getWindowWidth(), Window::getWindowHeight());
 
     // Associates each polygon with its corresponding server.
-    for (Polygon* polygon: voronoi_diagram_.get_polygons()) {
+    for (MyPolygon* polygon: voronoi_diagram_.get_polygons()) {
         for (Server *server: servers_) {
             // TODO is_inside not always working?
             if (polygon->is_inside(server->get_position())) {
@@ -59,7 +59,7 @@ void DiagramController::on_config_changed()
 }
 
 
-std::vector<Polygon *> &DiagramController::get_polygons()
+std::vector<MyPolygon *> &DiagramController::get_polygons()
 {
     return voronoi_diagram_.get_polygons();
 }
@@ -69,7 +69,7 @@ std::vector<Server *> DiagramController::get_servers()
     return servers_;
 }
 
-Polygon *DiagramController::get_polygon_for_server(Server *server)
+MyPolygon *DiagramController::get_polygon_for_server(Server *server)
 {
     for (auto& it: polygon_servers_) {
         if (it.second == server) {
@@ -79,12 +79,35 @@ Polygon *DiagramController::get_polygon_for_server(Server *server)
     return nullptr;
 }
 
-Server *DiagramController::get_server_for_polygon(Polygon *polygon)
+Server *DiagramController::get_server_for_polygon(MyPolygon *polygon)
 {
     return polygon_servers_[polygon];
 }
 
 float DiagramController::get_server_area(Server *server)
 {
-    return get_polygon_for_server(server)->area() / (Window::getWindowWidth() * Window::getWindowHeight());
+    return get_polygon_for_server(server)->area() / get_total_area();
+}
+
+float DiagramController::get_total_area()
+{
+    return Window::getWindowWidth() * Window::getWindowHeight();
+}
+
+bool DiagramController::are_polygons_neighbors(MyPolygon *p1, MyPolygon *p2)
+{
+    for (unsigned int i = 0; i < sizeof(p1->get_tab_pts()); i++) {
+        for (unsigned int j = 0; j < sizeof(p2->get_tab_pts()); j++) {
+            if (p1 == p2) {
+                continue;
+            }
+            if ((!(p1->get_tab_pts()[i].is_null()) && !(p2->get_tab_pts()[j].is_null()))
+                    && (p1->get_tab_pts()[i] == p2->get_tab_pts()[j])
+            ) {
+                return true;
+            }
+        }
+    }
+
+    return false;
 }

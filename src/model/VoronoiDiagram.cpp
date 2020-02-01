@@ -12,10 +12,10 @@ VoronoiDiagram::VoronoiDiagram()
     right_bottom_border_added_(false)
 {}
 
-void VoronoiDiagram::init(Polygon* base_polygon, unsigned int width, unsigned int heigth)
+void VoronoiDiagram::init(MyPolygon* base_polygon, unsigned int width, unsigned int heigth)
 {
     base_polygon->foreach_vertex([this, base_polygon, &width, &heigth](Vector2D &vertex, unsigned int index) {
-        auto *polygon = new Polygon();
+        auto *polygon = new MyPolygon();
         // subset of triangles of D that have Qi as vertex
         std::vector<Triangle> triangles = base_polygon->get_triangles_from(vertex);
 
@@ -47,7 +47,7 @@ void VoronoiDiagram::init(Polygon* base_polygon, unsigned int width, unsigned in
         add_point(triangle->get_circum_center(), polygon);
 
         if (is_opened) {
-            Vector2D *b = prev_vertex(*triangle, vertex);
+            Vector2D *b = previous_vertex(*triangle, vertex);
             Vector2D E = vertex - *b;
             Vector2D center = Vector2D::center(vertex, *b);
             Vector2D u = right_orthogonal_vector(E);
@@ -78,10 +78,10 @@ void VoronoiDiagram::remove_triangle(Triangle &triangle, std::vector<Triangle> &
     }
 }
 
-Triangle *VoronoiDiagram::right_neighbor(Polygon* mesh, Triangle &current, Vector2D &a)
+Triangle *VoronoiDiagram::right_neighbor(MyPolygon* mesh, Triangle &current, Vector2D &a)
 {
     // Get the previous point.
-    Vector2D *b_current = prev_vertex(current, a);
+    Vector2D *b_current = previous_vertex(current, a);
 
     // For each triangle and point of this triangle.
     for (Triangle &triangle: mesh->get_triangles()) {
@@ -90,7 +90,7 @@ Triangle *VoronoiDiagram::right_neighbor(Polygon* mesh, Triangle &current, Vecto
         }
 
         // Check if the triangle own the point a.
-        if (triangle.common_point(&a) && triangle.common_point(b_current)) {
+        if (triangle.is_common_point(&a) && triangle.is_common_point(b_current)) {
             return &triangle;
         }
     }
@@ -98,9 +98,9 @@ Triangle *VoronoiDiagram::right_neighbor(Polygon* mesh, Triangle &current, Vecto
     return nullptr;
 }
 
-Vector2D VoronoiDiagram::right_orthogonal_vector(Vector2D &vertex)
+Vector2D VoronoiDiagram::right_orthogonal_vector(Vector2D &edge)
 {
-    return Vector2D(vertex.y_, -vertex.x_);
+    return Vector2D(edge.y_, -edge.x_);
 }
 
 Triangle *VoronoiDiagram::left_triangle(std::vector<Triangle> &triangles, Vector2D &vertex)
@@ -118,7 +118,7 @@ Triangle *VoronoiDiagram::left_triangle(std::vector<Triangle> &triangles, Vector
 
         for (unsigned int j = 0; j < triangles.size(); j++) {
             if (i != j) {
-                if (triangles[j].common_point(next_point)) {
+                if (triangles[j].is_common_point(next_point)) {
 //                    std::cout << "common\n\n";
                     is_shared = true;
                     break;
@@ -149,7 +149,7 @@ Vector2D *VoronoiDiagram::next_vertex(Triangle &triangle, Vector2D &vertex)
     return next_point;
 }
 
-Vector2D *VoronoiDiagram::next_vertex(Polygon* polygon, Vector2D &vertex)
+Vector2D *VoronoiDiagram::next_vertex(MyPolygon* polygon, Vector2D &vertex)
 {
     Vector2D *next_point(nullptr);
 
@@ -171,7 +171,7 @@ Vector2D *VoronoiDiagram::next_edge(Triangle triangle, Vector2D vertex)
     return next_edge;
 }
 
-Vector2D *VoronoiDiagram::prev_vertex(Triangle &triangle, Vector2D &vertex)
+Vector2D *VoronoiDiagram::previous_vertex(Triangle &triangle, Vector2D &vertex)
 {
     Vector2D *previous_vertex(nullptr);
 
@@ -188,9 +188,9 @@ Vector2D *VoronoiDiagram::prev_vertex(Triangle &triangle, Vector2D &vertex)
     return previous_vertex;
 }
 
-Vector2D *VoronoiDiagram::prev_edge(Triangle triangle, Vector2D vertex)
+Vector2D *VoronoiDiagram::previous_edge(Triangle triangle, Vector2D vertex)
 {
-    Vector2D *prev_point = prev_vertex(triangle, vertex);
+    Vector2D *prev_point = previous_vertex(triangle, vertex);
 
     Vector2D *prev_edge = new Vector2D(vertex - *prev_point);
 
@@ -246,12 +246,12 @@ float VoronoiDiagram::min(float k0, float k1, float k2, float k3)
     return min_positive_number;
 }
 
-void VoronoiDiagram::add_point(Vector2D A, Polygon* polygon)
+void VoronoiDiagram::add_point(Vector2D A, MyPolygon* polygon)
 {
     polygon->add_vertex(A);
 }
 
-void VoronoiDiagram::add_corner_points(Polygon* polygon, float width, float height)
+void VoronoiDiagram::add_corner_points(MyPolygon* polygon, float width, float height)
 {
     Vector2D* next_point;
 
@@ -333,12 +333,12 @@ void VoronoiDiagram::add_corner_points(Polygon* polygon, float width, float heig
     });
 }
 
-void VoronoiDiagram::push(Polygon *polygon)
+void VoronoiDiagram::push(MyPolygon *polygon)
 {
     polygons_.push_back(polygon);
 }
 
-vector<Polygon*> &VoronoiDiagram::get_polygons()
+vector<MyPolygon*> &VoronoiDiagram::get_polygons()
 {
     return polygons_;
 }

@@ -16,18 +16,39 @@ class ZoneController: public Controller
 
 public:
 
+    struct ServerData {
+        float expected;
+        int current;
+        std::vector<Server*> neighbors;
+    };
+
     static std::string SERVICE;
 
     ZoneController();
 
+    ServerData* get_server_data(Server* server);
+
 private:
 
+    void find_neighbors();
+
+    void calculate_drones_distribution();
+
+    void check_drones_distribution();
+
+    void monitor_drone(Drone* drone);
+
     void track_drone_zone_change();
+
+    bool compare(Server* server, Server* neighbor);
+
+    Server* get_drone_current_zone_server(Drone* drone);
 
     std::vector<Drone*> drones_;
 
     DiagramController* diagram_controller_;
 
+    std::map<Server*, ServerData*> server_data_;
 };
 
 
