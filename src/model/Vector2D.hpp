@@ -35,12 +35,16 @@ public :
 
     void normalize();
 
+    bool is_null();
+
     double norm();
 
     /********** Operator overload **********/
     friend std::ostream &operator<<(std::ostream &out, const Vector2D &vector);
 
     friend bool operator==(const Vector2D& vector1, const Vector2D& vector2);
+
+    friend bool operator!=(const Vector2D& vector1, const Vector2D& vector2);
 
     Vector2D ortho();
 };

@@ -98,7 +98,12 @@ bool DiagramController::are_polygons_neighbors(Polygon *p1, Polygon *p2)
 {
     for (unsigned int i = 0; i < sizeof(p1->get_tab_pts()); i++) {
         for (unsigned int j = 0; j < sizeof(p2->get_tab_pts()); j++) {
-            if (p1->get_tab_pts()[i] == p2->get_tab_pts()[j]) {
+            if (p1 == p2) {
+                continue;
+            }
+            if ((!(p1->get_tab_pts()[i].is_null()) && !(p2->get_tab_pts()[j].is_null()))
+                    && (p1->get_tab_pts()[i] == p2->get_tab_pts()[j])
+            ) {
                 return true;
             }
         }
