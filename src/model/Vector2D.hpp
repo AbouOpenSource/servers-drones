@@ -71,7 +71,10 @@ public :
      * @details allows to get the direction and the sens of the vector with th orm 1.
      */
     void normalize();
-    /**
+
+    bool is_null();
+
+   /**
      * @brief : compute the norm of the vector
      * @return the norm of the vector
      */
@@ -82,21 +85,9 @@ public :
 
     friend bool operator==(const Vector2D& vector1, const Vector2D& vector2);
 
+    friend bool operator!=(const Vector2D& vector1, const Vector2D& vector2);
+
     Vector2D ortho();
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 #endif //DRONEPROJECT_VECTOR2D_HPP

@@ -20,7 +20,6 @@
 #include "../core/event/internal/DroneConfigChangeEvent.hpp"
 #include "../core/event/internal/EventType.hpp"
 #include "../core/event/internal/DroneZoneChangeEvent.hpp"
-#include "../core/event/internal/DroneTargetChangeEvent.hpp"
 #include "../core/event/internal/DeleteServerEvent.hpp"
 #include "../core/event/internal/DeleteDroneEvent.hpp"
 
@@ -50,11 +49,6 @@ ServerController::ServerController()
     event_manager_->subscribe(EventType::DRONE_CHANGED_ZONE, [this] (Event* e, auto) {
         auto* event = (DroneZoneChangeEvent*)e;
         attach_drone_to_server(event->get_drone(), event->get_server());
-    });
-
-    event_manager_->subscribe(EventType::DRONE_CHANGED_TARGET, [this] (Event* e, auto) {
-        auto* event = (DroneTargetChangeEvent*)e;
-        event->get_drone()->set_target_server_name(event->get_server()->get_name());
     });
 }
 

@@ -18,8 +18,8 @@ public:
 
     struct ServerData {
         float expected;
+        int current;
         std::vector<Server*> neighbors;
-        std::vector<Drone*> drones;
     };
 
     static std::string SERVICE;
@@ -34,17 +34,15 @@ private:
 
     void calculate_drones_distribution();
 
+    void check_drones_distribution();
+
+    void monitor_drone(Drone* drone);
+
     void track_drone_zone_change();
 
-    void send_target_event(Drone* drone, Server* server);
+    bool compare(Server* server, Server* neighbor);
 
-    void find_unfilled_neighbor(Drone* drone, Server* server);
-
-    void add_drone_to_server(Drone* drone, Server* server);
-
-    void remove_drone_from_server(Drone* drone, Server* avoid_server);
-
-    bool is_server_full(Server* server);
+    Server* get_drone_current_zone_server(Drone* drone);
 
     std::vector<Drone*> drones_;
 

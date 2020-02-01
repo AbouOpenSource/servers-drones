@@ -79,6 +79,6 @@ void ServerView::draw(DrawHelper* draw_helper)
     draw_helper->write_text("Name: " + server_->get_name(), left_padding, y + 12);
     draw_helper->write_text("Area: " + area_string + "%", left_padding, y + 2);
     draw_helper->write_text("Neighbors: " + std::to_string(data->neighbors.size()), left_padding, y - 8);
-    draw_helper->write_text("Count: " + std::to_string(data->drones.size()) + '/' + std::to_string((int)data->expected), left_padding, y - 18);
+    draw_helper->write_text("Count: " + std::to_string(data->current) + '/' + std::to_string((int)data->expected), left_padding, y - 18);
 }
 

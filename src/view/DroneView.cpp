@@ -65,5 +65,5 @@ void DroneView::draw(DrawHelper* draw_helper)
 
     glDisable(GL_TEXTURE_2D);
 
-    draw_helper->write_text("ID: " + drone_->get_id(), position.x_ + (ICON_SIZE / 2) + 6, position.y_ - 5);
+    //draw_helper->write_text(&"ID: " [ drone_->get_id()], position.x_ + (ICON_SIZE / 2) + 6, position.y_ - 5);
 }
