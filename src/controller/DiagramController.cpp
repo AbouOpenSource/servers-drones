@@ -39,6 +39,9 @@ void DiagramController::on_config_changed()
 
     base_polygon_ = Polygon(points);
     base_polygon_.init();
+
+    // Triangles are ok there.
+
     voronoi_diagram_ = VoronoiDiagram();
     voronoi_diagram_.init(&base_polygon_, Window::getWindowWidth(), Window::getWindowHeight());
 

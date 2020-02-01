@@ -13,7 +13,7 @@ Polygon::Polygon(int max_pts)
     build_points_()
 {}
 
-Polygon::Polygon(std::vector<Vector2D> points, int max_pts)
+Polygon::Polygon(std::vector<Vector2D> &points, int max_pts)
     : tab_pts_{new Vector2D[max_pts]},
     n_max_(max_pts),
     current_n_(0),
@@ -428,10 +428,19 @@ float Polygon::cross_product(const Vector2D& u, const Vector2D& v)
     return (u.x_ * v.y_ - u.y_ * v.x_);
 }
 
+void Polygon::foreach_point(PointCallback cb)
+{
+    for (unsigned int i = 0; i < build_points_.size(); i++)
+    {
+        cb(build_points_[i], i);
+    }
+}
+
 void Polygon::foreach_vertex(VertexCallback cb)
 {
-    for (unsigned int i = 0; i < build_points_.size(); i++) {
-        cb(build_points_[i], i);
+    for (unsigned int i = 0; i < sizeof(tab_pts_); i++)
+    {
+        cb(tab_pts_[i], i);
     }
 }
 
@@ -464,7 +473,7 @@ std::ostream &operator<<(std::ostream &out, Polygon &polygon)
 {
     out << "Polygon | ";
 
-    polygon.foreach_vertex([&out](Vector2D& vertex, unsigned int index) {
+    polygon.foreach_point([&out](Vector2D& vertex, unsigned int index) {
         out << vertex << std::endl;
     });
 
@@ -477,7 +486,7 @@ Vector2D *Polygon::next_vertex(Vector2D &vertex)
 
     foreach_vertex([&next_point, &vertex, this](Vector2D& point, unsigned int index) {
         if (point == vertex) {
-            next_point = &tab_pts_[(index + 1) % build_points_.size()];
+            next_point = &tab_pts_[(index + 1) % sizeof(tab_pts_)];
         }
     });
 
@@ -508,9 +517,9 @@ Vector2D *Polygon::previous_vertex(Vector2D &vertex)
     foreach_vertex([&previous_point, &vertex, this](Vector2D& point, unsigned int index) {
         if (point == vertex) {
             if (index == 0) {
-                previous_point = &build_points_[build_points_.size()-1];
+                previous_point = &tab_pts_[sizeof(tab_pts_) - 1];
             } else {
-                previous_point = &build_points_[(index - 1)];
+                previous_point = &tab_pts_[(index - 1)];
             }
         }
     });
@@ -537,19 +546,23 @@ float Polygon::area()
 {
     float area = 0.0;
 
-    for (const auto& p: triangles_) {
-        Vector2D AB = *p.ptr_[1] - *p.ptr_[0];
-        Vector2D BC = *p.ptr_[2] - *p.ptr_[1];
-        Vector2D CA = *p.ptr_[0] - *p.ptr_[2];
+    float mult_x_y = 0.0;
+    float mult_y_x = 0.0;
 
-        double a = AB.norm();
-        double b = BC.norm();
-        double c = CA.norm();
-
-        auto s = (a + b + c) / 2;
-        auto calculated = std::sqrt(s * (s - a) * (s - b) * (s - c));
-        area += calculated;
+    for (unsigned int i = 0; i < sizeof(tab_pts_); i++)
+    {
+        if (i == sizeof(tab_pts_))
+        {
+            std::cout << "last index" << std::endl;
+        }
+        else
+        {
+            mult_x_y += tab_pts_[i].x_ * tab_pts_[i + 1].y_;
+            mult_y_x += tab_pts_[i].y_ * tab_pts_[i + 1].x_;
+        }
     }
+
+    area = (mult_x_y - mult_y_x) / 2;
 
     return area;
 }

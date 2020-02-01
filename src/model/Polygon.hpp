@@ -13,11 +13,12 @@ class Polygon
 public:
     /********** typedef **********/
     typedef std::function<void(Vector2D& point, unsigned int index)> VertexCallback;
+    typedef std::function<void(Vector2D& point, unsigned int index)> PointCallback;
 
     /********** Constructor & destructor **********/
     explicit Polygon(int max_pts = 100);
 
-    Polygon(std::vector<Vector2D> points, int max_pts = 100);
+    Polygon(std::vector<Vector2D> &points, int max_pts = 100);
 
     ~Polygon();
 
@@ -79,6 +80,8 @@ public:
     void solve_delaunay();
 
     void check_delaunay();
+
+    void foreach_point(PointCallback cb);
 
     void foreach_vertex(VertexCallback cb);
 

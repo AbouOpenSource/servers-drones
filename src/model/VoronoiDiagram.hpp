@@ -38,13 +38,13 @@ private:
 
     Vector2D* next_vertex(Polygon* polygon, Vector2D& vertex);
 
-    Vector2D *next_edge(Triangle triangle, Vector2D vertex);
+    Vector2D *next_edge(Triangle &triangle, Vector2D &vertex);
 
-    Vector2D *prev_edge(Triangle triangle, Vector2D vertex);
+    Vector2D *prev_edge(Triangle &triangle, Vector2D &vertex);
 
     Vector2D* prev_vertex(Triangle& triangle, Vector2D& vertex);
 
-    Vector2D intersection_with_borders(Vector2D a, Vector2D u, float x0, float y0, float x1, float y2);
+    Vector2D intersection_with_borders(Vector2D &a, Vector2D &u, float x0, float y0, float x1, float y2);
 
     Triangle* right_neighbor(Polygon* mesh, Triangle& triangle, Vector2D& a);
 

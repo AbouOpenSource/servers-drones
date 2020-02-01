@@ -12,9 +12,6 @@ ServerView::ServerView(Server *server): TextureView("master"), server_(server)
 void ServerView::init(View::DrawHelper *draw_helper, EventManager *event_manager)
 {
     TextureView::init(draw_helper, event_manager);
-    /*event_manager->subscribe(EventType::DIAGRAM_CHANGED, [this] (Event* e, auto&) {
-        std::cout << ((DiagramChangeEvent*)e)->get_diagram_controller()->get_server_area(server_) << std::endl;
-    });*/
 }
 
 void ServerView::start()
@@ -68,7 +65,9 @@ void ServerView::draw(DrawHelper* draw_helper)
 
     glColor3fv(BLACK);
 
+    float area = ((DiagramController*) ServiceContainer::get_instance()->get_service(DiagramController::SERVICE))->get_server_area(server_);
+
     draw_helper->write_text(server_->get_name(), x + (ICON_SIZE / 2) + 6, y + 5);
-    draw_helper->write_text("Area: " + std::to_string(area_ * 100) + "%", x + (ICON_SIZE / 2) + 6, y - 10);
+    draw_helper->write_text("Area: " + std::to_string(area * 100) + "%", x + (ICON_SIZE / 2) + 6, y - 10);
 }
 

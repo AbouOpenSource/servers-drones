@@ -40,6 +40,7 @@ void Window::onDraw()
 {
     FrameUpdateEvent event(this);
     event_manager_->publish(EventType::FRAME_UPDATED, &event);
+
     for (auto & view : views_) {
         view->draw(&draw_helper_);
     }

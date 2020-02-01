@@ -5,7 +5,6 @@ Triangle::Triangle()
 }
 
 Triangle::Triangle(Vector2D *ptr1,Vector2D *ptr2,Vector2D *ptr3): circum_center_({0, 0})
-// TODO: Give a value for circum_center_ initialisation
 {
     ptr_[0] = ptr1;
     ptr_[1] = ptr2;

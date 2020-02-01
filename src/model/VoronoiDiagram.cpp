@@ -14,7 +14,7 @@ VoronoiDiagram::VoronoiDiagram()
 
 void VoronoiDiagram::init(Polygon* base_polygon, unsigned int width, unsigned int heigth)
 {
-    base_polygon->foreach_vertex([this, base_polygon, &width, &heigth](Vector2D &vertex, unsigned int index) {
+    base_polygon->foreach_point([this, base_polygon, &width, &heigth](Vector2D &vertex, unsigned int index) {
         auto *polygon = new Polygon();
         // subset of triangles of D that have Qi as vertex
         std::vector<Triangle> triangles = base_polygon->get_triangles_from(vertex);
@@ -29,7 +29,6 @@ void VoronoiDiagram::init(Polygon* base_polygon, unsigned int width, unsigned in
             Vector2D u = right_orthogonal_vector(E);
             Vector2D Q = intersection_with_borders(center, u, 0, 0, width, heigth);
 
-            std::cout << "current vertex: " << &vertex << std::endl;
             std::cout << "current vertex: " << vertex << std::endl;
             std::cout << "triangle: " << *triangle;
             std::cout << "next vertex: " << *b << std::endl;
@@ -172,14 +171,14 @@ Vector2D *VoronoiDiagram::next_vertex(Polygon* polygon, Vector2D &vertex)
 
     polygon->foreach_vertex([&next_point, &vertex, &polygon](Vector2D &point, unsigned int index) {
         if (point == vertex) {
-            next_point = &polygon->get_tab_pts()[(index + 1) % polygon->get_build_points().size()];
+            next_point = &polygon->get_tab_pts()[(index + 1) % sizeof(polygon->get_tab_pts())];
         }
     });
 
     return next_point;
 }
 
-Vector2D *VoronoiDiagram::next_edge(Triangle triangle, Vector2D vertex)
+Vector2D *VoronoiDiagram::next_edge(Triangle &triangle, Vector2D &vertex)
 {
     Vector2D *next_point = next_vertex(triangle, vertex);
 
@@ -205,7 +204,7 @@ Vector2D *VoronoiDiagram::prev_vertex(Triangle &triangle, Vector2D &vertex)
     return previous_vertex;
 }
 
-Vector2D *VoronoiDiagram::prev_edge(Triangle triangle, Vector2D vertex)
+Vector2D *VoronoiDiagram::prev_edge(Triangle &triangle, Vector2D &vertex)
 {
     Vector2D *prev_point = prev_vertex(triangle, vertex);
 
@@ -214,7 +213,7 @@ Vector2D *VoronoiDiagram::prev_edge(Triangle triangle, Vector2D vertex)
     return prev_edge;
 }
 
-Vector2D VoronoiDiagram::intersection_with_borders(Vector2D a, Vector2D u, float x0, float y0, float x1, float y1)
+Vector2D VoronoiDiagram::intersection_with_borders(Vector2D &a, Vector2D &u, float x0, float y0, float x1, float y1)
 {
     float k0 = (x0 - a.x_) / u.x_;
     float k1 = (x1 - a.x_) / u.x_;
@@ -275,8 +274,12 @@ void VoronoiDiagram::add_corner_points(Polygon* polygon, float width, float heig
     float x0(0);
     float y0(0);
 
-    polygon->foreach_vertex([&](Vector2D& current_point, unsigned int index) {
+    polygon->foreach_vertex([&](Vector2D &current_point, unsigned int index) {
         next_point = next_vertex(polygon, current_point);
+
+//        std::cout << "ADD CORNER POINT" << std::endl;
+//        std::cout << "current_point: " << current_point << std::endl;
+//        std::cout << "next_vertex: " << *next_point << std::endl << std::endl;
 
         if (((current_point.x_ == x0 && next_point->y_ == y0) || (next_point->x_ == x0 && current_point.y_ == y0)) && !left_bottom_border_added_) {
             left_bottom_border_added_ = true;
