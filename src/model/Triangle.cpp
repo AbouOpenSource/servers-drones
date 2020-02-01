@@ -16,16 +16,16 @@ Triangle::Triangle(Vector2D *ptr1,Vector2D *ptr2,Vector2D *ptr3): circum_center_
     calculate_circle();
 }
 
-void Triangle::update_vertices(Vector2D *ptr1, Vector2D *ptr2, Vector2D *ptr3)
-{
-    ptr_[0] = ptr1;
-    ptr_[1] = ptr2;
-    ptr_[2] = ptr3;
-
-    is_highlighted_ = false;
-
-    calculate_circle();
-}
+//void Triangle::update_vertices(Vector2D *ptr1, Vector2D *ptr2, Vector2D *ptr3)
+//{
+//    ptr_[0] = ptr1;
+//    ptr_[1] = ptr2;
+//    ptr_[2] = ptr3;
+//
+//    is_highlighted_ = false;
+//
+//    calculate_circle();
+//}
 
 void Triangle::calculate_circle()
 {
@@ -42,14 +42,15 @@ void Triangle::calculate_circle()
 }
 
 
-void Triangle::on_mouse_move(const Vector2D& pos)
-{
-    is_highlighted_ = is_inside(pos);
-}
+//void Triangle::on_mouse_move(const Vector2D& pos)
+//{
+//    is_highlighted_ = is_inside(pos);
+//}
 
-bool Triangle::is_on_the_left(const Vector2D *P, const Vector2D *P1, const Vector2D *P2)
+bool Triangle::is_on_the_left(const Vector2D *p, const Vector2D *p1, const Vector2D *p2)
 {
-    Vector2D ab = *P2 - *P1, ap = *P - *P1;
+    Vector2D ab = *p2 - *p1,
+    ap = *p - *p1;
 
     return (ab.x_ * ap.y_ - ab.y_ * ap.x_) >= 0;
 }
@@ -76,7 +77,8 @@ bool Triangle::is_inside(const Vector2D &p)
 
 bool operator==(Triangle& triangle1, Triangle& triangle2)
 {
-    return triangle1.common_point(triangle2.ptr_[0]) && triangle1.common_point(triangle2.ptr_[1]) && triangle1.common_point(triangle2.ptr_[2]);
+    return triangle1.is_common_point(triangle2.ptr_[0]) && triangle1.is_common_point(triangle2.ptr_[1]) &&
+           triangle1.is_common_point(triangle2.ptr_[2]);
 }
 
 std::ostream &operator<<(std::ostream &out, Triangle &triangle)
@@ -85,25 +87,26 @@ std::ostream &operator<<(std::ostream &out, Triangle &triangle)
     return out;
 }
 
-void Triangle::draw()
-{
-    glColor3fv(is_delaunay_ ? (is_highlighted_ ? GREEN : GREY) : (is_highlighted_ ? ORANGE : YELLOW));
+//void Triangle::draw()
+//{
+//    glColor3fv(is_delaunay_ ? (is_highlighted_ ? GREEN : GREY) : (is_highlighted_ ? ORANGE : YELLOW));
+//
+//    // Draw the triangle.
+//    glBegin(GL_TRIANGLES);
+//    glVertex2f(ptr_[0]->x_, ptr_[0]->y_);
+//    glVertex2f(ptr_[1]->x_, ptr_[1]->y_);
+//    glVertex2f(ptr_[2]->x_, ptr_[2]->y_);
+//    glEnd();
+//
+//    // Draw the borders.
+//    glColor3fv(BLACK);
+//    glBegin(GL_LINE_LOOP);
+//    glVertex2f(ptr_[0]->x_, ptr_[0]->y_);
+//    glVertex2f(ptr_[1]->x_, ptr_[1]->y_);
+//    glVertex2f(ptr_[2]->x_, ptr_[2]->y_);
+//    glEnd();
+//}
 
-    // Draw the triangle.
-    glBegin(GL_TRIANGLES);
-    glVertex2f(ptr_[0]->x_, ptr_[0]->y_);
-    glVertex2f(ptr_[1]->x_, ptr_[1]->y_);
-    glVertex2f(ptr_[2]->x_, ptr_[2]->y_);
-    glEnd();
-
-    // Draw the borders.
-    glColor3fv(BLACK);
-    glBegin(GL_LINE_LOOP);
-    glVertex2f(ptr_[0]->x_, ptr_[0]->y_);
-    glVertex2f(ptr_[1]->x_, ptr_[1]->y_);
-    glVertex2f(ptr_[2]->x_, ptr_[2]->y_);
-    glEnd();
-}
 
 bool Triangle::is_inside_circle(const Vector2D &p)
 {
@@ -136,7 +139,7 @@ bool Triangle::check_delaunay(const std::vector<Vector2D> &points) {
     return is_delaunay_;
 }
 
-bool Triangle::common_point(Vector2D *point)
+bool Triangle::is_common_point(Vector2D *point)
 {
     return *point == *ptr_[0] ||
            *point == *ptr_[1] ||

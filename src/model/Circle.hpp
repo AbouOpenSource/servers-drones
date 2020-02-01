@@ -61,7 +61,13 @@ private:
     Position center_;
 
     float radius;
-    /********** overriding of the output operator ************/
+
+    /**
+    * @brief overload of the cout operator for this class.
+    * @param out the output stream.
+    * @param circle the server to print.
+    * @return the output stream.
+    */
     friend std::ostream &operator<<(std::ostream &out, const Circle &circle);
 
 };

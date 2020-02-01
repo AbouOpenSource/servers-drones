@@ -41,7 +41,7 @@ public:
     };
 
     /**
-     * @brief this the constructor of the drone, each drone have identifier in the system.
+     * @brief this is the constructor of the drone, each drone have identifier in the system.
      * @param id identifier of the drone.
      * @details We use explicit for the compiler optimization.
      */
@@ -77,7 +77,13 @@ public:
      * @return: a MoveData struct.
      */
     MoveData &get_move_data();
-    /************Overriding of the output operator********************/
+
+    /**
+    * @brief overload of the cout operator for this class.
+    * @param os the output stream.
+    * @param dt the server to print.
+    * @return the output stream.
+    */
     friend std::ostream& operator<<(std::ostream& os, const Drone& dt);
 
 private:

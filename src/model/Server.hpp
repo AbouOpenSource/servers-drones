@@ -41,16 +41,21 @@ public:
      */
     const std::string &get_name() const;
     /**
-     * @brief getter of the color
+     * @brief getter of the color.
      * @return string of the color of the zone of server
      */
     const std::string &get_color() const;
     /**
-     * @brief setter of the color of server
+     * @brief setter of the color of server.
      * @param color
      */
     void set_color(const std::string &color);
-    /**************Overriding of the output operator***************/
+    /**
+     * @brief overload of the cout operator for this class.
+     * @param os the output stream.
+     * @param server the server to print.
+     * @return the output stream.
+     */
     friend std::ostream &operator<<(std::ostream &os, const Server &server);
 
 private:

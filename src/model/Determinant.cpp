@@ -1,16 +1,16 @@
 #include "Determinant.hpp"
 
-void Matrix22::get2x2From3x3(const Matrix33 &mat33,int shadowLin, int shadowCol)
+void Matrix22::get2x2From3x3(const Matrix33 &mat33, int shadowLin, int shadowCol)
 {
-    int l=0;
-    for (int lig=0; lig<3; lig++)
+    int l = 0;
+    for (int lig = 0; lig < 3; lig++)
     {
-        if (lig!=shadowLin)
+        if (lig != shadowLin)
         {
-            int c=0;
-            for (int col=0; col<3; col++)
+            int c = 0;
+            for (int col = 0; col < 3; col++)
             {
-                if (col!=shadowCol)
+                if (col != shadowCol)
                 {
                     m[l][c] = mat33.m[lig][col];
                     c++;
@@ -23,20 +23,20 @@ void Matrix22::get2x2From3x3(const Matrix33 &mat33,int shadowLin, int shadowCol)
 
 float Matrix22::determinant()
 {
-    return m[0][0]*m[1][1]-m[0][1]*m[1][0];
+    return m[0][0] * m[1][1] - m[0][1] * m[1][0];
 }
 
-void Matrix33::get3x3From4x4(const Matrix44 &mat44,int shadowLin, int shadowCol)
+void Matrix33::get3x3From4x4(const Matrix44 &mat44, int shadowLin, int shadowCol)
 {
-    int l=0;
-    for (int lig=0; lig<4; lig++)
+    int l = 0;
+    for (int lig = 0; lig < 4; lig++)
     {
-        if (lig!=shadowLin)
+        if (lig != shadowLin)
         {
-            int c=0;
-            for (int col=0; col<4; col++)
+            int c = 0;
+            for (int col = 0; col < 4; col++)
             {
-                if (col!=shadowCol)
+                if (col != shadowCol)
                 {
                     m[l][c] = mat44.m[lig][col];
                     c++;
@@ -50,13 +50,13 @@ void Matrix33::get3x3From4x4(const Matrix44 &mat44,int shadowLin, int shadowCol)
 float Matrix33::determinant()
 {
     Matrix22 mat22;
-    float det=0;
+    float det = 0;
 
-    float sign=1;
-    for (int i=0; i<3; i++)
+    float sign = 1;
+    for (int i = 0; i < 3; i++)
     {
-        mat22.get2x2From3x3(*this,i,0);
-        det += sign*m[i][0]*mat22.determinant();
+        mat22.get2x2From3x3(*this, i, 0);
+        det += sign * m[i][0] * mat22.determinant();
         sign = -sign;
     }
 
@@ -66,13 +66,13 @@ float Matrix33::determinant()
 float  Matrix44::determinant()
 {
     Matrix33 mat33;
-    float det=0;
+    float det = 0;
 
-    float sign=1;
-    for (int i=0; i<4; i++)
+    float sign = 1;
+    for (int i = 0; i < 4; i++)
     {
-        mat33.get3x3From4x4(*this,i,0);
-        det += sign*m[i][0]*mat33.determinant();
+        mat33.get3x3From4x4(*this, i, 0);
+        det += sign * m[i][0] * mat33.determinant();
         sign = -sign;
     }
 
