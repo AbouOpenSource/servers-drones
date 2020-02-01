@@ -4,7 +4,7 @@
 
 </div>
 
-## <span class="c14">Serves and Drone Project</span>
+## <span class="c14">Servers and Drone Project</span>
 
 <span class="c27">The context of the project is to place servers and drones on a field and make them communicate with each other.</span>
 
