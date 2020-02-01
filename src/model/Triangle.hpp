@@ -16,14 +16,24 @@ class Triangle
 public:
 
     Vector2D *ptr_[3];
-
+    /**
+     * @brief callback on each point of the triangle.
+     */
     typedef std::function<void(Vector2D* point, unsigned int index)> PointCallback;
 
     /********** Constructor & destructor **********/
     Triangle();
-
+    /**
+     * @brief costructor of copy
+     * @param toCopy
+     */
     Triangle(Triangle* toCopy);
-
+    /**
+     * @brief constructor of initialization
+     * @param ptr1 first point of the triangle
+     * @param ptr2 second point of the triangle
+     * @param ptr3
+     */
     Triangle(Vector2D *ptr1, Vector2D *ptr2, Vector2D *ptr3);
 
     /********** Capacity **********/

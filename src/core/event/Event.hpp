@@ -7,12 +7,16 @@
 
 
 #include <string>
-
+/**
+ * @brief main class for the event in the system
+ */
 class Event
 {
 
 protected:
-
+    /**
+     * @brief: default constructor
+     */
     Event();
 
 public:

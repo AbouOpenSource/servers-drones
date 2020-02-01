@@ -15,7 +15,13 @@ class Drone
 {
 
 public:
-
+    /**
+     * @brief data for the drone movement
+     * @paragraph
+     *  the drone movement is stored in this data structures.
+     *  There are all requirements to allow Drone movement in its environment
+     * @paragraph
+     */
     struct MoveData {
         int delta_time = 1;
         int radius = 100;
@@ -34,22 +40,44 @@ public:
         Vector2D target = {0, 0};
     };
 
+    /**
+     * @brief this the constructor of the drone, each drone have identifier in the system.
+     * @param id identifier of the drone.
+     * @details We use explicit for the compiler optimization.
+     */
     explicit Drone(int id);
-
+    /**
+     * @brief getter of the identifier of the drone
+     * @return the identifier of the drone.
+     */
     int get_id() const;
-
+    /**
+     * @brief getter of the name of the server
+     * @return the name of drone'server (string)
+     * @details
+     */
     const std::string &get_server_name() const;
-
+    /**
+     * @brief that is the setter of the drone'server name
+     * @param server_name: the name of server where the drone is
+     */
     void set_server_name(const std::string &server_name);
 
     const std::string &get_target_server_name() const;
 
     void set_target_server_name(const std::string &server_name);
-
+  
+    /**
+     * @brief getter the position of the drone
+     * @return: the position the drone Vector2D.
+     */
     Vector2D& get_position();
-
+    /**
+     * @brief getter of the movement data of the drone
+     * @return: a MoveData struct.
+     */
     MoveData &get_move_data();
-
+    /************Overriding of the output operator********************/
     friend std::ostream& operator<<(std::ostream& os, const Drone& dt);
 
 private:
