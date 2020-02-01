@@ -10,6 +10,8 @@ const char* EventType::SELECTION_COLOR_CHANGED = "SELECTION_COLOR_CHANGED";
 
 const char* EventType::DRONE_ADDED = "DRONE_ADDED";
 const char* EventType::SERVER_ADDED = "SERVER_ADDED";
+const char* EventType::DRONE_DELETED = "DRONE_DELETED";
+const char* EventType::SERVER_DELETED = "SERVER_DELETED";
 
 const char* EventType::CONFIG_SAVED = "CONFIG_SAVED";
 const char* EventType::CONFIG_LOADED = "CONFIG_LOADED";
@@ -19,6 +21,7 @@ const char* EventType::DRONE_CONFIG_CHANGED = "DRONE_CONFIG_CHANGED";
 
 const char* EventType::COLLISION_DETECTED = "COLLISION_DETECTED";
 const char* EventType::DRONE_CHANGED_ZONE = "DRONE_CHANGED_ZONE";
+const char* EventType::DRONE_CHANGED_TARGET = "DRONE_CHANGED_TARGET";
 
 const char* EventType::FRAME_UPDATED = "FRAME_UPDATED";
 const char* EventType::DIAGRAM_CHANGED = "DIAGRAM_CHANGED";

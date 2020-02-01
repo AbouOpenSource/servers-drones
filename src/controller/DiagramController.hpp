@@ -29,6 +29,12 @@ public:
 
     Server* get_server_for_polygon(Polygon* polygon);
 
+    bool are_polygons_neighbors(Polygon* p1, Polygon* p2);
+
+    float get_server_area(Server* server);
+
+    float get_total_area();
+
 private:
 
     void on_config_changed();

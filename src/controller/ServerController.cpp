@@ -4,7 +4,6 @@
 
 #include <array>
 #include "ServerController.hpp"
-#include "../core/service/ServiceContainer.hpp"
 #include "../core/io/reader/FileStream.hpp"
 #include "../util/StringUtil.hpp"
 #include "../util/VectorUtil.hpp"
@@ -20,18 +19,21 @@
 #include "../core/event/internal/MouseClickEvent.hpp"
 #include "../core/event/internal/DroneConfigChangeEvent.hpp"
 #include "../core/event/internal/EventType.hpp"
-#include "../core/event/internal/DroneChangeZoneEvent.hpp"
+#include "../core/event/internal/DroneZoneChangeEvent.hpp"
+#include "../core/event/internal/DroneTargetChangeEvent.hpp"
+#include "../core/event/internal/DeleteServerEvent.hpp"
+#include "../core/event/internal/DeleteDroneEvent.hpp"
 
 std::string ServerController::SERVICE = "ServerService";
 
 ServerController::ServerController()
     : Controller(ServerController::SERVICE),
-      servers_({}),
-      server_view_({}),
-      drone_view_({}),
-      server_drones_({}),
-      drone_id_incrementer_(0),
-      window_((Window *) get_service(Window::SERVICE))
+    servers_({}),
+    server_view_({}),
+    drone_view_({}),
+    server_drones_({}),
+    drone_id_incrementer_(0),
+    window_((Window *) get_service(Window::SERVICE))
 {
     event_manager_->subscribe({EventType::KEY_PRESSED, EventType::MOUSE_CLICKED, EventType::MOUSE_MOVED},
             [this] (Event* e, const EventManager::EventDetail& detail) {
@@ -46,8 +48,13 @@ ServerController::ServerController()
     });
 
     event_manager_->subscribe(EventType::DRONE_CHANGED_ZONE, [this] (Event* e, auto) {
-        auto* event = (DroneChangeZoneEvent*)e;
+        auto* event = (DroneZoneChangeEvent*)e;
         attach_drone_to_server(event->get_drone(), event->get_server());
+    });
+
+    event_manager_->subscribe(EventType::DRONE_CHANGED_TARGET, [this] (Event* e, auto) {
+        auto* event = (DroneTargetChangeEvent*)e;
+        event->get_drone()->set_target_server_name(event->get_server()->get_name());
     });
 }
 
@@ -112,6 +119,9 @@ void ServerController::delete_server(Server *server)
 
     // Remove the object
     VectorUtil::delete_object(servers_, server);
+
+    event_manager_->publish(EventType::SERVER_DELETED, new DeleteServerEvent(server));
+    delete server;
 }
 
 Drone* ServerController::create_drone()
@@ -171,6 +181,9 @@ void ServerController::delete_drone(Drone *drone)
 
     // Remove the object
     VectorUtil::delete_object(drones_, drone);
+
+    event_manager_->publish(EventType::DRONE_DELETED, new DeleteDroneEvent(drone));
+    delete drone;
 }
 
 std::vector<Server *> ServerController::get_selection()
@@ -195,6 +208,7 @@ void ServerController::delete_selection()
     }
 
     event_manager_->publish(EventType::SELECTION_DELETED, new SelectionDeleteEvent(selection));
+    event_manager_->publish(EventType::SERVER_CONFIG_CHANGED, new ServerConfigChangeEvent(servers_));
 }
 
 void ServerController::color_selection(const std::string& color)
@@ -377,7 +391,7 @@ void ServerController::on_input(const char* type, Event *event)
                 color_selection("RED");
                 break;
             case Window::F2:
-                color_selection("BLACK");
+                color_selection("MAGENTA");
                 break;
             case Window::F3:
                 color_selection("CYAN");
@@ -399,6 +413,9 @@ void ServerController::on_input(const char* type, Event *event)
                 break;
             case Window::F9:
                 color_selection("GREEN");
+                break;
+            case Window::F10:
+                color_selection(window_->getDrawHelper()->dynamic_color_string());
                 break;
             case Window::S:
                 save_current_state();
@@ -424,7 +441,7 @@ void ServerController::on_input(const char* type, Event *event)
             }
         } else if (click == Window::RIGHT) {
             if (Server* server = get_server_at({position.X, position.Y})) {
-                server->set_color(get_next_color());
+                server->set_color(window_->getDrawHelper()->dynamic_color_string());
             } else if (Drone* drone = get_drone_at({position.X, position.Y})) {
                 delete_drone(drone);
                 event_manager_->publish(EventType::DRONE_CONFIG_CHANGED, new DroneConfigChangeEvent(drones()));

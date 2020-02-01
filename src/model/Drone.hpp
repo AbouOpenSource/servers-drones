@@ -62,6 +62,11 @@ public:
      * @param server_name: the name of server where the drone is
      */
     void set_server_name(const std::string &server_name);
+
+    const std::string &get_target_server_name() const;
+
+    void set_target_server_name(const std::string &server_name);
+  
     /**
      * @brief getter the position of the drone
      * @return: the position the drone Vector2D.
@@ -80,6 +85,8 @@ private:
     int id_;
 
     std::string server_name_;
+
+    std::string target_server_name_;
 
     Vector2D position_;
 

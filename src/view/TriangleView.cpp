@@ -8,9 +8,9 @@ TriangleView::TriangleView(Triangle *triangle)
     : triangle_(triangle)
 {}
 
-void TriangleView::init(View::DrawHelper *draw_helper, EventManager *event_manager)
+void TriangleView::init(View::DrawHelper *draw_helper, ServiceContainer *service_container)
 {
-    View::init(draw_helper, event_manager);
+    View::init(draw_helper, service_container);
 }
 
 void TriangleView::start()

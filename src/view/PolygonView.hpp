@@ -16,7 +16,7 @@ public:
 
     explicit PolygonView(Polygon* polygon, Server* server);
 
-    void init(DrawHelper* draw_helper, EventManager *event_manager) override;
+    void init(DrawHelper* draw_helper, ServiceContainer *service_container) override;
 
     void start() override;
 
@@ -29,6 +29,8 @@ private:
     Polygon* polygon_;
 
     Server* server_;
+
+    std::string color_;
 };
 
 
