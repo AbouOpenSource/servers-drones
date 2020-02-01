@@ -8,6 +8,8 @@
 
 #include "../model/Server.hpp"
 #include "TextureView.hpp"
+#include "../controller/DiagramController.hpp"
+#include "../controller/ZoneController.hpp"
 
 class ServerView: public TextureView
 {
@@ -20,13 +22,15 @@ public:
 
     void draw(DrawHelper* draw_helper) override;
 
-    void init(DrawHelper *draw_helper, EventManager *event_manager) override;
+    void init(DrawHelper *draw_helper, ServiceContainer *service_container) override;
 
 private:
 
     Server* server_;
 
-    float area_;
+    DiagramController* diagram_controller_;
+
+    ZoneController* zone_controller_;
 };
 
 

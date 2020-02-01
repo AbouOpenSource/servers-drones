@@ -4,7 +4,6 @@
 
 #include <array>
 #include "ServerController.hpp"
-#include "../core/service/ServiceContainer.hpp"
 #include "../core/io/reader/FileStream.hpp"
 #include "../util/StringUtil.hpp"
 #include "../util/VectorUtil.hpp"
@@ -20,7 +19,10 @@
 #include "../core/event/internal/MouseClickEvent.hpp"
 #include "../core/event/internal/DroneConfigChangeEvent.hpp"
 #include "../core/event/internal/EventType.hpp"
-#include "../core/event/internal/DroneChangeZoneEvent.hpp"
+#include "../core/event/internal/DroneZoneChangeEvent.hpp"
+#include "../core/event/internal/DroneTargetChangeEvent.hpp"
+#include "../core/event/internal/DeleteServerEvent.hpp"
+#include "../core/event/internal/DeleteDroneEvent.hpp"
 
 std::string ServerController::SERVICE = "ServerService";
 
@@ -46,8 +48,13 @@ ServerController::ServerController()
     });
 
     event_manager_->subscribe(EventType::DRONE_CHANGED_ZONE, [this] (Event* e, auto) {
-        auto* event = (DroneChangeZoneEvent*)e;
+        auto* event = (DroneZoneChangeEvent*)e;
         attach_drone_to_server(event->get_drone(), event->get_server());
+    });
+
+    event_manager_->subscribe(EventType::DRONE_CHANGED_TARGET, [this] (Event* e, auto) {
+        auto* event = (DroneTargetChangeEvent*)e;
+        event->get_drone()->set_target_server_name(event->get_server()->get_name());
     });
 }
 
@@ -112,6 +119,9 @@ void ServerController::delete_server(Server *server)
 
     // Remove the object
     VectorUtil::delete_object(servers_, server);
+
+    event_manager_->publish(EventType::SERVER_DELETED, new DeleteServerEvent(server));
+    delete server;
 }
 
 Drone* ServerController::create_drone()
@@ -171,6 +181,9 @@ void ServerController::delete_drone(Drone *drone)
 
     // Remove the object
     VectorUtil::delete_object(drones_, drone);
+
+    event_manager_->publish(EventType::DRONE_DELETED, new DeleteDroneEvent(drone));
+    delete drone;
 }
 
 std::vector<Server *> ServerController::get_selection()
@@ -378,7 +391,7 @@ void ServerController::on_input(const char* type, Event *event)
                 color_selection("RED");
                 break;
             case Window::F2:
-                color_selection("BLACK");
+                color_selection("MAGENTA");
                 break;
             case Window::F3:
                 color_selection("CYAN");

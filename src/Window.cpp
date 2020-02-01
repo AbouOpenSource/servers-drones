@@ -59,7 +59,7 @@ void Window::addView(View* view, bool front)
     } else {
         views_.push_back(view);
     }
-    view->init(&draw_helper_, event_manager_);
+    view->init(&draw_helper_, ServiceContainer::get_instance());
 }
 
 void Window::removeView(View *view)

@@ -13,7 +13,7 @@ class TextureView: public View
 
 public:
 
-    void init(DrawHelper *draw_helper, EventManager *event_manager) override;
+    void init(DrawHelper *draw_helper, ServiceContainer *service_container) override;
 
     void draw(DrawHelper* draw_helper) override;
 

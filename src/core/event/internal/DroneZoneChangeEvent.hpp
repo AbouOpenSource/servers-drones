@@ -2,8 +2,8 @@
 // Created by Maanrifa Bacar Ali on 30/01/2020.
 //
 
-#ifndef DRONEPROJECT_DRONECHANGEZONEEVENT_HPP
-#define DRONEPROJECT_DRONECHANGEZONEEVENT_HPP
+#ifndef DRONEPROJECT_DRONEZONECHANGEEVENT_HPP
+#define DRONEPROJECT_DRONEZONECHANGEEVENT_HPP
 
 
 #include <ostream>
@@ -12,12 +12,12 @@
 #include "../../../model/Server.hpp"
 #include "../../../model/Polygon.hpp"
 
-class DroneChangeZoneEvent: public Event
+class DroneZoneChangeEvent: public Event
 {
 
 public:
 
-    DroneChangeZoneEvent(Drone *drone, Server *server, Polygon *polygon);
+    DroneZoneChangeEvent(Drone *drone, Server *server, Polygon *polygon);
 
     Drone *get_drone() const;
 
@@ -25,7 +25,7 @@ public:
 
     Polygon *get_polygon() const;
 
-    friend std::ostream &operator<<(std::ostream &os, const DroneChangeZoneEvent &event);
+    friend std::ostream &operator<<(std::ostream &os, const DroneZoneChangeEvent &event);
 
 private:
 
@@ -38,4 +38,4 @@ private:
 };
 
 
-#endif //DRONEPROJECT_DRONECHANGEZONEEVENT_HPP
+#endif //DRONEPROJECT_DRONEZONECHANGEEVENT_HPP

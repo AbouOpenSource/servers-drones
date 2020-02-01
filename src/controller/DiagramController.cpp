@@ -86,5 +86,23 @@ Server *DiagramController::get_server_for_polygon(Polygon *polygon)
 
 float DiagramController::get_server_area(Server *server)
 {
-    return get_polygon_for_server(server)->area() / (Window::getWindowWidth() * Window::getWindowHeight());
+    return get_polygon_for_server(server)->area() / get_total_area();
+}
+
+float DiagramController::get_total_area()
+{
+    return Window::getWindowWidth() * Window::getWindowHeight();
+}
+
+bool DiagramController::are_polygons_neighbors(Polygon *p1, Polygon *p2)
+{
+    for (unsigned int i = 0; i < sizeof(p1->get_tab_pts()); i++) {
+        for (unsigned int j = 0; j < sizeof(p2->get_tab_pts()); j++) {
+            if (p1->get_tab_pts()[i] == p2->get_tab_pts()[j]) {
+                return true;
+            }
+        }
+    }
+
+    return false;
 }

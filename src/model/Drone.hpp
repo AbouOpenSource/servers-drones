@@ -42,6 +42,10 @@ public:
 
     void set_server_name(const std::string &server_name);
 
+    const std::string &get_target_server_name() const;
+
+    void set_target_server_name(const std::string &server_name);
+
     Vector2D& get_position();
 
     MoveData &get_move_data();
@@ -53,6 +57,8 @@ private:
     int id_;
 
     std::string server_name_;
+
+    std::string target_server_name_;
 
     Vector2D position_;
 

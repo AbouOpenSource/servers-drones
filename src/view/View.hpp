@@ -8,9 +8,9 @@
 #include "../core/event/EventManager.hpp"
 #include "../../data/config/config.hpp"
 #include "glutWindow.h"
+#include "../core/service/ServiceContainer.hpp"
 
 const float WHITE[4] = {1.0, 1.0, 1.0, 0.15f};
-const float BLACK[4] = {0.0, 0.0, 0.0, 1.0f};
 const float GREY[4] = {0.75f, 0.75f, 0.75f, 1.0f};
 const float RED[4] = {1.0f, 0.0, 0.0, 1.0f};
 const float ORANGE[4] = {1.0f, 0.27f, 0.0, 1.0f};
@@ -19,6 +19,10 @@ const float GREEN[4] = {0.0, 1.0f, 0.0, 1.0f};
 const float BLUE[4] = {0.0, 0.0, 1.0f, 1.0f};
 const float PINK[4] = {0.9569f, 0.7529f, 0.7961f, 1.0f};
 const float CYAN[4] = {0.0, 1.0f, 1.0f, 1.0f};
+const float BROWN[4] = {0.6471f, 0.1647f, 0.1647f, 1.0f};
+const float PURPLE[4] = {0.5020f, 0.0f, 0.5020f, 1.0f};
+const float MAGENTA[4] = {1.0f, 0.0f, 1.0f, 1.0f};
+const float BLACK[4] = {0.0f, 0.0f, 0.0f, 1.0f};
 
 class View
 {
@@ -82,7 +86,7 @@ public:
 
     View();
 
-    virtual void init(DrawHelper *draw_helper, EventManager *event_manager);
+    virtual void init(DrawHelper *draw_helper, ServiceContainer *service_container);
 
     virtual void start();
 

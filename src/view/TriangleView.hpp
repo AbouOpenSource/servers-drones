@@ -7,6 +7,7 @@
 
 #include "View.hpp"
 #include "../model/Triangle.hpp"
+#include "../core/service/ServiceContainer.hpp"
 
 class TriangleView: public View
 {
@@ -15,7 +16,7 @@ public:
 
     TriangleView(Triangle* triangle);
 
-    void init(DrawHelper *draw_helper, EventManager *event_manager) override;
+    void init(DrawHelper *draw_helper, ServiceContainer *service_container) override;
 
     void start() override;
 

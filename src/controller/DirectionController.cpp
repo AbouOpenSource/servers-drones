@@ -5,7 +5,7 @@
 #include "DirectionController.hpp"
 #include "../core/event/internal/EventType.hpp"
 #include "../core/event/internal/CollisionDetectEvent.hpp"
-#include "../core/event/internal/DroneChangeZoneEvent.hpp"
+#include "../core/event/internal/DroneTargetChangeEvent.hpp"
 
 
 std::string DirectionController::SERVICE = "DirectionService";
@@ -14,18 +14,18 @@ DirectionController::DirectionController()
     : Controller(DirectionController::SERVICE),
       callbacks_({})
 {
-    event_manager_->subscribe(EventType::FRAME_UPDATED, [this] (Event* e, const EventManager::EventDetail& detail) {
+    event_manager_->subscribe(EventType::FRAME_UPDATED, [this] (Event* e, auto&) {
         for (auto & it : callbacks_) {
             it.second();
         }
     });
 
-    event_manager_->subscribe(EventType::DRONE_CHANGED_ZONE, [this] (Event* e, const EventManager::EventDetail& detail) {
-        auto* event = ((DroneChangeZoneEvent*)e);
+    event_manager_->subscribe(EventType::DRONE_CHANGED_TARGET, [this] (Event* e, auto&) {
+        auto* event = ((DroneTargetChangeEvent*)e);
         set_drone_target(event->get_drone(), event->get_server()->get_position());
     });
 
-    event_manager_->subscribe(EventType::COLLISION_DETECTED, [this] (Event* e, const EventManager::EventDetail& detail) {
+    event_manager_->subscribe(EventType::COLLISION_DETECTED, [this] (Event* e, auto&) {
         auto* collision = (CollisionDetectEvent*)e;
         prevent_collision_between_drones(collision->get_first_drone(), collision->get_second_drone());
     });

@@ -5,7 +5,7 @@
 #include <iostream>
 #include "EventManager.hpp"
 #include "internal/EventType.hpp"
-#include "internal/DroneChangeZoneEvent.hpp"
+#include "internal/DroneZoneChangeEvent.hpp"
 
 std::string EventManager::SERVICE = "EventService";
 
