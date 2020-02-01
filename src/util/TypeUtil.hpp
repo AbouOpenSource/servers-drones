@@ -10,8 +10,14 @@
 
 namespace TypeUtil
 {
-
+    /**
+     * @brief a type to define a function which is used as an error callback.
+     */
     typedef std::function<void(const std::string& error)> ErrorCallback;
+
+    /**
+     * a type to define a function which is used as a callback.
+     */
     typedef std::function<void()> Callback;
 };
 

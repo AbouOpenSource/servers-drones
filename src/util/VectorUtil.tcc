@@ -1,7 +1,7 @@
+#include <sstream>
+
 #include "iostream"
 #include "VectorUtil.hpp"
-
-#include <sstream>
 
 namespace VectorUtil {
     template <typename T>
@@ -71,39 +71,6 @@ namespace VectorUtil {
         reader >> val;
 
         return val;
-    }
-
-    template <typename cast_type>
-    std::vector<std::vector<cast_type>> cast_2d_string_vector_to_vector_of(std::vector<std::vector<std::string>> &vector)
-    {
-        std::vector<std::vector<cast_type>> vector_of_cast_type{};
-        // Check if the vector is empty.
-        if (vector.empty())
-        {
-            std::cout << "Vector is empty!" << std::endl;
-        }
-
-        else
-        {
-            for (unsigned int i = 0; i < vector.size(); i++)
-            {
-                vector_of_cast_type.push_back({});
-                for (unsigned int j = 0; j < vector.size(); j++)
-                {
-                    try
-                    {
-                        const double cell = string_cast_to<cast_type>(vector[i][j]);
-                        vector_of_cast_type[i].push_back(cell);
-                    }
-                    catch(const std::invalid_argument &ia)
-                    {
-                        std::cerr << "Invalid argument: " << ia.what() << '\n';
-                    }
-                }
-            }
-        }
-
-        return vector_of_cast_type;
     }
 
     template<typename T>

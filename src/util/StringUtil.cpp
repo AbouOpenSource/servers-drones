@@ -3,7 +3,6 @@
 //
 
 #include <regex>
-#include <sstream>
 #include "StringUtil.hpp"
 
 std::string StringUtil::trim(std::string &target)
@@ -30,14 +29,4 @@ std::vector<std::string> StringUtil::split(const std::string& line, const char& 
     }
 
     return array;
-}
-
-template <typename cast_type>
-cast_type StringUtil::string_cast_to(std::string& string_value)
-{
-    std::istringstream reader(string_value);
-    cast_type val;
-    reader >> val;
-
-    return val;
 }

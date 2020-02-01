@@ -50,6 +50,7 @@ public:
     static std::string SERVICE;
 
     /********** Constructor **********/
+
     Window(int argc, char **argv);
 
     /********** Getter **********/

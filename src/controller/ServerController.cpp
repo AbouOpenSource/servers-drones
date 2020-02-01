@@ -290,8 +290,8 @@ void ServerController::load_last_state(const TypeUtil::Callback& on_loaded)
                 std::string color = values[2];
 
                 string x_string = StringUtil::trim(position[0]);
-                auto x = VectorUtil::string_cast_to<float>(x_string);
-                auto y = VectorUtil::string_cast_to<float>(position[1]);
+                auto x = StringUtil::string_cast_to<float>(x_string);
+                auto y = StringUtil::string_cast_to<float>(position[1]);
 
                 create_server(name, color, x, y);
             }

@@ -132,17 +132,18 @@ bool Polygon::polar_comparison(Vector2D p1, Vector2D p2)
 
 bool Polygon::is_on_the_left(const Vector2D& p, int i)
 {
-    Vector2D ab = tab_pts_[i + 1] - tab_pts_[i], ap = p - tab_pts_[i];
+    Vector2D ab = tab_pts_[i + 1] - tab_pts_[i],
+    ap = p - tab_pts_[i];
 
     return cross_product(ab, ap) >= 0;
 }
 
 bool Polygon::is_on_the_left(const Vector2D* p, const Vector2D* p1, const Vector2D* p2)
 {
-    Vector2D ab = *p2 - *p1, ap = *p - *p1;
+    Vector2D ab = *p2 - *p1,
+    ap = *p - *p1;
 
     return cross_product(ab, ap) >= 0;
-//    (ab.x_ * ap.y_ - ab.y_ * ap.x_) >= 0;
 }
 
 bool Polygon::is_convex()
@@ -173,7 +174,7 @@ bool Polygon::add_vertex(Vector2D &p)
 // Complexity is N because for each edge and there is N edges.
 bool Polygon::is_inside(const Vector2D& p)
 {
-    return is_inside_left(p) || is_in_side_right(p);
+    return is_inside_left(p) || is_inside_right(p);
 }
 
 bool Polygon::is_inside_left(const Vector2D &p) {
@@ -184,17 +185,6 @@ bool Polygon::is_inside_left(const Vector2D &p) {
     }
 
     return i == current_n_;
-}
-
-bool Polygon::is_inside_triangle(const Vector2D& p)
-{
-    auto triangle = triangles_.begin();
-
-    while (triangle != triangles_.end() && !(*triangle).is_inside(p)) {
-        triangle++;
-    }
-
-    return triangle != triangles_.end();
 }
 
 vector<float> Polygon::intersect(const Vector2D& a, const Vector2D& u, const Vector2D& p, const Vector2D& q)
@@ -302,7 +292,7 @@ Triangle* Polygon::neighbor_inside(Triangle* current)
             }
 
             // If the point is a common point with the triangle passed in parameter.
-            if (current->common_point(point)) {
+            if (current->is_common_point(point)) {
                 common_points++;
             }
         }
@@ -323,7 +313,7 @@ void Polygon::flip(Triangle* current, Triangle* neighbor)
     unsigned int index_no_common_points_current;
 
     current->foreach_point([&](Vector2D* point, unsigned int index) {
-        if (neighbor->common_point(point)) {
+        if (neighbor->is_common_point(point)) {
             index_common_points_current.push_back(index);
         } else {
             index_no_common_points_current = index;
@@ -334,7 +324,7 @@ void Polygon::flip(Triangle* current, Triangle* neighbor)
     unsigned int index_no_common_points_neighbor;
 
     neighbor->foreach_point([&](Vector2D* point, unsigned int index) {
-        if (current->common_point(point)) {
+        if (current->is_common_point(point)) {
             index_common_points_neighbor.push_back(index);
         } else {
             index_no_common_points_neighbor = index;
@@ -487,7 +477,7 @@ bool Polygon::is_on_the_right(const Vector2D &p, int i) {
     return cross_product(u, v) <= 0;
 }
 
-bool Polygon::is_in_side_right(const Vector2D &p) {
+bool Polygon::is_inside_right(const Vector2D &p) {
     int i = 0;
 
     while (i < current_n_ && is_on_the_right(p, i)) {
