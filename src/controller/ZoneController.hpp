@@ -36,11 +36,13 @@ private:
 
     void check_drones_distribution();
 
-    void monitor_drones();
+    void monitor_drone(Drone* drone);
 
     void track_drone_zone_change();
 
     bool compare(Server* server, Server* neighbor);
+
+    Server* get_drone_current_zone_server(Drone* drone);
 
     std::vector<Drone*> drones_;
 

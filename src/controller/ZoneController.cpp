@@ -18,7 +18,6 @@ ZoneController::ZoneController()
         calculate_drones_distribution();
         track_drone_zone_change();
         check_drones_distribution();
-        monitor_drones();
     });
 
     event_manager_->subscribe(EventType::DRONE_CONFIG_CHANGED, [this] (Event* e, auto&) {
@@ -75,6 +74,7 @@ void ZoneController::track_drone_zone_change()
             server = diagram_controller_->get_server_for_polygon(polygons[i]);
             if (polygon->is_inside(drone->get_position())) {
                 if (drone->get_server_name() != server->get_name()) {
+                    monitor_drone(drone);
                     event_manager_->publish(EventType::DRONE_CHANGED_ZONE, new DroneZoneChangeEvent(drone, server, polygon));
                     break;
                 }
@@ -84,31 +84,30 @@ void ZoneController::track_drone_zone_change()
     }
 }
 
-void ZoneController::monitor_drones()
+void ZoneController::monitor_drone(Drone* drone)
 {
-    for (auto* drone: drones_) {
-        Server* main;
-        for (auto* server: diagram_controller_->get_servers()) {
-            if (diagram_controller_->get_polygon_for_server(server)->is_inside(drone->get_position())) {
-                main = server;
-                break;
-            }
+    Server* main = get_drone_current_zone_server(drone);
+    Server* next = main;
+    for (auto* neighbor: get_server_data(main)->neighbors) {
+        if (compare(main, neighbor)) {
+            next = neighbor;
         }
-        Server* next = main;
-        for (auto* neighbor: get_server_data(main)->neighbors) {
-            if (compare(next, neighbor)) {
-                next = neighbor;
-            }
-        }
-        event_manager_->publish(EventType::DRONE_CHANGED_TARGET, new DroneTargetChangeEvent(drone, next));
     }
+    std::cout
+    << main->get_name()
+    << " tell D(" << drone->get_id() << ") to go to " << next->get_name()
+    << std::endl;
+    drone->set_target_server_name(next->get_name());
+    event_manager_->publish(EventType::DRONE_CHANGED_TARGET, new DroneTargetChangeEvent(drone, next));
 }
 
 bool ZoneController::compare(Server *server, Server* neighbor) {
     auto* server_data = get_server_data(server);
     auto* neighbor_data = get_server_data(neighbor);
-
-    return neighbor_data->expected > server_data->expected && (float)neighbor_data->current < neighbor_data->expected;
+    return
+        (neighbor_data->expected > server_data->expected && (float)neighbor_data->current < neighbor_data->expected)
+        ||
+        (neighbor_data->expected < server_data->expected && (float)server_data->current >= server_data->expected);
 }
 
 void ZoneController::calculate_drones_distribution()
@@ -126,4 +125,14 @@ ZoneController::ServerData *ZoneController::get_server_data(Server *server)
         server_data_[server] = new ServerData{0, {}, {}};
     }
     return server_data_[server];
+}
+
+Server* ZoneController::get_drone_current_zone_server(Drone* drone)
+{
+    for (auto* server: diagram_controller_->get_servers()) {
+        if (diagram_controller_->get_polygon_for_server(server)->is_inside(drone->get_position())) {
+            return server;
+        }
+    }
+    return nullptr;
 }
